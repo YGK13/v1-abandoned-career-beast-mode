@@ -12,13 +12,16 @@ import {
   Menu,
   X,
   GraduationCap,
-  Target // Add this import for Life Design icon
+  Target,
+  CreditCard
 } from "lucide-react";
+import { useSubscription } from "@/context/SubscriptionContext";
 
 const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const { hasJobsAccess } = useSubscription();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -37,9 +40,15 @@ const Navbar: React.FC = () => {
     { path: "/", label: "Dashboard", icon: BarChart2 },
     { path: "/skills", label: "Skills", icon: Award },
     { path: "/documents", label: "Documents", icon: FileText },
-    { path: "/jobs", label: "Jobs", icon: Briefcase },
+    { 
+      path: "/jobs", 
+      label: "Jobs", 
+      icon: Briefcase,
+      locked: !hasJobsAccess
+    },
     { path: "/coaching", label: "Coaching", icon: GraduationCap },
-    { path: "/lifedesign", label: "Life Design", icon: Target }, // Add Life Design to nav links
+    { path: "/lifedesign", label: "Life Design", icon: Target },
+    { path: "/pricing", label: "Pricing", icon: CreditCard },
     { path: "/help", label: "Help", icon: HelpCircle },
   ];
 
@@ -58,7 +67,7 @@ const Navbar: React.FC = () => {
         </Link>
         
         <nav className="hidden md:flex items-center space-x-1">
-          {navLinks.map(({ path, label, icon: Icon }) => (
+          {navLinks.map(({ path, label, icon: Icon, locked }) => (
             <Link
               key={path}
               to={path}
@@ -66,10 +75,11 @@ const Navbar: React.FC = () => {
                 location.pathname === path
                   ? "text-primary bg-primary/10"
                   : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
-              }`}
+              } ${locked ? "opacity-75" : ""}`}
             >
               <Icon size={16} />
               <span>{label}</span>
+              {locked && <span className="w-2 h-2 bg-amber-500 rounded-full ml-1"></span>}
             </Link>
           ))}
         </nav>
@@ -97,7 +107,7 @@ const Navbar: React.FC = () => {
       {isMobileMenuOpen && (
         <div className="md:hidden absolute top-16 left-0 right-0 bg-background/95 backdrop-blur-lg border-b border-border z-50 animate-fade-in">
           <nav className="container mx-auto px-4 py-4 flex flex-col space-y-1">
-            {navLinks.map(({ path, label, icon: Icon }) => (
+            {navLinks.map(({ path, label, icon: Icon, locked }) => (
               <Link
                 key={path}
                 to={path}
@@ -105,10 +115,11 @@ const Navbar: React.FC = () => {
                   location.pathname === path
                     ? "text-primary bg-primary/10"
                     : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
-                }`}
+                } ${locked ? "opacity-75" : ""}`}
               >
                 <Icon size={18} />
                 <span>{label}</span>
+                {locked && <span className="w-2 h-2 bg-amber-500 rounded-full ml-1"></span>}
               </Link>
             ))}
           </nav>
