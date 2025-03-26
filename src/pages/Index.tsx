@@ -8,6 +8,7 @@ import FeaturedSkillsSection from "@/components/dashboard/FeaturedSkillsSection"
 import UpcomingEventsSection from "@/components/dashboard/UpcomingEventsSection";
 import JobRecommendationsSection from "@/components/dashboard/JobRecommendationsSection";
 import CareerPromoSection from "@/components/dashboard/CareerPromoSection";
+import LifeDesignSection from "@/components/dashboard/LifeDesignSection";
 
 const Index = () => {
   // Mock data
@@ -79,6 +80,7 @@ const Index = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <CareerHealthSection careerScore={careerScore} />
           <ActionItemsSection actionItems={actionItems} />
+          <LifeDesignSection />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
