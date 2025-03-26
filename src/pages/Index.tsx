@@ -13,9 +13,9 @@ const Index = () => {
   // Mock data
   const [careerScore, setCareerScore] = useState(76);
   const [featuredSkills] = useState([
-    { name: "Project Management", level: 85, category: "Leadership", trend: "up", isInDemand: true },
-    { name: "Data Analysis", level: 72, category: "Technical", trend: "up", isInDemand: true },
-    { name: "Public Speaking", level: 65, category: "Soft Skills", trend: "stable", isInDemand: false },
+    { name: "Project Management", level: 85, category: "Leadership", trend: "up" as const, isInDemand: true },
+    { name: "Data Analysis", level: 72, category: "Technical", trend: "up" as const, isInDemand: true },
+    { name: "Public Speaking", level: 65, category: "Soft Skills", trend: "stable" as const, isInDemand: false },
   ]);
   const [recommendedJobs] = useState([
     {
@@ -44,17 +44,17 @@ const Index = () => {
     {
       title: "Update your LinkedIn profile",
       description: "Your profile hasn't been updated in 3 months",
-      priority: "high",
+      priority: "high" as const,
     },
     {
       title: "Take the Product Strategy assessment",
       description: "Validate your skills with a certification",
-      priority: "medium",
+      priority: "medium" as const,
     },
     {
       title: "Connect resume to ATS",
       description: "Improve application tracking",
-      priority: "medium",
+      priority: "medium" as const,
     }
   ];
 
