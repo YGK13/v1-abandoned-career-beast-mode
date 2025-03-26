@@ -1,14 +1,6 @@
 
 import React from "react";
-import { LucideIcon } from "lucide-react";
-import NavLink from "./NavLink";
-
-interface NavItem {
-  path: string;
-  label: string;
-  icon: LucideIcon;
-  locked?: boolean;
-}
+import NavLink, { NavItem } from "./NavLink";
 
 interface NavLinksProps {
   links: NavItem[];
