@@ -9,7 +9,16 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { Search, MapPin, Briefcase, Zap, Check, Clock, Sparkles } from "lucide-react";
+import { 
+  Search, 
+  MapPin, 
+  Briefcase, 
+  Zap, 
+  Check, 
+  Clock, 
+  Sparkles,
+  Building
+} from "lucide-react";
 import { useSubscription } from "@/context/SubscriptionContext";
 import Paywall from "@/components/Paywall";
 
@@ -45,6 +54,7 @@ const Jobs = () => {
   const jobCategories = [
     { id: "all", name: "All Jobs" },
     { id: "recommended", name: "Recommended" },
+    { id: "offmarket", name: "Off-Market Exec" },
     { id: "applied", name: "Applied" },
     { id: "saved", name: "Saved" },
   ];
@@ -140,8 +150,46 @@ const Jobs = () => {
     },
   ];
 
+  const offMarketJobs = [
+    {
+      title: "Board Member - Technology",
+      company: "VirtualNonExecs",
+      location: "Remote",
+      salary: "$50K - $75K",
+      postedDate: "3 days ago",
+      matchScore: 94,
+      skills: ["Corporate Governance", "Technology Strategy", "Risk Management", "Executive Leadership"],
+      isRecommended: true,
+      status: "offmarket"
+    },
+    {
+      title: "Non-Executive Director - Financial Services",
+      company: "VirtualNonExecs",
+      location: "London / Remote",
+      salary: "£40K - £60K",
+      postedDate: "1 week ago",
+      matchScore: 89,
+      skills: ["Regulatory Compliance", "Financial Oversight", "Strategic Planning", "Board Experience"],
+      isRecommended: true,
+      status: "offmarket"
+    },
+    {
+      title: "Advisory Board Chair - Healthcare",
+      company: "VirtualNonExecs",
+      location: "New York / Remote",
+      salary: "$60K - $90K",
+      postedDate: "5 days ago",
+      matchScore: 86,
+      skills: ["Healthcare Governance", "Industry Networks", "Strategic Guidance", "Fundraising"],
+      isRecommended: false,
+      status: "offmarket"
+    }
+  ];
+
+  const allJobs = [...jobs, ...offMarketJobs];
+
   const filteredJobs = (category: string) => {
-    let filtered = jobs;
+    let filtered = allJobs;
     
     if (category !== "all") {
       filtered = filtered.filter(job => job.status === category);
@@ -189,7 +237,7 @@ const Jobs = () => {
                 </div>
                 
                 <div className="flex flex-col items-center bg-muted/50 rounded-lg p-4">
-                  <h4 className="text-2xl font-bold mb-1">8</h4>
+                  <h4 className="text-2xl font-bold mb-1">11</h4>
                   <p className="text-xs text-muted-foreground text-center">Job matches found</p>
                 </div>
               </div>
@@ -216,8 +264,8 @@ const Jobs = () => {
                   
                   <div className="bg-muted/50 rounded-lg p-3">
                     <div className="flex items-center gap-2 mb-1">
-                      <Sparkles size={16} className="text-yellow-500" />
-                      <h4 className="font-medium text-sm">Recommendations</h4>
+                      <Building size={16} className="text-blue-500" />
+                      <h4 className="font-medium text-sm">Off-Market</h4>
                     </div>
                     <p className="text-xl font-bold">3</p>
                   </div>
@@ -317,7 +365,7 @@ const Jobs = () => {
         </div>
         
         <Tabs defaultValue="all" className="w-full mb-8">
-          <TabsList className="w-full sm:w-auto mb-4 grid grid-cols-2 sm:grid-cols-4 gap-2">
+          <TabsList className="w-full sm:w-auto mb-4 grid grid-cols-2 sm:grid-cols-5 gap-2">
             {jobCategories.map(category => (
               <TabsTrigger key={category.id} value={category.id} className="whitespace-nowrap">
                 {category.name}
@@ -357,6 +405,24 @@ const Jobs = () => {
                   <Button variant="outline" className="mt-4">
                     Reset Filters
                   </Button>
+                </div>
+              )}
+
+              {category.id === "offmarket" && filteredJobs(category.id).length > 0 && (
+                <div className="mt-8 p-4 border border-amber-200 bg-amber-50 dark:bg-amber-950/20 dark:border-amber-900 rounded-lg">
+                  <div className="flex items-start gap-3">
+                    <Building className="text-amber-600 dark:text-amber-400 mt-1" size={24} />
+                    <div>
+                      <h3 className="font-medium text-amber-800 dark:text-amber-300">Off-Market Executive Positions</h3>
+                      <p className="text-sm text-amber-700 dark:text-amber-400">
+                        Exclusive board and executive positions from VirtualNonExecs. These opportunities require 
+                        additional verification and are available to premium members only.
+                      </p>
+                      <Button variant="outline" className="mt-3 border-amber-300 text-amber-700 hover:bg-amber-100 dark:border-amber-700 dark:text-amber-300 dark:hover:bg-amber-900/30">
+                        Learn More About VirtualNonExecs
+                      </Button>
+                    </div>
+                  </div>
                 </div>
               )}
             </TabsContent>

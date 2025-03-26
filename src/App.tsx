@@ -8,6 +8,7 @@ import { AnimatePresence } from "framer-motion";
 import { SubscriptionProvider } from "./context/SubscriptionContext";
 import Index from "./pages/Index";
 import Skills from "./pages/Skills";
+import SkillDetails from "./pages/SkillDetails";
 import Documents from "./pages/Documents";
 import Jobs from "./pages/Jobs";
 import Coaching from "./pages/Coaching";
@@ -32,6 +33,7 @@ const App = () => (
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/skills" element={<Skills />} />
+              <Route path="/skills/:skillName" element={<SkillDetails />} />
               <Route path="/documents" element={<Documents />} />
               <Route path="/build-business" element={<BuildBusiness />} />
               <Route path="/jobs" element={<Jobs />} />

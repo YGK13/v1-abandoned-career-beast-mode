@@ -1,5 +1,6 @@
 
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Layout from "@/components/Layout";
 import DashboardCard from "@/components/DashboardCard";
 import SkillCard from "@/components/SkillCard";
@@ -11,6 +12,7 @@ import { Sparkles, Search, Plus, Award, TrendingUp, Filter } from "lucide-react"
 
 const Skills = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
   
   // Mock data
   const skillCategories = [
@@ -55,6 +57,10 @@ const Skills = () => {
     { name: "React", category: "Technical", level: 0, trend: "up", isInDemand: true },
     { name: "Data Science", category: "Technical", level: 0, trend: "up", isInDemand: true },
   ];
+
+  const handleSkillClick = (skillName: string) => {
+    navigate(`/skills/${encodeURIComponent(skillName.toLowerCase())}`);
+  };
 
   const filteredSkills = (category: string) => {
     let filtered = skills;
@@ -150,6 +156,7 @@ const Skills = () => {
                 <div 
                   key={index}
                   className="p-3 rounded-md border border-border bg-muted/30 hover:bg-muted/50 transition-colors cursor-pointer"
+                  onClick={() => handleSkillClick(skill.name)}
                 >
                   <div className="flex justify-between items-center">
                     <h4 className="font-medium">{skill.name}</h4>
@@ -206,7 +213,7 @@ const Skills = () => {
                       category={skill.category}
                       trend={skill.trend as any}
                       isInDemand={skill.isInDemand}
-                      onClick={() => {}}
+                      onClick={() => handleSkillClick(skill.name)}
                     />
                   ))}
                 </div>

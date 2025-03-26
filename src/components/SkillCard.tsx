@@ -2,7 +2,7 @@
 import React from "react";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { Sparkles } from "lucide-react";
+import { Sparkles, ChevronRight } from "lucide-react";
 import DashboardCard from "./DashboardCard";
 
 interface SkillCardProps {
@@ -38,8 +38,8 @@ const SkillCard: React.FC<SkillCardProps> = ({
 
   return (
     <DashboardCard 
-      className="h-full"
-      isHoverable={!!onClick}
+      className="h-full cursor-pointer hover:border-primary/50 transition-colors"
+      isHoverable={true}
       onClick={onClick}
     >
       <div className="flex flex-col h-full">
@@ -64,9 +64,12 @@ const SkillCard: React.FC<SkillCardProps> = ({
           <Badge variant="outline" className="text-xs">
             {category}
           </Badge>
-          <span className="text-xs text-muted-foreground">
-            {getTrendIcon(trend)} {trend === "stable" ? "Stable" : trend === "up" ? "Growing" : "Declining"}
-          </span>
+          <div className="flex items-center gap-1">
+            <span className="text-xs text-muted-foreground">
+              {getTrendIcon(trend)} {trend === "stable" ? "Stable" : trend === "up" ? "Growing" : "Declining"}
+            </span>
+            <ChevronRight size={16} className="text-muted-foreground" />
+          </div>
         </div>
       </div>
     </DashboardCard>
