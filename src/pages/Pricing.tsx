@@ -29,21 +29,21 @@ const Pricing = () => {
         </header>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-          {/* Free Plan */}
+          {/* Basic Plan (formerly Free) */}
           <DashboardCard className="flex flex-col border-2 h-full">
             <div className="p-6 flex-1">
               <div className="bg-muted/50 w-14 h-14 rounded-full flex items-center justify-center mb-4">
                 <BadgeDollarSign className="w-7 h-7 text-muted-foreground" />
               </div>
               
-              <h2 className="font-bold text-2xl mb-2">Free</h2>
+              <h2 className="font-bold text-2xl mb-2">Basic</h2>
               <div className="mb-4">
-                <span className="text-3xl font-bold">$0</span>
+                <span className="text-3xl font-bold">$5</span>
                 <span className="text-muted-foreground">/month</span>
               </div>
               
               <p className="text-muted-foreground mb-6">
-                Basic career tools and resources to get started
+                Essential career tools and resources to get started
               </p>
               
               <ul className="space-y-3 mb-8">
@@ -64,6 +64,11 @@ const Pricing = () => {
                   <span>Life design tips</span>
                 </li>
               </ul>
+              
+              <div className="bg-primary/10 px-3 py-2 rounded-md text-sm mb-4">
+                <p className="font-medium">7-day free trial</p>
+                <p className="text-xs text-muted-foreground">Cancel anytime during trial period</p>
+              </div>
             </div>
             
             <div className="p-6 pt-0 mt-auto">
@@ -101,7 +106,7 @@ const Pricing = () => {
               <ul className="space-y-3 mb-8">
                 <li className="flex">
                   <Check className="w-5 h-5 text-green-500 mr-2 flex-shrink-0" />
-                  <span>Everything in Free</span>
+                  <span>Everything in Basic</span>
                 </li>
                 <li className="flex">
                   <Check className="w-5 h-5 text-green-500 mr-2 flex-shrink-0" />
@@ -116,6 +121,11 @@ const Pricing = () => {
                   <span>Auto-apply functionality</span>
                 </li>
               </ul>
+              
+              <div className="bg-primary/10 px-3 py-2 rounded-md text-sm mb-4">
+                <p className="font-medium">7-day free trial</p>
+                <p className="text-xs text-muted-foreground">Cancel anytime during trial period</p>
+              </div>
             </div>
             
             <div className="p-6 pt-0 space-y-3 mt-auto">
@@ -146,8 +156,8 @@ const Pricing = () => {
             </div>
           </DashboardCard>
 
-          {/* Premium Plan - For future expansion */}
-          <DashboardCard className="flex flex-col border-2 h-full opacity-75">
+          {/* Premium Plan - Updated features */}
+          <DashboardCard className="flex flex-col border-2 h-full">
             <div className="p-6 flex-1">
               <div className="bg-muted/50 w-14 h-14 rounded-full flex items-center justify-center mb-4">
                 <CreditCard className="w-7 h-7 text-muted-foreground" />
@@ -170,17 +180,22 @@ const Pricing = () => {
                 </li>
                 <li className="flex">
                   <Check className="w-5 h-5 text-green-500 mr-2 flex-shrink-0" />
-                  <span>1:1 Coaching sessions</span>
+                  <span>Monthly group coaching sessions</span>
                 </li>
                 <li className="flex">
                   <Check className="w-5 h-5 text-green-500 mr-2 flex-shrink-0" />
-                  <span>Resume review</span>
+                  <span>Premium newsletter access</span>
                 </li>
                 <li className="flex">
                   <Check className="w-5 h-5 text-green-500 mr-2 flex-shrink-0" />
                   <span>Priority support</span>
                 </li>
               </ul>
+              
+              <div className="bg-primary/10 px-3 py-2 rounded-md text-sm mb-4">
+                <p className="font-medium">7-day free trial</p>
+                <p className="text-xs text-muted-foreground">Cancel anytime during trial period</p>
+              </div>
             </div>
             
             <div className="p-6 pt-0 mt-auto">

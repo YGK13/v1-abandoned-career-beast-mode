@@ -3,7 +3,7 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 import { toast } from "@/hooks/use-toast";
 
 type SubscriptionStatus = "active" | "inactive" | "loading";
-type SubscriptionTier = "free" | "jobs" | "premium";
+type SubscriptionTier = "basic" | "jobs" | "premium";
 
 interface SubscriptionContextType {
   status: SubscriptionStatus;
@@ -26,10 +26,10 @@ export const useSubscription = () => {
 
 export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [status, setStatus] = useState<SubscriptionStatus>("loading");
-  const [tier, setTier] = useState<SubscriptionTier>("free");
+  const [tier, setTier] = useState<SubscriptionTier>("basic");
 
   const hasJobsAccess = tier === "jobs" || tier === "premium";
-  const isSubscribed = tier !== "free";
+  const isSubscribed = tier !== "basic";
 
   useEffect(() => {
     // Check local storage for subscription status
@@ -47,7 +47,7 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
         setTier(savedTier);
         setStatus("active");
       } else {
-        setTier("free");
+        setTier("basic");
         setStatus("inactive");
       }
     }, 500);
@@ -82,7 +82,7 @@ export const SubscriptionProvider: React.FC<{ children: React.ReactNode }> = ({ 
         setStatus("active");
         toast({
           title: "Subscription activated!",
-          description: "You now have access to the Jobs section.",
+          description: "You now have access to the Jobs section with a 7-day free trial.",
         });
       }
     } catch (error) {
