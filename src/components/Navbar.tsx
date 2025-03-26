@@ -11,7 +11,13 @@ import {
   Target,
   CreditCard,
   Building,
-  Sprout
+  Sprout,
+  Scale,
+  Factory,
+  User,
+  Landmark,
+  Mailbox,
+  Link
 } from "lucide-react";
 import { useSubscription } from "@/context/SubscriptionContext";
 import Logo from "./navbar/Logo";
@@ -46,7 +52,8 @@ const Navbar: React.FC = () => {
       label: "Build", 
       icon: Building,
       children: [
-        { path: "/documents", label: "Documents", icon: FileText }
+        { path: "/documents", label: "Documents", icon: FileText },
+        { path: "/build-business", label: "Build Your Business", icon: Factory }
       ]
     },
     { 
@@ -55,7 +62,22 @@ const Navbar: React.FC = () => {
       icon: Sprout,
       children: [
         { path: "/skills", label: "Skills", icon: Award },
-        { path: "/coaching", label: "Coaching", icon: GraduationCap }
+        { 
+          path: "/coaching", 
+          label: "Coaching", 
+          icon: GraduationCap,
+          children: [
+            { path: "/coaching/one-on-one", label: "1:1 with Yuri Kruman", icon: User }
+          ]
+        }
+      ]
+    },
+    { 
+      path: "/scale", 
+      label: "Scale", 
+      icon: Scale,
+      children: [
+        { path: "/lifedesign", label: "Life Design", icon: Target }
       ]
     },
     { 
@@ -64,7 +86,6 @@ const Navbar: React.FC = () => {
       icon: Briefcase,
       locked: !hasJobsAccess
     },
-    { path: "/lifedesign", label: "Life Design", icon: Target },
     { path: "/pricing", label: "Pricing", icon: CreditCard },
     { path: "/help", label: "Help", icon: HelpCircle },
   ];

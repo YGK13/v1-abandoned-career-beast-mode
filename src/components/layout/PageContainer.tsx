@@ -10,8 +10,6 @@ interface PageContainerProps {
 const PageContainer: React.FC<PageContainerProps> = ({ children }) => {
   const location = useLocation();
   
-  // Note: We need to make sure our new route structures 
-  // (like /build and /grow) are included in the animation key
   const getRouteKey = () => {
     // For main navigation paths, use the pathname
     if (location.pathname === '/' || 
@@ -27,6 +25,10 @@ const PageContainer: React.FC<PageContainerProps> = ({ children }) => {
       return '/build/documents';
     }
     
+    if (location.pathname === '/build-business') {
+      return '/build/build-business';
+    }
+    
     // For paths under Grow
     if (location.pathname === '/skills') {
       return '/grow/skills';
@@ -34,6 +36,15 @@ const PageContainer: React.FC<PageContainerProps> = ({ children }) => {
     
     if (location.pathname === '/coaching') {
       return '/grow/coaching';
+    }
+
+    if (location.pathname === '/coaching/one-on-one') {
+      return '/grow/coaching/one-on-one';
+    }
+    
+    // For paths under Scale
+    if (location.pathname === '/lifedesign') {
+      return '/scale/lifedesign';
     }
     
     // Default to the pathname

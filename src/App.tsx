@@ -11,6 +11,8 @@ import Skills from "./pages/Skills";
 import Documents from "./pages/Documents";
 import Jobs from "./pages/Jobs";
 import Coaching from "./pages/Coaching";
+import CoachingOneOnOne from "./pages/CoachingOneOnOne";
+import BuildBusiness from "./pages/BuildBusiness";
 import LifeDesign from "./pages/LifeDesign";
 import Help from "./pages/Help";
 import NotFound from "./pages/NotFound";
@@ -31,8 +33,10 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/skills" element={<Skills />} />
               <Route path="/documents" element={<Documents />} />
+              <Route path="/build-business" element={<BuildBusiness />} />
               <Route path="/jobs" element={<Jobs />} />
               <Route path="/coaching" element={<Coaching />} />
+              <Route path="/coaching/one-on-one" element={<CoachingOneOnOne />} />
               <Route path="/lifedesign" element={<LifeDesign />} />
               <Route path="/help" element={<Help />} />
               <Route path="/pricing" element={<Pricing />} />
