@@ -11,7 +11,8 @@ import {
   HelpCircle,
   Menu,
   X,
-  GraduationCap
+  GraduationCap,
+  Target // Add this import for Life Design icon
 } from "lucide-react";
 
 const Navbar: React.FC = () => {
@@ -38,6 +39,7 @@ const Navbar: React.FC = () => {
     { path: "/documents", label: "Documents", icon: FileText },
     { path: "/jobs", label: "Jobs", icon: Briefcase },
     { path: "/coaching", label: "Coaching", icon: GraduationCap },
+    { path: "/lifedesign", label: "Life Design", icon: Target }, // Add Life Design to nav links
     { path: "/help", label: "Help", icon: HelpCircle },
   ];
 
