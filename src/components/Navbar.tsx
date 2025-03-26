@@ -8,6 +8,7 @@ import {
   FileText, 
   Briefcase, 
   Award,
+  HelpCircle,
   Menu,
   X
 } from "lucide-react";
@@ -35,6 +36,7 @@ const Navbar: React.FC = () => {
     { path: "/skills", label: "Skills", icon: Award },
     { path: "/documents", label: "Documents", icon: FileText },
     { path: "/jobs", label: "Jobs", icon: Briefcase },
+    { path: "/help", label: "Help", icon: HelpCircle },
   ];
 
   return (
@@ -108,7 +110,6 @@ const Navbar: React.FC = () => {
           </nav>
         </div>
       )}
-    </header>
   );
 };
 
