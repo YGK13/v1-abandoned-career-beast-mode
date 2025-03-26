@@ -52,7 +52,7 @@ const Navbar: React.FC = () => {
       label: "Build", 
       icon: Building,
       children: [
-        { path: "/documents", label: "Documents", icon: FileText },
+        { path: "/career-docs", label: "Career Docs", icon: FileText },
         { path: "/build-business", label: "Build Your Business", icon: Factory }
       ]
     },

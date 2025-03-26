@@ -9,7 +9,7 @@ import { SubscriptionProvider } from "./context/SubscriptionContext";
 import Index from "./pages/Index";
 import Skills from "./pages/Skills";
 import SkillDetails from "./pages/SkillDetails";
-import Documents from "./pages/Documents";
+import CareerDocs from "./pages/CareerDocs";
 import Jobs from "./pages/Jobs";
 import Coaching from "./pages/Coaching";
 import CoachingOneOnOne from "./pages/CoachingOneOnOne";
@@ -34,7 +34,7 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/skills" element={<Skills />} />
               <Route path="/skills/:skillName" element={<SkillDetails />} />
-              <Route path="/documents" element={<Documents />} />
+              <Route path="/career-docs" element={<CareerDocs />} />
               <Route path="/build-business" element={<BuildBusiness />} />
               <Route path="/jobs" element={<Jobs />} />
               <Route path="/coaching" element={<Coaching />} />

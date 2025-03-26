@@ -21,8 +21,8 @@ const PageContainer: React.FC<PageContainerProps> = ({ children }) => {
     }
     
     // For paths under Build
-    if (location.pathname === '/documents') {
-      return '/build/documents';
+    if (location.pathname === '/career-docs') {
+      return '/build/career-docs';
     }
     
     if (location.pathname === '/build-business') {
