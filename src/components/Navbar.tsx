@@ -10,7 +10,8 @@ import {
   Award,
   HelpCircle,
   Menu,
-  X
+  X,
+  GraduationCap
 } from "lucide-react";
 
 const Navbar: React.FC = () => {
@@ -36,6 +37,7 @@ const Navbar: React.FC = () => {
     { path: "/skills", label: "Skills", icon: Award },
     { path: "/documents", label: "Documents", icon: FileText },
     { path: "/jobs", label: "Jobs", icon: Briefcase },
+    { path: "/coaching", label: "Coaching", icon: GraduationCap },
     { path: "/help", label: "Help", icon: HelpCircle },
   ];
 
