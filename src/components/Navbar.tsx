@@ -110,6 +110,7 @@ const Navbar: React.FC = () => {
           </nav>
         </div>
       )}
+    </header>
   );
 };
 
