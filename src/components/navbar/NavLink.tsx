@@ -45,11 +45,13 @@ const NavLink: React.FC<NavLinkProps> = ({ path, label, icon: Icon, locked, chil
         <NavigationMenuList>
           <NavigationMenuItem>
             <NavigationMenuTrigger
-              className={`px-3 py-2 rounded-md flex items-center space-x-1 transition-colors ${
+              className={cn(
+                "px-3 py-2 rounded-md flex items-center space-x-1 transition-colors",
                 isActive
                   ? "text-primary bg-primary/10"
-                  : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
-              } ${locked ? "opacity-75" : ""}`}
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted/50",
+                locked ? "opacity-75" : ""
+              )}
               onClick={() => setOpen(!open)}
             >
               <Icon size={16} />
@@ -64,11 +66,13 @@ const NavLink: React.FC<NavLinkProps> = ({ path, label, icon: Icon, locked, chil
                     return (
                       <li key={child.path} className="relative group">
                         <div
-                          className={`flex items-center justify-between space-x-2 p-2 rounded-md cursor-pointer ${
+                          className={cn(
+                            "flex items-center justify-between space-x-2 p-2 rounded-md cursor-pointer",
                             location.pathname === child.path
                               ? "text-primary bg-primary/10"
-                              : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
-                          } ${child.locked ? "opacity-75" : ""}`}
+                              : "text-muted-foreground hover:text-foreground hover:bg-muted/50",
+                            child.locked ? "opacity-75" : ""
+                          )}
                         >
                           <div className="flex items-center space-x-2">
                             <child.icon size={16} />
@@ -85,11 +89,13 @@ const NavLink: React.FC<NavLinkProps> = ({ path, label, icon: Icon, locked, chil
                               <Link
                                 key={grandchild.path}
                                 to={grandchild.path}
-                                className={`flex items-center space-x-2 p-2 rounded-md ${
+                                className={cn(
+                                  "flex items-center space-x-2 p-2 rounded-md",
                                   location.pathname === grandchild.path
                                     ? "text-primary bg-primary/10"
-                                    : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
-                                } ${grandchild.locked ? "opacity-75" : ""}`}
+                                    : "text-muted-foreground hover:text-foreground hover:bg-muted/50",
+                                  grandchild.locked ? "opacity-75" : ""
+                                )}
                               >
                                 <grandchild.icon size={16} />
                                 <span>{grandchild.label}</span>
@@ -107,11 +113,13 @@ const NavLink: React.FC<NavLinkProps> = ({ path, label, icon: Icon, locked, chil
                     <li key={child.path}>
                       <Link
                         to={child.path}
-                        className={`flex items-center space-x-2 p-2 rounded-md ${
+                        className={cn(
+                          "flex items-center space-x-2 p-2 rounded-md",
                           location.pathname === child.path
                             ? "text-primary bg-primary/10"
-                            : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
-                        } ${child.locked ? "opacity-75" : ""}`}
+                            : "text-muted-foreground hover:text-foreground hover:bg-muted/50",
+                          child.locked ? "opacity-75" : ""
+                        )}
                       >
                         <child.icon size={16} />
                         <span>{child.label}</span>
@@ -128,15 +136,17 @@ const NavLink: React.FC<NavLinkProps> = ({ path, label, icon: Icon, locked, chil
     );
   }
   
-  // For regular links without children
+  // Regular link without children
   return (
     <Link
       to={path}
-      className={`px-3 py-2 rounded-md flex items-center space-x-1 transition-colors ${
+      className={cn(
+        "px-3 py-2 rounded-md flex items-center space-x-1 transition-colors",
         isActive
           ? "text-primary bg-primary/10"
-          : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
-      } ${locked ? "opacity-75" : ""}`}
+          : "text-muted-foreground hover:text-foreground hover:bg-muted/50",
+        locked ? "opacity-75" : ""
+      )}
     >
       <Icon size={16} />
       <span>{label}</span>

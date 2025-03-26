@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { 
@@ -17,7 +16,8 @@ import {
   User,
   Landmark,
   Mailbox,
-  Link
+  Link,
+  Users
 } from "lucide-react";
 import { useSubscription } from "@/context/SubscriptionContext";
 import Logo from "./navbar/Logo";
@@ -53,7 +53,8 @@ const Navbar: React.FC = () => {
       icon: Building,
       children: [
         { path: "/career-docs", label: "Career Docs", icon: FileText },
-        { path: "/build-business", label: "Build Your Business", icon: Factory }
+        { path: "/build-business", label: "Build Your Business", icon: Factory },
+        { path: "/manage-everything", label: "Manage Everything", icon: Users }
       ]
     },
     { 

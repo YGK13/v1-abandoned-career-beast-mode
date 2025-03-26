@@ -19,6 +19,7 @@ import Help from "./pages/Help";
 import NotFound from "./pages/NotFound";
 import Pricing from "./pages/Pricing";
 import Checkout from "./pages/Checkout";
+import ManageEverything from "./pages/ManageEverything";
 
 const queryClient = new QueryClient();
 
@@ -36,6 +37,7 @@ const App = () => (
               <Route path="/skills/:skillName" element={<SkillDetails />} />
               <Route path="/career-docs" element={<CareerDocs />} />
               <Route path="/build-business" element={<BuildBusiness />} />
+              <Route path="/manage-everything" element={<ManageEverything />} />
               <Route path="/jobs" element={<Jobs />} />
               <Route path="/coaching" element={<Coaching />} />
               <Route path="/coaching/one-on-one" element={<CoachingOneOnOne />} />
