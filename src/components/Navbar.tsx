@@ -1,21 +1,21 @@
 
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useLocation } from "react-router-dom";
 import { 
   BarChart2, 
   FileText, 
   Briefcase, 
   Award,
   HelpCircle,
-  Menu,
-  X,
   GraduationCap,
   Target,
   CreditCard
 } from "lucide-react";
 import { useSubscription } from "@/context/SubscriptionContext";
+import Logo from "./navbar/Logo";
+import NavLinks from "./navbar/NavLinks";
+import MobileMenu from "./navbar/MobileMenu";
+import UserMenu from "./navbar/UserMenu";
 
 const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -52,6 +52,10 @@ const Navbar: React.FC = () => {
     { path: "/help", label: "Help", icon: HelpCircle },
   ];
 
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
   return (
     <header 
       className={`sticky top-0 z-40 w-full transition-all duration-300 ${
@@ -59,72 +63,15 @@ const Navbar: React.FC = () => {
       }`}
     >
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-        <Link to="/" className="flex items-center space-x-2">
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-accent/80 flex items-center justify-center">
-            <span className="text-white font-semibold">B</span>
-          </div>
-          <span className="font-semibold text-xl">Beast Mode Career</span>
-        </Link>
-        
-        <nav className="hidden md:flex items-center space-x-1">
-          {navLinks.map(({ path, label, icon: Icon, locked }) => (
-            <Link
-              key={path}
-              to={path}
-              className={`px-3 py-2 rounded-md flex items-center space-x-1 transition-colors ${
-                location.pathname === path
-                  ? "text-primary bg-primary/10"
-                  : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
-              } ${locked ? "opacity-75" : ""}`}
-            >
-              <Icon size={16} />
-              <span>{label}</span>
-              {locked && <span className="w-2 h-2 bg-amber-500 rounded-full ml-1"></span>}
-            </Link>
-          ))}
-        </nav>
-        
-        <div className="flex items-center space-x-4">
-          <Button variant="ghost" size="icon" className="rounded-full bg-muted/50">
-            <Avatar className="h-8 w-8">
-              <AvatarImage src="/placeholder.svg" alt="User" />
-              <AvatarFallback>JS</AvatarFallback>
-            </Avatar>
-          </Button>
-          
-          <Button
-            variant="ghost"
-            size="icon"
-            className="md:hidden"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          >
-            {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
-          </Button>
-        </div>
+        <Logo />
+        <NavLinks links={navLinks} />
+        <UserMenu 
+          isMobileMenuOpen={isMobileMenuOpen} 
+          toggleMobileMenu={toggleMobileMenu} 
+        />
       </div>
       
-      {/* Mobile menu */}
-      {isMobileMenuOpen && (
-        <div className="md:hidden absolute top-16 left-0 right-0 bg-background/95 backdrop-blur-lg border-b border-border z-50 animate-fade-in">
-          <nav className="container mx-auto px-4 py-4 flex flex-col space-y-1">
-            {navLinks.map(({ path, label, icon: Icon, locked }) => (
-              <Link
-                key={path}
-                to={path}
-                className={`px-4 py-3 rounded-md flex items-center space-x-3 transition-colors ${
-                  location.pathname === path
-                    ? "text-primary bg-primary/10"
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
-                } ${locked ? "opacity-75" : ""}`}
-              >
-                <Icon size={18} />
-                <span>{label}</span>
-                {locked && <span className="w-2 h-2 bg-amber-500 rounded-full ml-1"></span>}
-              </Link>
-            ))}
-          </nav>
-        </div>
-      )}
+      <MobileMenu isOpen={isMobileMenuOpen} navLinks={navLinks} />
     </header>
   );
 };
