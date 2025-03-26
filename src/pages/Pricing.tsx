@@ -1,4 +1,3 @@
-
 import React from "react";
 import Layout from "@/components/Layout";
 import DashboardCard from "@/components/DashboardCard";
@@ -21,8 +20,8 @@ const Pricing = () => {
     if (planType === "jobs") {
       navigate("/checkout");
     } else if (planType === "premium") {
-      // Premium is coming soon
-      return;
+      // For now, just navigate to checkout when Premium is ready
+      navigate("/checkout");
     } else {
       // Basic plan
       navigate("/");
@@ -195,11 +194,11 @@ const Pricing = () => {
             <div className="p-6 pt-0 mt-auto">
               <Button 
                 className="w-full" 
-                variant={tier === "premium" ? "default" : "outline"}
-                disabled={true}
+                onClick={() => handleSelectPlan("premium")}
+                disabled={tier === "premium"}
               >
-                Coming Soon
-                {!tier && <ArrowRight className="ml-2 h-4 w-4" />}
+                {tier === "premium" ? "Current Plan" : "Select Plan"}
+                {tier !== "premium" && <ArrowRight className="ml-2 h-4 w-4" />}
               </Button>
             </div>
           </DashboardCard>
