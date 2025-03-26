@@ -15,6 +15,7 @@ import LifeDesign from "./pages/LifeDesign";
 import Help from "./pages/Help";
 import NotFound from "./pages/NotFound";
 import Pricing from "./pages/Pricing";
+import Checkout from "./pages/Checkout";
 
 const queryClient = new QueryClient();
 
@@ -35,6 +36,7 @@ const App = () => (
               <Route path="/lifedesign" element={<LifeDesign />} />
               <Route path="/help" element={<Help />} />
               <Route path="/pricing" element={<Pricing />} />
+              <Route path="/checkout" element={<Checkout />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </AnimatePresence>

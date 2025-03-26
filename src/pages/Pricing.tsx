@@ -4,9 +4,7 @@ import Layout from "@/components/Layout";
 import DashboardCard from "@/components/DashboardCard";
 import { Button } from "@/components/ui/button";
 import {
-  CreditCard,
   Check,
-  DollarSign,
   BadgeDollarSign,
   Briefcase,
   ArrowRight,
@@ -15,8 +13,21 @@ import { useSubscription } from "@/context/SubscriptionContext";
 import { useNavigate } from "react-router-dom";
 
 const Pricing = () => {
-  const { hasJobsAccess, checkoutJobs } = useSubscription();
+  const { tier, hasJobsAccess } = useSubscription();
   const navigate = useNavigate();
+
+  // Navigate to checkout page for the selected plan
+  const handleSelectPlan = (planType: string) => {
+    if (planType === "jobs") {
+      navigate("/checkout");
+    } else if (planType === "premium") {
+      // Premium is coming soon
+      return;
+    } else {
+      // Basic plan
+      navigate("/");
+    }
+  };
 
   return (
     <Layout>
@@ -29,7 +40,7 @@ const Pricing = () => {
         </header>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-          {/* Basic Plan (formerly Free) */}
+          {/* Basic Plan */}
           <DashboardCard className="flex flex-col border-2 h-full">
             <div className="p-6 flex-1">
               <div className="bg-muted/50 w-14 h-14 rounded-full flex items-center justify-center mb-4">
@@ -73,11 +84,11 @@ const Pricing = () => {
             
             <div className="p-6 pt-0 mt-auto">
               <Button 
-                variant="outline" 
                 className="w-full"
-                onClick={() => navigate("/")}
+                onClick={() => handleSelectPlan("basic")}
               >
-                Current Plan
+                {tier === "basic" ? "Current Plan" : "Select Plan"}
+                {tier !== "basic" && <ArrowRight className="ml-2 h-4 w-4" />}
               </Button>
             </div>
           </DashboardCard>
@@ -128,39 +139,22 @@ const Pricing = () => {
               </div>
             </div>
             
-            <div className="p-6 pt-0 space-y-3 mt-auto">
-              {hasJobsAccess ? (
-                <Button className="w-full" onClick={() => navigate("/jobs")}>
-                  Access Jobs
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              ) : (
-                <>
-                  <Button 
-                    className="w-full" 
-                    onClick={() => checkoutJobs("stripe")}
-                  >
-                    <CreditCard className="mr-2 h-4 w-4" />
-                    Subscribe with Stripe
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    className="w-full" 
-                    onClick={() => checkoutJobs("paypal")}
-                  >
-                    <DollarSign className="mr-2 h-4 w-4" />
-                    Pay with PayPal
-                  </Button>
-                </>
-              )}
+            <div className="p-6 pt-0 mt-auto">
+              <Button 
+                className="w-full" 
+                onClick={() => handleSelectPlan("jobs")}
+              >
+                {hasJobsAccess ? "Current Plan" : "Select Plan"}
+                {!hasJobsAccess && <ArrowRight className="ml-2 h-4 w-4" />}
+              </Button>
             </div>
           </DashboardCard>
 
-          {/* Premium Plan - Updated features */}
+          {/* Premium Plan */}
           <DashboardCard className="flex flex-col border-2 h-full">
             <div className="p-6 flex-1">
               <div className="bg-muted/50 w-14 h-14 rounded-full flex items-center justify-center mb-4">
-                <CreditCard className="w-7 h-7 text-muted-foreground" />
+                <BadgeDollarSign className="w-7 h-7 text-muted-foreground" />
               </div>
               
               <h2 className="font-bold text-2xl mb-2">Premium</h2>
@@ -199,8 +193,13 @@ const Pricing = () => {
             </div>
             
             <div className="p-6 pt-0 mt-auto">
-              <Button variant="outline" className="w-full" disabled>
+              <Button 
+                className="w-full" 
+                variant={tier === "premium" ? "default" : "outline"}
+                disabled={true}
+              >
                 Coming Soon
+                {!tier && <ArrowRight className="ml-2 h-4 w-4" />}
               </Button>
             </div>
           </DashboardCard>
