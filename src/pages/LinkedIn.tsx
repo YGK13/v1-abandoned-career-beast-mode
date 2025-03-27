@@ -2,6 +2,7 @@
 import React from "react";
 import Layout from "@/components/Layout";
 import LinkedInProfile from "@/components/career-docs/LinkedInProfile";
+import LinkedInProfileImport from "@/components/career-docs/LinkedInProfileImport";
 
 const LinkedIn: React.FC = () => {
   return (
@@ -18,6 +19,9 @@ const LinkedIn: React.FC = () => {
           </div>
         </header>
 
+        {/* LinkedIn Profile Import Section */}
+        <LinkedInProfileImport />
+        
         {/* LinkedIn Profile Assessment Section */}
         <LinkedInProfile />
         
