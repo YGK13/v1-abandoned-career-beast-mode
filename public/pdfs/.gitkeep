@@ -1,2 +1,13 @@
 
-# This directory is for book chapter PDFs
+# PDF Chapter Files Directory
+
+This directory contains all the chapter PDFs for the Life Design Library books.
+
+## Directory Structure
+- Each volume has its own folder (volume-1, volume-2, etc.)
+- Individual chapter PDFs are named with a consistent pattern: volume-{vol}-chapter-{chap}-{title}.pdf
+- For example: volume-1-chapter-1-four-conversations.pdf
+
+## Important
+When processing the complete volume PDFs into individual chapters, maintain this naming convention
+for proper file linking in the application.
