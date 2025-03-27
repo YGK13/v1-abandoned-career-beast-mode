@@ -4,15 +4,17 @@ import Layout from "@/components/Layout";
 import JobsHeader from "@/components/jobs/JobsHeader";
 import JobFilters from "@/components/jobs/JobFilters";
 import JobListingSection from "@/components/jobs/JobListingSection";
-import { jobs, offMarketJobs } from "@/components/jobs/JobsData";
+import AutoApplySettings from "@/components/jobs/AutoApplySettings";
+import { jobs, offMarketJobs, getApplicationStats } from "@/components/jobs/JobsData";
 import DashboardCard from "@/components/DashboardCard";
 import { Badge } from "@/components/ui/badge";
-import { Clock, Check, Building } from "lucide-react";
+import { Clock, Check, Building, Briefcase } from "lucide-react";
 
 const Jobs = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [matchThreshold, setMatchThreshold] = useState([70]);
   const [onlyRemote, setOnlyRemote] = useState(false);
+  const [isAutoApplyOpen, setIsAutoApplyOpen] = useState(false);
   
   const handleResetFilters = () => {
     setSearchQuery("");
@@ -20,10 +22,12 @@ const Jobs = () => {
     setOnlyRemote(false);
   };
 
+  const appStats = getApplicationStats();
+
   return (
     <Layout>
       <div className="page-container">
-        <JobsHeader />
+        <JobsHeader onOpenAutoApplySettings={() => setIsAutoApplyOpen(true)} />
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <DashboardCard className="md:col-span-2">
@@ -35,7 +39,7 @@ const Jobs = () => {
                 </div>
                 
                 <div className="flex flex-col items-center bg-muted/50 rounded-lg p-4">
-                  <h4 className="text-2xl font-bold mb-1">11</h4>
+                  <h4 className="text-2xl font-bold mb-1">{appStats.total}</h4>
                   <p className="text-xs text-muted-foreground text-center">Job matches found</p>
                 </div>
               </div>
@@ -49,7 +53,7 @@ const Jobs = () => {
                       <Clock size={16} className="text-muted-foreground" />
                       <h4 className="font-medium text-sm">Pending</h4>
                     </div>
-                    <p className="text-xl font-bold">2</p>
+                    <p className="text-xl font-bold">{appStats.saved}</p>
                   </div>
                   
                   <div className="bg-muted/50 rounded-lg p-3">
@@ -57,7 +61,7 @@ const Jobs = () => {
                       <Check size={16} className="text-green-500" />
                       <h4 className="font-medium text-sm">Interviews</h4>
                     </div>
-                    <p className="text-xl font-bold">1</p>
+                    <p className="text-xl font-bold">{appStats.interviews}</p>
                   </div>
                   
                   <div className="bg-muted/50 rounded-lg p-3">
@@ -65,7 +69,7 @@ const Jobs = () => {
                       <Building size={16} className="text-blue-500" />
                       <h4 className="font-medium text-sm">Off-Market</h4>
                     </div>
-                    <p className="text-xl font-bold">3</p>
+                    <p className="text-xl font-bold">{offMarketJobs.length}</p>
                   </div>
                 </div>
                 
@@ -99,6 +103,12 @@ const Jobs = () => {
           onSearchChange={setSearchQuery}
           matchThreshold={matchThreshold}
           onlyRemote={onlyRemote}
+          onApply={(job) => console.log("Apply to job:", job)}
+        />
+        
+        <AutoApplySettings
+          open={isAutoApplyOpen}
+          onOpenChange={setIsAutoApplyOpen}
         />
       </div>
     </Layout>

@@ -32,6 +32,7 @@ const JobCard: React.FC<JobCardProps> = ({
     <DashboardCard
       className="h-full"
       onClick={onClick}
+      isHoverable={!!onClick}
     >
       <div className="flex flex-col h-full">
         <div className="flex justify-between items-start mb-2">

@@ -1,5 +1,6 @@
 
 export interface Job {
+  id?: string;
   title: string;
   company: string;
   location: string;
@@ -10,10 +11,16 @@ export interface Job {
   isRecommended: boolean;
   status: string;
   source: string;
+  applicationStatus?: "not_applied" | "in_progress" | "applied" | "rejected" | "interview" | "offer";
+  appliedAt?: string;
+  easyApply?: boolean;
+  applyUrl?: string;
+  description?: string;
 }
 
 export const jobs: Job[] = [
   {
+    id: "j001",
     title: "Senior Product Manager",
     company: "TechCorp Inc.",
     location: "San Francisco, CA",
@@ -23,9 +30,14 @@ export const jobs: Job[] = [
     skills: ["Product Strategy", "Agile", "User Research", "Roadmapping", "Analytics"],
     isRecommended: true,
     status: "recommended",
-    source: "LinkedIn"
+    source: "LinkedIn",
+    applicationStatus: "not_applied",
+    easyApply: true,
+    applyUrl: "https://linkedin.com/jobs/view/senior-product-manager-at-techcorp",
+    description: "TechCorp is seeking an experienced Product Manager to lead our flagship product. You'll work closely with engineering, design, and business teams to define product strategy and roadmap."
   },
   {
+    id: "j002",
     title: "Product Marketing Lead",
     company: "InnovateLabs",
     location: "Remote",
@@ -35,9 +47,13 @@ export const jobs: Job[] = [
     skills: ["Marketing Strategy", "Product Launches", "Analytics", "Content Strategy"],
     isRecommended: true,
     status: "recommended",
-    source: "LinkedIn"
+    source: "LinkedIn",
+    applicationStatus: "not_applied",
+    easyApply: true,
+    applyUrl: "https://linkedin.com/jobs/view/product-marketing-lead-at-innovatelabs"
   },
   {
+    id: "j003",
     title: "Senior Data Analyst",
     company: "DataDriven Co.",
     location: "New York, NY",
@@ -47,9 +63,13 @@ export const jobs: Job[] = [
     skills: ["SQL", "Python", "Data Visualization", "Statistical Analysis"],
     isRecommended: true,
     status: "recommended",
-    source: "AngelList"
+    source: "AngelList",
+    applicationStatus: "not_applied",
+    easyApply: false,
+    applyUrl: "https://angel.co/company/datadriven/jobs/senior-data-analyst"
   },
   {
+    id: "j004",
     title: "Technical Product Manager",
     company: "SoftSolutions",
     location: "Boston, MA",
@@ -59,9 +79,13 @@ export const jobs: Job[] = [
     skills: ["API Development", "Technical Requirements", "Agile", "Product Strategy"],
     isRecommended: false,
     status: "saved",
-    source: "Y Combinator"
+    source: "Y Combinator",
+    applicationStatus: "not_applied",
+    easyApply: false,
+    applyUrl: "https://www.ycombinator.com/companies/softsolutions/jobs/technical-product-manager"
   },
   {
+    id: "j005",
     title: "Marketing Director",
     company: "BrandBuilders",
     location: "Remote",
@@ -71,9 +95,13 @@ export const jobs: Job[] = [
     skills: ["Digital Marketing", "Brand Strategy", "Team Leadership", "Budget Management"],
     isRecommended: false,
     status: "saved",
-    source: "LinkedIn"
+    source: "LinkedIn",
+    applicationStatus: "not_applied",
+    easyApply: true,
+    applyUrl: "https://linkedin.com/jobs/view/marketing-director-at-brandbuilders"
   },
   {
+    id: "j006",
     title: "UX Research Lead",
     company: "DesignFirst Inc.",
     location: "Seattle, WA",
@@ -83,9 +111,14 @@ export const jobs: Job[] = [
     skills: ["User Research", "Usability Testing", "Personas", "Journey Mapping"],
     isRecommended: false,
     status: "applied",
-    source: "Twitter"
+    source: "Twitter",
+    applicationStatus: "applied",
+    appliedAt: "2023-06-15T08:30:00Z",
+    easyApply: true,
+    applyUrl: "https://twitter.com/DesignFirstInc/status/1234567890"
   },
   {
+    id: "j007",
     title: "Product Operations Manager",
     company: "OptiFlow",
     location: "Chicago, IL",
@@ -95,9 +128,14 @@ export const jobs: Job[] = [
     skills: ["Process Improvement", "Cross-functional Collaboration", "Analytics", "Documentation"],
     isRecommended: false,
     status: "applied",
-    source: "Wellfound"
+    source: "Wellfound",
+    applicationStatus: "interview",
+    appliedAt: "2023-06-12T14:15:00Z",
+    easyApply: false,
+    applyUrl: "https://wellfound.com/company/optiflow/jobs/product-operations-manager"
   },
   {
+    id: "j008",
     title: "Growth Product Manager",
     company: "ScaleUp Technologies",
     location: "Remote",
@@ -107,12 +145,17 @@ export const jobs: Job[] = [
     skills: ["A/B Testing", "User Acquisition", "Retention Strategies", "Analytics"],
     isRecommended: false,
     status: "applied",
-    source: "Twitter"
+    source: "Twitter",
+    applicationStatus: "applied",
+    appliedAt: "2023-06-14T09:45:00Z",
+    easyApply: true,
+    applyUrl: "https://twitter.com/ScaleUpTech/status/9876543210"
   },
 ];
 
 export const offMarketJobs: Job[] = [
   {
+    id: "om001",
     title: "Board Member - Technology",
     company: "VirtualNonExecs",
     location: "Remote",
@@ -122,9 +165,13 @@ export const offMarketJobs: Job[] = [
     skills: ["Corporate Governance", "Technology Strategy", "Risk Management", "Executive Leadership"],
     isRecommended: true,
     status: "offmarket",
-    source: "Executive Network"
+    source: "Executive Network",
+    applicationStatus: "not_applied",
+    easyApply: false,
+    description: "Looking for experienced technology leaders to join our board of directors. This position requires strategic thinking and a proven track record in technology governance."
   },
   {
+    id: "om002",
     title: "Non-Executive Director - Financial Services",
     company: "VirtualNonExecs",
     location: "London / Remote",
@@ -134,9 +181,12 @@ export const offMarketJobs: Job[] = [
     skills: ["Regulatory Compliance", "Financial Oversight", "Strategic Planning", "Board Experience"],
     isRecommended: true,
     status: "offmarket",
-    source: "Executive Network"
+    source: "Executive Network",
+    applicationStatus: "not_applied",
+    easyApply: false
   },
   {
+    id: "om003",
     title: "Advisory Board Chair - Healthcare",
     company: "VirtualNonExecs",
     location: "New York / Remote",
@@ -146,9 +196,25 @@ export const offMarketJobs: Job[] = [
     skills: ["Healthcare Governance", "Industry Networks", "Strategic Guidance", "Fundraising"],
     isRecommended: false,
     status: "offmarket",
-    source: "LinkedIn"
+    source: "LinkedIn",
+    applicationStatus: "not_applied",
+    easyApply: true,
+    applyUrl: "https://linkedin.com/jobs/view/advisory-board-chair-healthcare"
   }
 ];
+
+// Function to auto-apply to a job
+export const autoApplyToJob = async (job: Job, credentials: any): Promise<boolean> => {
+  // This would be implemented to connect to the various platforms' APIs
+  console.log(`Auto-applying to ${job.title} at ${job.company} via ${job.source}`, credentials);
+  
+  // Simulate API call delay
+  await new Promise(resolve => setTimeout(resolve, 1500));
+  
+  // In a real implementation, this would use the appropriate API for each source
+  // and return success/failure based on the API response
+  return Math.random() > 0.2; // 80% success rate for demo purposes
+};
 
 // Update function that will be called daily to refresh job listings
 export const updateJobListings = async () => {
@@ -156,4 +222,21 @@ export const updateJobListings = async () => {
   // and refresh the job listings to ensure they're all within 7 days
   console.log("Job listings updated:", new Date().toISOString());
   // The actual implementation would call APIs and update the jobs array
+};
+
+// Function to get application statistics
+export const getApplicationStats = () => {
+  const allJobs = [...jobs, ...offMarketJobs];
+  
+  return {
+    total: allJobs.length,
+    applied: allJobs.filter(job => job.applicationStatus === "applied" || 
+                             job.applicationStatus === "interview" || 
+                             job.applicationStatus === "offer").length,
+    interviews: allJobs.filter(job => job.applicationStatus === "interview" || 
+                               job.applicationStatus === "offer").length,
+    offers: allJobs.filter(job => job.applicationStatus === "offer").length,
+    saved: allJobs.filter(job => job.status === "saved").length,
+    easyApply: allJobs.filter(job => job.easyApply).length,
+  };
 };

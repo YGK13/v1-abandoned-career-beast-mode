@@ -5,25 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import JobCard from "@/components/JobCard";
-import { Search, Briefcase, Linkedin, Twitter } from "lucide-react";
+import { Search, Briefcase, Linkedin, Twitter, Check, Zap } from "lucide-react";
 import OffMarketBanner from "./OffMarketBanner";
+import { Job } from "./JobsData";
 
 interface JobCategory {
   id: string;
   name: string;
-}
-
-interface Job {
-  title: string;
-  company: string;
-  location: string;
-  salary?: string;
-  postedDate: string;
-  matchScore: number;
-  skills: string[];
-  isRecommended: boolean;
-  status: string;
-  source: string;
 }
 
 interface JobListingSectionProps {
@@ -33,6 +21,7 @@ interface JobListingSectionProps {
   onSearchChange: (query: string) => void;
   matchThreshold: number[];
   onlyRemote: boolean;
+  onApply?: (job: Job) => void;
 }
 
 const JobListingSection: React.FC<JobListingSectionProps> = ({
@@ -41,7 +30,8 @@ const JobListingSection: React.FC<JobListingSectionProps> = ({
   searchQuery,
   onSearchChange,
   matchThreshold,
-  onlyRemote
+  onlyRemote,
+  onApply
 }) => {
   const jobCategories: JobCategory[] = [
     { id: "all", name: "All Jobs" },
@@ -98,6 +88,50 @@ const JobListingSection: React.FC<JobListingSectionProps> = ({
     return false;
   };
 
+  // Function to render application status badge
+  const renderApplicationStatus = (job: Job) => {
+    if (!job.applicationStatus || job.applicationStatus === "not_applied") return null;
+    
+    switch (job.applicationStatus) {
+      case "applied":
+        return (
+          <Badge className="absolute top-3 left-3 z-10 bg-green-500 text-white border-0 flex items-center gap-1">
+            <Check size={12} />
+            Applied
+          </Badge>
+        );
+      case "interview":
+        return (
+          <Badge className="absolute top-3 left-3 z-10 bg-blue-500 text-white border-0 flex items-center gap-1">
+            <Check size={12} />
+            Interview
+          </Badge>
+        );
+      case "offer":
+        return (
+          <Badge className="absolute top-3 left-3 z-10 bg-purple-500 text-white border-0 flex items-center gap-1">
+            <Check size={12} />
+            Offer
+          </Badge>
+        );
+      default:
+        return null;
+    }
+  };
+
+  // Render easy apply badge
+  const renderEasyApply = (job: Job) => {
+    if (job.easyApply) {
+      return (
+        <Badge className="absolute bottom-3 left-3 z-10 bg-amber-500 text-white border-0 flex items-center gap-1">
+          <Zap size={12} />
+          Easy Apply
+        </Badge>
+      );
+    }
+    return null;
+  };
+
   return (
     <>
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
@@ -141,6 +175,10 @@ const JobListingSection: React.FC<JobListingSectionProps> = ({
                     {renderSourceIcon(job.source)}
                     <span className="text-xs text-muted-foreground">{job.source}</span>
                   </div>
+                  
+                  {renderApplicationStatus(job)}
+                  {renderEasyApply(job)}
+                  
                   <JobCard
                     title={job.title}
                     company={job.company}
@@ -150,6 +188,7 @@ const JobListingSection: React.FC<JobListingSectionProps> = ({
                     matchScore={job.matchScore}
                     skills={job.skills}
                     isRecommended={job.isRecommended}
+                    onClick={() => onApply && onApply(job)}
                   />
                 </div>
               ))}
