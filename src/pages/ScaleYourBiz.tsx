@@ -2,6 +2,7 @@
 import React from "react";
 import Layout from "@/components/Layout";
 import EnterpriseToolsSection from "@/components/business/EnterpriseToolsSection";
+import BusinessResourcesDashboard from "@/components/business/BusinessResourcesDashboard";
 
 const ScaleYourBiz = () => {
   return (
@@ -12,7 +13,10 @@ const ScaleYourBiz = () => {
           Premium tools and resources to accelerate your business growth
         </p>
 
-        <EnterpriseToolsSection />
+        <div className="space-y-10">
+          <BusinessResourcesDashboard />
+          <EnterpriseToolsSection />
+        </div>
       </div>
     </Layout>
   );
