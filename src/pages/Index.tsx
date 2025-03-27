@@ -9,6 +9,7 @@ import JobRecommendationsSection from "@/components/dashboard/JobRecommendations
 import CareerPromoSection from "@/components/dashboard/CareerPromoSection";
 import LifeDesignSection from "@/components/dashboard/LifeDesignSection";
 import { Award, Briefcase, FileText, User, Users, Calendar, Trophy, Target, Network, GraduationCap } from "lucide-react";
+import { Job } from "@/components/jobs/data/types";
 
 const Index = () => {
   // Mock data
@@ -18,7 +19,7 @@ const Index = () => {
     { name: "Data Analysis", level: 72, category: "Technical", trend: "up" as const, isInDemand: true },
     { name: "Public Speaking", level: 65, category: "Soft Skills", trend: "stable" as const, isInDemand: false },
   ]);
-  const [recommendedJobs] = useState([
+  const [recommendedJobs] = useState<Job[]>([
     {
       title: "Senior Product Manager",
       company: "TechCorp Inc.",
@@ -27,7 +28,10 @@ const Index = () => {
       postedDate: "2 days ago",
       matchScore: 92,
       skills: ["Product Strategy", "Agile", "User Research", "Roadmapping", "Analytics"],
-      isRecommended: true
+      isRecommended: true,
+      status: "recommended",
+      source: "LinkedIn",
+      applicationStatus: "not_applied"
     },
     {
       title: "Product Marketing Lead",
@@ -37,7 +41,10 @@ const Index = () => {
       postedDate: "1 week ago",
       matchScore: 87,
       skills: ["Marketing Strategy", "Product Launches", "Analytics", "Content Strategy"],
-      isRecommended: true
+      isRecommended: true,
+      status: "recommended",
+      source: "AngelList",
+      applicationStatus: "not_applied"
     }
   ]);
   

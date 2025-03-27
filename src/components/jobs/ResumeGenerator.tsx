@@ -1,21 +1,10 @@
-
 import React, { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Check, RefreshCw, FileText, CheckCircle2, X } from "lucide-react";
-
-interface Job {
-  title: string;
-  company: string;
-  location: string;
-  salary?: string;
-  postedDate: string;
-  matchScore: number;
-  skills: string[];
-  isRecommended?: boolean;
-}
+import { Job } from "./data/types";
 
 interface ResumeGeneratorProps {
   job: Job;
@@ -37,7 +26,6 @@ const ResumeGenerator: React.FC<ResumeGeneratorProps> = ({
   const [currentStage, setCurrentStage] = useState<'analyzing' | 'optimizing' | 'formatting' | 'complete'>('analyzing');
   const [resumeData, setResumeData] = useState<any>(null);
   
-  // Handle the resume generation process
   useEffect(() => {
     if (!isGenerating) return;
     
@@ -60,21 +48,19 @@ const ResumeGenerator: React.FC<ResumeGeneratorProps> = ({
       setProgress(prev => {
         const newProgress = prev + increment;
         if (newProgress >= stage.targetProgress) {
-          // Move to next stage
           if (currentStageIndex < stages.length - 1) {
             startProgress = stage.targetProgress;
             currentStageIndex++;
             setCurrentStage(stages[currentStageIndex].name as any);
           }
           
-          // Generate resume data when complete
           if (currentStageIndex === stages.length - 1) {
             setResumeData({
               jobTitle: job.title,
               company: job.company,
               tailoredSkills: job.skills,
               resumeId: `resume-${Date.now()}`,
-              atsScore: Math.floor(Math.random() * 11) + 90, // 90-100 score
+              atsScore: Math.floor(Math.random() * 11) + 90,
               keywords: job.skills.slice(0, 3)
             });
           }

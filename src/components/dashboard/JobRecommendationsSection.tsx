@@ -10,17 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { autoApplyToJob } from "@/components/jobs/data/jobsAPI";
 import ResumeGenerator from "@/components/jobs/ResumeGenerator";
-
-interface Job {
-  title: string;
-  company: string;
-  location: string;
-  salary: string;
-  postedDate: string;
-  matchScore: number;
-  skills: string[];
-  isRecommended: boolean;
-}
+import { Job } from "@/components/jobs/data/types"; // Import the correct Job type
 
 interface JobRecommendationsSectionProps {
   jobs: Job[];
