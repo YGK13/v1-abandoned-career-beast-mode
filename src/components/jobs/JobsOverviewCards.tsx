@@ -1,8 +1,11 @@
-
 import React from "react";
 import DashboardCard from "@/components/DashboardCard";
 import { Badge } from "@/components/ui/badge";
-import { Clock, Check, Building } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Slider } from "@/components/ui/slider";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { Clock, Check, Building, MapPin, Briefcase } from "lucide-react";
 
 const JobsOverviewCards: React.FC = () => {
   return (
@@ -150,10 +153,5 @@ const JobTypeFilters: React.FC = () => {
     </div>
   );
 };
-
-import { Slider } from "@/components/ui/slider";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
-import { MapPin, Briefcase } from "lucide-react";
 
 export default JobsOverviewCards;
