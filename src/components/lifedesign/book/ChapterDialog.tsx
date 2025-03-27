@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Download, BookOpen } from "lucide-react";
+import { Download, BookOpen, File } from "lucide-react";
 import { BookChapter, BookVolume } from "./types";
 import {
   Dialog,
@@ -9,6 +9,8 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 
 interface ChapterDialogProps {
   open: boolean;
@@ -32,7 +34,17 @@ const ChapterDialog: React.FC<ChapterDialogProps> = ({
           <div className={`inline-flex px-2 py-1 rounded-md text-sm ${volume.badgeColor} mb-2`}>
             {volume.title}
           </div>
-          <DialogTitle>{chapter.title}</DialogTitle>
+          <DialogTitle className="flex items-center justify-between">
+            <span>{chapter.title}</span>
+            <a 
+              href={chapter.pdfUrl} 
+              download
+              className="inline-flex items-center justify-center rounded-md text-sm font-medium h-9 px-3 bg-primary text-primary-foreground shadow hover:bg-primary/90"
+            >
+              <Download className="h-4 w-4 mr-2" />
+              <span>Download Chapter PDF</span>
+            </a>
+          </DialogTitle>
           <DialogDescription>{chapter.description}</DialogDescription>
         </DialogHeader>
         
@@ -50,16 +62,22 @@ const ChapterDialog: React.FC<ChapterDialogProps> = ({
             ))}
           </ul>
         </div>
+
+        <Separator className="my-4" />
         
-        <div className="mt-6 flex justify-center">
+        <div className="mt-6">
+          <div className="mb-3 flex items-center">
+            <File className="h-4 w-4 mr-2 text-primary" />
+            <h4 className="font-medium">Chapter PDF Preview</h4>
+          </div>
           <object
             data={chapter.pdfUrl}
             type="application/pdf"
             width="100%"
-            height="400px"
+            height="500px"
             className="border rounded-md"
           >
-            <p>
+            <p className="p-4 text-center">
               It appears your browser doesn't support embedded PDFs. You can{" "}
               <a 
                 href={chapter.pdfUrl} 
@@ -71,17 +89,6 @@ const ChapterDialog: React.FC<ChapterDialogProps> = ({
               instead.
             </p>
           </object>
-        </div>
-        
-        <div className="flex justify-end mt-6">
-          <a 
-            href={chapter.pdfUrl} 
-            download
-            className="inline-flex items-center justify-center rounded-md text-sm font-medium h-10 px-4 py-2 bg-primary text-primary-foreground shadow hover:bg-primary/90"
-          >
-            <Download className="h-4 w-4 mr-2" />
-            <span>Download Full Chapter</span>
-          </a>
         </div>
       </DialogContent>
     </Dialog>

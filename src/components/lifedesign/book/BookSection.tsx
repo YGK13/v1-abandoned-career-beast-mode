@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import { BookOpen } from "lucide-react";
+import { BookOpen, Download } from "lucide-react";
 import { 
   Card, 
   CardContent, 
@@ -14,6 +14,7 @@ import {
   TabsList, 
   TabsTrigger 
 } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
 
 import { bookVolumes } from "./data";
 import ChapterDialog from "./ChapterDialog";
@@ -53,6 +54,19 @@ const BookSection: React.FC = () => {
         <CardDescription>
           Explore the complete Be Your Own Commander-in-Chief book series
         </CardDescription>
+        <div className="flex items-center mt-2 space-x-2">
+          {bookVolumes.map((volume) => (
+            <a 
+              key={volume.id} 
+              href={`/pdfs/volume-${volume.id}-full.pdf`}
+              download
+              className="inline-flex items-center text-sm font-medium h-9 px-4 py-2 rounded-md bg-primary text-primary-foreground hover:bg-primary/90"
+            >
+              <Download className="h-4 w-4 mr-2" />
+              Volume {volume.id} PDF
+            </a>
+          ))}
+        </div>
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="volumes">

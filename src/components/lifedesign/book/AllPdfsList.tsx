@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Download } from "lucide-react";
+import { Download, File } from "lucide-react";
 import { BookVolume } from "./types";
 
 interface AllPdfsListProps {
@@ -12,9 +12,19 @@ const AllPdfsList: React.FC<AllPdfsListProps> = ({ volumes }) => {
     <div className="space-y-6">
       {volumes.map((volume) => (
         <div key={volume.id} className="border rounded-lg overflow-hidden">
-          <div className={`${volume.color} p-3 flex items-center gap-2`}>
-            <volume.icon size={18} />
-            <h3 className="font-medium">{volume.title}</h3>
+          <div className={`${volume.color} p-3 flex items-center justify-between`}>
+            <div className="flex items-center gap-2">
+              <volume.icon size={18} />
+              <h3 className="font-medium">{volume.title}</h3>
+            </div>
+            <a 
+              href={`/pdfs/volume-${volume.id}-full.pdf`}
+              download
+              className="flex items-center gap-1 px-3 py-1 bg-white/20 rounded-md hover:bg-white/30 text-white"
+            >
+              <Download className="h-4 w-4" />
+              <span className="text-sm">Full Volume</span>
+            </a>
           </div>
           <div className="p-4">
             <div className="divide-y">
@@ -29,7 +39,7 @@ const AllPdfsList: React.FC<AllPdfsListProps> = ({ volumes }) => {
                     download
                     className="flex items-center gap-1 px-3 py-1 bg-muted rounded-md hover:bg-muted/80"
                   >
-                    <Download className="h-4 w-4" />
+                    <File className="h-4 w-4" />
                     <span className="text-sm">PDF</span>
                   </a>
                 </div>
