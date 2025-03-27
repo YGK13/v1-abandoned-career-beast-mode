@@ -1,5 +1,5 @@
 
-import { DollarSign, Users, Briefcase, Globe, BookOpen, PieChart, FileText, Presentation } from "lucide-react";
+import { DollarSign, Users, Briefcase, Globe, BookOpen, PieChart, FileText, Presentation, Landmark, Lightbulb, Brain } from "lucide-react";
 
 export interface ExpertPlatform {
   id: string;
@@ -12,6 +12,7 @@ export interface ExpertPlatform {
   benefits: string[];
   industries: string[];
   link: string;
+  lastVerified?: string; // Date when platform was last verified as active
 }
 
 export const expertPlatforms: ExpertPlatform[] = [
@@ -35,7 +36,8 @@ export const expertPlatforms: ExpertPlatform[] = [
       "Expand your professional network"
     ],
     industries: ["Finance", "Healthcare", "Technology", "Legal", "Energy"],
-    link: "https://glginsights.com/experts/"
+    link: "https://glginsights.com/experts/",
+    lastVerified: "2023-11-01"
   },
   {
     id: "toptal",
@@ -58,7 +60,8 @@ export const expertPlatforms: ExpertPlatform[] = [
       "Dedicated placement team"
     ],
     industries: ["Software Development", "Design", "Finance", "Project Management", "Product Management"],
-    link: "https://www.toptal.com/talent/apply"
+    link: "https://www.toptal.com/talent/apply",
+    lastVerified: "2023-10-15"
   },
   {
     id: "catalant",
@@ -80,7 +83,8 @@ export const expertPlatforms: ExpertPlatform[] = [
       "Access to premium consulting opportunities"
     ],
     industries: ["Strategy", "Operations", "Marketing", "HR", "Digital"],
-    link: "https://gocatalant.com/experts"
+    link: "https://gocatalant.com/experts",
+    lastVerified: "2023-10-30"
   },
   {
     id: "umbrex",
@@ -102,7 +106,8 @@ export const expertPlatforms: ExpertPlatform[] = [
       "Marketing support"
     ],
     industries: ["Strategy", "Private Equity", "Digital Transformation", "Operations", "Marketing"],
-    link: "https://umbrex.com/join/"
+    link: "https://umbrex.com/join/",
+    lastVerified: "2023-11-12"
   },
   {
     id: "tegus",
@@ -124,7 +129,8 @@ export const expertPlatforms: ExpertPlatform[] = [
       "Business development opportunities"
     ],
     industries: ["Investment", "Finance", "Technology", "Healthcare", "Consumer"],
-    link: "https://www.tegus.com/experts/"
+    link: "https://www.tegus.com/experts/",
+    lastVerified: "2023-11-05"
   },
   {
     id: "third-bridge",
@@ -146,7 +152,8 @@ export const expertPlatforms: ExpertPlatform[] = [
       "Professional networking"
     ],
     industries: ["Private Equity", "Investment Banking", "Venture Capital", "Consulting", "Corporate Strategy"],
-    link: "https://www.thirdbridge.com/join-our-forum"
+    link: "https://www.thirdbridge.com/join-our-forum",
+    lastVerified: "2023-10-20"
   },
   {
     id: "alphasights",
@@ -168,7 +175,77 @@ export const expertPlatforms: ExpertPlatform[] = [
       "Flexible engagement options"
     ],
     industries: ["Management Consulting", "Financial Services", "Healthcare", "Technology", "Consumer Goods"],
-    link: "https://www.alphasights.com/advisors/"
+    link: "https://www.alphasights.com/advisors/",
+    lastVerified: "2023-10-25"
+  },
+  {
+    id: "clarity",
+    name: "Clarity.fm",
+    description: "Clarity.fm enables entrepreneurs to connect with experts for on-demand business advice through phone consultations.",
+    icon: Lightbulb,
+    payRange: "$50-$300+ per hour",
+    requirements: [
+      "Entrepreneurial or industry expertise",
+      "Demonstrated success in your field",
+      "Willingness to provide advice on call",
+      "Professional online presence"
+    ],
+    applicationProcess: "Create a profile, set your rate, verify your identity, then start receiving call requests.",
+    benefits: [
+      "Complete flexibility",
+      "Direct client interactions",
+      "Set your own availability",
+      "Build your personal brand"
+    ],
+    industries: ["Startups", "Entrepreneurship", "Marketing", "Fundraising", "Product Development"],
+    link: "https://clarity.fm/become-an-expert",
+    lastVerified: "2023-11-02"
+  },
+  {
+    id: "expertvoice",
+    name: "ExpertVoice",
+    description: "ExpertVoice connects brands with industry experts who can provide authentic product recommendations and insights.",
+    icon: Brain,
+    payRange: "Varies + product discounts",
+    requirements: [
+      "Professional experience in relevant industry",
+      "Certification or credentials in your field",
+      "Active influence in your community",
+      "Authentic passion for products in your category"
+    ],
+    applicationProcess: "Apply online, verify your professional status, complete brand-specific training to unlock opportunities.",
+    benefits: [
+      "Access to exclusive product discounts",
+      "Early product testing opportunities",
+      "Education from top brands",
+      "Community of like-minded experts"
+    ],
+    industries: ["Retail", "Outdoor", "Fitness", "Technology", "Beauty"],
+    link: "https://www.expertvoice.com/experts/",
+    lastVerified: "2023-10-10"
+  },
+  {
+    id: "zintro",
+    name: "Zintro",
+    description: "Zintro connects companies with specialized experts for consulting projects, phone consultations, and research.",
+    icon: Landmark,
+    payRange: "$100-$500+ per hour",
+    requirements: [
+      "Expert-level knowledge in your field",
+      "5+ years professional experience",
+      "Professional credentials preferred",
+      "Client-focused approach"
+    ],
+    applicationProcess: "Create a free expert account, complete your profile with keywords, respond to project notifications.",
+    benefits: [
+      "Direct client interactions",
+      "Variety of engagement formats",
+      "Global client base",
+      "Project alerts based on your expertise"
+    ],
+    industries: ["Manufacturing", "Energy", "Finance", "Healthcare", "Technology"],
+    link: "https://www.zintro.com/expertnetwork",
+    lastVerified: "2023-10-18"
   }
 ];
 
@@ -191,4 +268,16 @@ export const getAllPlatforms = (): ExpertPlatform[] => {
 // Find platform by ID
 export const getPlatformById = (id: string): ExpertPlatform | undefined => {
   return expertPlatforms.find(platform => platform.id === id);
+};
+
+// Get recently verified platforms (within last month)
+export const getRecentlyVerifiedPlatforms = (): ExpertPlatform[] => {
+  const oneMonthAgo = new Date();
+  oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
+  
+  return expertPlatforms.filter(platform => {
+    if (!platform.lastVerified) return true; // Include if no verification date
+    const verifiedDate = new Date(platform.lastVerified);
+    return verifiedDate >= oneMonthAgo;
+  });
 };
