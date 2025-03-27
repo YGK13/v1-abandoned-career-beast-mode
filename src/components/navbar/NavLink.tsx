@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { LucideIcon, ChevronDown } from "lucide-react";
@@ -38,10 +37,8 @@ const NavLink: React.FC<NavLinkProps> = ({ path, label, icon: Icon, locked, chil
                   ));
   const [open, setOpen] = useState(false);
   
-  // Standardized font styling for all menu items
   const menuItemStyle = "font-medium text-sm";
   
-  // If this is a parent link with children
   if (children && children.length > 0) {
     return (
       <NavigationMenu>
@@ -65,7 +62,6 @@ const NavLink: React.FC<NavLinkProps> = ({ path, label, icon: Icon, locked, chil
             <NavigationMenuContent>
               <ul className="w-[220px] p-2 space-y-1">
                 {children.map((child) => {
-                  // If this child has its own children (third level nav)
                   if (child.children && child.children.length > 0) {
                     return (
                       <li key={child.path} className="relative group">
@@ -84,10 +80,8 @@ const NavLink: React.FC<NavLinkProps> = ({ path, label, icon: Icon, locked, chil
                             <span>{child.label}</span>
                             {child.locked && <span className="w-2 h-2 bg-amber-500 rounded-full ml-1"></span>}
                           </div>
-                          <ChevronDown size={14} className="transform -rotate-90" />
                         </div>
                         
-                        {/* Third level submenu */}
                         <div className="absolute left-full top-0 ml-1 hidden group-hover:block">
                           <div className="bg-background border border-border rounded-md shadow-md p-2 w-[220px]">
                             {child.children.map((grandchild) => (
@@ -114,7 +108,6 @@ const NavLink: React.FC<NavLinkProps> = ({ path, label, icon: Icon, locked, chil
                     );
                   }
                   
-                  // Regular second-level link
                   return (
                     <li key={child.path}>
                       <Link
@@ -143,7 +136,6 @@ const NavLink: React.FC<NavLinkProps> = ({ path, label, icon: Icon, locked, chil
     );
   }
   
-  // Regular link without children
   return (
     <Link
       to={path}
