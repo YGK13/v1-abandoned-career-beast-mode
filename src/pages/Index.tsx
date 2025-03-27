@@ -7,6 +7,7 @@ import ActionItemsSection from "@/components/dashboard/ActionItemsSection";
 import LifeDesignSection from "@/components/dashboard/LifeDesignSection";
 import JobRecommendationsSection from "@/components/dashboard/JobRecommendationsSection";
 import ProgressSection from "@/components/dashboard/ProgressSection";
+import { Job } from "@/components/jobs/data/types";
 
 const Index = () => {
   // Mock data
@@ -36,7 +37,7 @@ const Index = () => {
   ];
 
   // Recommended jobs data
-  const recommendedJobs = [
+  const recommendedJobs: Job[] = [
     {
       title: "Senior Product Manager",
       company: "TechCorp Inc.",
