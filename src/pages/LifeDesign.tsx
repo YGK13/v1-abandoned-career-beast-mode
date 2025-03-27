@@ -10,6 +10,7 @@ import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
 import DailyLifeDesignTip from "@/components/lifedesign/DailyLifeDesignTip";
 import ConversationSection from "@/components/lifedesign/ConversationSection";
+import BookSection from "@/components/lifedesign/BookSection";
 
 const LifeDesign: React.FC = () => {
   // Mock data for the 4 conversations
@@ -322,6 +323,9 @@ const LifeDesign: React.FC = () => {
             </div>
           </CardContent>
         </Card>
+        
+        {/* Book Section */}
+        <BookSection />
       </div>
     </Layout>
   );

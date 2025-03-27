@@ -7,7 +7,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ChevronRight, CheckCircle, RefreshCw } from "lucide-react";
 import ExpertPlatformCard from "@/components/monetize/ExpertPlatformCard";
 import DailyPlatformTip from "@/components/monetize/DailyPlatformTip";
-import BioGenerator from "@/components/monetize/BioGenerator";
 import { 
   getRandomPlatform, 
   getInitialPlatforms, 
@@ -103,9 +102,6 @@ const MonetizeExpertise = () => {
               </div>
             </TabsContent>
           </Tabs>
-          
-          {/* Bio Generator */}
-          <BioGenerator />
           
           <div className="bg-muted/30 p-6 rounded-lg border mt-12">
             <h2 className="text-xl font-semibold mb-3">How to Maximize Your Expert Consulting Opportunities</h2>

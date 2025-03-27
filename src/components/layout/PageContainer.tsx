@@ -37,6 +37,10 @@ const PageContainer: React.FC<PageContainerProps> = ({ children }) => {
       return '/build/manage-everything';
     }
     
+    if (location.pathname === '/bio-generator') {
+      return '/build/bio-generator';
+    }
+    
     // For paths under Grow
     if (location.pathname === '/skills') {
       return '/grow/skills';

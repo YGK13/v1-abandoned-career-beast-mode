@@ -21,7 +21,8 @@ import {
   DollarSign,
   Linkedin,
   Network,
-  LucideProps
+  LucideProps,
+  FileSpreadsheet
 } from "lucide-react";
 import { useSubscription } from "@/context/SubscriptionContext";
 import Logo from "./navbar/Logo";
@@ -80,13 +81,14 @@ const Navbar: React.FC = () => {
       label: "Build", 
       icon: Building,
       children: [
-        { path: "/career-docs", label: "Career Assets", icon: FileText }, // Updated label here
+        { path: "/career-docs", label: "Career Assets", icon: FileText }, 
         { path: "/linkedin", label: "LinkedIn", icon: Linkedin },
         { path: "/manage-everything", label: "Manage Everything", icon: Users,
           children: [
             { path: "/build-business", label: "Start Your Biz", icon: Factory },
           ] 
-        }
+        },
+        { path: "/bio-generator", label: "Bio Generator", icon: FileSpreadsheet }
       ]
     },
     { 

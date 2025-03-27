@@ -29,6 +29,7 @@ import Networking from "./pages/Networking";
 import SalaryTitle from "./pages/SalaryTitle";
 import MentalModels from "./pages/MentalModels";
 import LifeSkills from "./pages/LifeSkills";
+import BioGenerator from "./pages/BioGenerator";
 
 const queryClient = new QueryClient();
 
@@ -63,6 +64,7 @@ const App = () => (
               <Route path="/help" element={<Help />} />
               <Route path="/pricing" element={<Pricing />} />
               <Route path="/checkout" element={<Checkout />} />
+              <Route path="/bio-generator" element={<BioGenerator />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </AnimatePresence>
