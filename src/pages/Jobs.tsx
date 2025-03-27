@@ -19,37 +19,11 @@ import {
   Sparkles,
   Building
 } from "lucide-react";
-import { useSubscription } from "@/context/SubscriptionContext";
-import Paywall from "@/components/Paywall";
 
 const Jobs = () => {
-  const { hasJobsAccess, status } = useSubscription();
   const [searchQuery, setSearchQuery] = useState("");
   const [matchThreshold, setMatchThreshold] = useState([70]);
   const [onlyRemote, setOnlyRemote] = useState(false);
-  
-  if (status === "loading") {
-    return (
-      <Layout>
-        <div className="page-container">
-          <div className="flex items-center justify-center h-[60vh]">
-            <p className="text-lg">Loading subscription status...</p>
-          </div>
-        </div>
-      </Layout>
-    );
-  }
-  
-  if (!hasJobsAccess) {
-    return (
-      <Layout>
-        <Paywall 
-          title="Jobs Section Requires Subscription" 
-          description="Unlock comprehensive job matching, application tools, and exclusive job listings with a Jobs subscription." 
-        />
-      </Layout>
-    );
-  }
   
   const jobCategories = [
     { id: "all", name: "All Jobs" },
