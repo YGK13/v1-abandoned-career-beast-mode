@@ -12,7 +12,6 @@ import {
   CreditCard,
   Building,
   Sprout,
-  ChartBarIcon,
   Factory,
   User,
   Landmark,
@@ -30,8 +29,8 @@ import MobileMenu from "./navbar/MobileMenu";
 import UserMenu from "./navbar/UserMenu";
 import { NavItem } from "./navbar/NavLink";
 
-// Create a custom ChartBarIcon component with the hockey stick growth shape
-const ChartBarIcon = (props) => (
+// Create a custom GrowthChartIcon component with the hockey stick growth shape
+const GrowthChartIcon = (props) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={props.size || 24}
@@ -101,7 +100,7 @@ const Navbar: React.FC = () => {
     { 
       path: "/scale", 
       label: "Scale", 
-      icon: ChartBarIcon,
+      icon: GrowthChartIcon,
       children: [
         { path: "/lifedesign", label: "Life Design", icon: Target },
         { path: "/scale-your-biz", label: "Scale Your Biz", icon: Factory }
