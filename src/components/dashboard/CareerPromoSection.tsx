@@ -1,46 +1,57 @@
 
 import React from "react";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { User, Award, Star, Info } from "lucide-react";
-import DashboardCard from "@/components/DashboardCard";
 import { Link } from "react-router-dom";
+import { LucideIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface CareerPromoSectionProps {
-  icon?: React.ElementType;
-  title?: string;
-  description?: string;
-  buttonText?: string;
-  buttonLink?: string;
-  className?: string;
+  icon: LucideIcon;
+  title: string;
+  description: string;
+  buttonText: string;
+  buttonLink: string;
+  highlight?: boolean;
 }
 
 const CareerPromoSection: React.FC<CareerPromoSectionProps> = ({
-  icon: IconComponent = User,
-  title = "Ready to reach the next level?",
-  description = "Build your personal brand and get noticed with our PR opportunity tracking and media mention monitoring.",
-  buttonText = "Manage Your Brand",
-  buttonLink = "/personal-brand",
-  className,
+  icon: Icon,
+  title,
+  description,
+  buttonText,
+  buttonLink,
+  highlight = false
 }) => {
   return (
-    <DashboardCard
-      className={`bg-gradient-to-br from-primary/10 to-accent/5 border-primary/20 ${className || ""}`}
-    >
-      <div className="flex flex-col md:flex-row items-center gap-6">
-        <div className="flex-shrink-0 w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
-          <IconComponent size={24} className="text-primary" />
+    <Card className={cn(
+      "transition-all duration-200 hover:shadow-md", 
+      highlight ? "border-primary/30 bg-primary/5 shadow-sm" : ""
+    )}>
+      <CardContent className="pt-6">
+        <div className="flex items-start gap-4">
+          <div className={cn(
+            "p-2 rounded-lg", 
+            highlight ? "bg-primary text-primary-foreground" : "bg-muted"
+          )}>
+            <Icon size={20} />
+          </div>
+          <div className="flex-1">
+            <h3 className="font-medium text-lg mb-2">{title}</h3>
+            <p className="text-muted-foreground text-sm mb-4">{description}</p>
+            <Link to={buttonLink}>
+              <Button 
+                variant={highlight ? "default" : "outline"} 
+                size="sm" 
+                className="w-full"
+              >
+                {buttonText}
+              </Button>
+            </Link>
+          </div>
         </div>
-        <div className="flex-1">
-          <h3 className="text-xl font-semibold mb-1">{title}</h3>
-          <p className="text-muted-foreground">{description}</p>
-        </div>
-        <Button className="flex-shrink-0" asChild>
-          <Link to={buttonLink}>
-            {buttonText}
-          </Link>
-        </Button>
-      </div>
-    </DashboardCard>
+      </CardContent>
+    </Card>
   );
 };
 

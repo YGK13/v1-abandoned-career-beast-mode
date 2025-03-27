@@ -26,6 +26,7 @@ import PersonalBrand from "./pages/PersonalBrand";
 import LinkedIn from "./pages/LinkedIn";
 import ScaleYourBiz from "./pages/ScaleYourBiz";
 import Networking from "./pages/Networking";
+import SalaryTitle from "./pages/SalaryTitle";
 
 const queryClient = new QueryClient();
 
@@ -49,6 +50,7 @@ const App = () => (
               <Route path="/monetize-expertise/:platformId" element={<MonetizePlatformDetails />} />
               <Route path="/personal-brand" element={<PersonalBrand />} />
               <Route path="/networking" element={<Networking />} />
+              <Route path="/salary-title" element={<SalaryTitle />} />
               <Route path="/jobs" element={<Jobs />} />
               <Route path="/coaching" element={<Coaching />} />
               <Route path="/coaching/one-on-one" element={<CoachingOneOnOne />} />

@@ -9,7 +9,7 @@ import UpcomingEventsSection from "@/components/dashboard/UpcomingEventsSection"
 import JobRecommendationsSection from "@/components/dashboard/JobRecommendationsSection";
 import CareerPromoSection from "@/components/dashboard/CareerPromoSection";
 import LifeDesignSection from "@/components/dashboard/LifeDesignSection";
-import { Award, Briefcase, FileText, User, Users, Calendar, Trophy } from "lucide-react";
+import { Award, Briefcase, FileText, User, Users, Calendar, Trophy, Target, Network, GraduationCap } from "lucide-react";
 
 const Index = () => {
   // Mock data
@@ -57,6 +57,11 @@ const Index = () => {
       title: "Connect resume to ATS",
       description: "Improve application tracking",
       priority: "medium" as const,
+    },
+    {
+      title: "Calculate your market salary",
+      description: "See where you stand in the market",
+      priority: "high" as const,
     }
   ];
 
@@ -76,6 +81,14 @@ const Index = () => {
   // Promotion sections array for easier management
   const promoSections = [
     {
+      icon: Target,
+      title: "Accelerate Salary & Title Growth",
+      description: "Use data-driven strategies and proven timelines to maximize your compensation and advance your career.",
+      buttonText: "Salary Calculator",
+      buttonLink: "/salary-title",
+      highlight: true
+    },
+    {
       icon: FileText,
       title: "Organize Your Career Assets",
       description: "Centralize resumes, certifications, and professional documents in one secure location.",
@@ -90,7 +103,7 @@ const Index = () => {
       buttonLink: "/personal-brand"
     },
     {
-      icon: Users,
+      icon: Network,
       title: "Expand Your Network",
       description: "Connect with industry professionals and join relevant groups to strengthen your network.",
       buttonText: "Network Now",
@@ -102,6 +115,13 @@ const Index = () => {
       description: "Analyze your current skills, identify gaps, and create development plans tailored to your goals.",
       buttonText: "View Skills",
       buttonLink: "/skills"
+    },
+    {
+      icon: GraduationCap,
+      title: "Get Career Coaching",
+      description: "Access personalized guidance and mentorship to navigate your professional journey effectively.",
+      buttonText: "Start Coaching",
+      buttonLink: "/coaching"
     },
     {
       icon: Briefcase,
@@ -148,6 +168,7 @@ const Index = () => {
                 description={section.description}
                 buttonText={section.buttonText}
                 buttonLink={section.buttonLink}
+                highlight={section.highlight}
               />
             ))}
           </div>
