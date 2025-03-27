@@ -95,11 +95,13 @@ const Navbar: React.FC = () => {
       icon: Sprout,
       children: [
         { path: "/salary-title", label: "Salary + Title", icon: Target },
-        { path: "/skills", label: "Skills", icon: Award },
+        { path: "/skills", label: "Pro Skills", icon: Award },
         { path: "/coaching", label: "Coaching", icon: GraduationCap },
         { path: "/networking", label: "Networking", icon: Network },
         { path: "/personal-brand", label: "Personal Brand", icon: User },
-        { path: "/monetize-expertise", label: "Monetize Expertise", icon: DollarSign }
+        { path: "/monetize-expertise", label: "Monetize Expertise", icon: DollarSign },
+        { path: "/mental-models", label: "Mental Models", icon: Target },
+        { path: "/life-skills", label: "Life Skills", icon: Award }
       ]
     },
     { 

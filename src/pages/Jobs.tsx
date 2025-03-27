@@ -8,7 +8,8 @@ import AutoApplySettings from "@/components/jobs/AutoApplySettings";
 import { jobs, offMarketJobs, getApplicationStats } from "@/components/jobs/data";
 import DashboardCard from "@/components/DashboardCard";
 import { Badge } from "@/components/ui/badge";
-import { Clock, Check, Building, Briefcase } from "lucide-react";
+import { Clock, Check, Building, Briefcase, Target, Award, MapPin } from "lucide-react";
+import { Progress } from "@/components/ui/progress";
 
 const Jobs = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -87,25 +88,80 @@ const Jobs = () => {
             </div>
           </DashboardCard>
           
-          <JobFilters 
-            matchThreshold={matchThreshold}
-            onlyRemote={onlyRemote}
-            onMatchThresholdChange={setMatchThreshold}
-            onRemoteToggle={setOnlyRemote}
-            onReset={handleResetFilters}
-          />
+          <DashboardCard>
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold">Application Progress</h3>
+              <div className="space-y-3">
+                <div className="space-y-1">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">Applied</span>
+                    <span className="font-medium">{appStats.applied}/{appStats.total}</span>
+                  </div>
+                  <Progress value={(appStats.applied/appStats.total) * 100} className="h-2" />
+                </div>
+                
+                <div className="space-y-1">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">Interviews</span>
+                    <span className="font-medium">{appStats.interviews}/{appStats.total}</span>
+                  </div>
+                  <Progress value={(appStats.interviews/appStats.total) * 100} className="h-2" />
+                </div>
+                
+                <div className="space-y-1">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-muted-foreground">Offers</span>
+                    <span className="font-medium">{appStats.offers}/{appStats.total}</span>
+                  </div>
+                  <Progress value={(appStats.offers/appStats.total) * 100} className="h-2" />
+                </div>
+              </div>
+              
+              <div className="pt-4 border-t border-border">
+                <h4 className="text-sm font-medium mb-2">Top Job Locations</h4>
+                <div className="flex flex-wrap gap-2">
+                  <Badge variant="outline" className="flex items-center gap-1">
+                    <MapPin size={12} />
+                    <span>San Francisco (12)</span>
+                  </Badge>
+                  <Badge variant="outline" className="flex items-center gap-1">
+                    <MapPin size={12} />
+                    <span>New York (8)</span>
+                  </Badge>
+                  <Badge variant="outline" className="flex items-center gap-1">
+                    <MapPin size={12} />
+                    <span>Remote (15)</span>
+                  </Badge>
+                </div>
+              </div>
+            </div>
+          </DashboardCard>
         </div>
-        
-        <JobListingSection 
-          jobs={jobs}
-          offMarketJobs={offMarketJobs}
-          searchQuery={searchQuery}
-          onSearchChange={setSearchQuery}
-          matchThreshold={matchThreshold}
-          onlyRemote={onlyRemote}
-          onApply={(job) => console.log("Apply to job:", job)}
-          onResetFilters={handleResetFilters}
-        />
+
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+          <div className="md:col-span-1">
+            <JobFilters 
+              matchThreshold={matchThreshold}
+              onlyRemote={onlyRemote}
+              onMatchThresholdChange={setMatchThreshold}
+              onRemoteToggle={setOnlyRemote}
+              onReset={handleResetFilters}
+            />
+          </div>
+          
+          <div className="md:col-span-3">
+            <JobListingSection 
+              jobs={jobs}
+              offMarketJobs={offMarketJobs}
+              searchQuery={searchQuery}
+              onSearchChange={setSearchQuery}
+              matchThreshold={matchThreshold}
+              onlyRemote={onlyRemote}
+              onApply={(job) => console.log("Apply to job:", job)}
+              onResetFilters={handleResetFilters}
+            />
+          </div>
+        </div>
         
         <AutoApplySettings
           open={isAutoApplyOpen}

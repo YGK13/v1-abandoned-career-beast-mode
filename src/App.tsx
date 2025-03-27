@@ -27,6 +27,8 @@ import LinkedIn from "./pages/LinkedIn";
 import ScaleYourBiz from "./pages/ScaleYourBiz";
 import Networking from "./pages/Networking";
 import SalaryTitle from "./pages/SalaryTitle";
+import MentalModels from "./pages/MentalModels";
+import LifeSkills from "./pages/LifeSkills";
 
 const queryClient = new QueryClient();
 
@@ -51,6 +53,8 @@ const App = () => (
               <Route path="/personal-brand" element={<PersonalBrand />} />
               <Route path="/networking" element={<Networking />} />
               <Route path="/salary-title" element={<SalaryTitle />} />
+              <Route path="/mental-models" element={<MentalModels />} />
+              <Route path="/life-skills" element={<LifeSkills />} />
               <Route path="/jobs" element={<Jobs />} />
               <Route path="/coaching" element={<Coaching />} />
               <Route path="/coaching/one-on-one" element={<CoachingOneOnOne />} />
