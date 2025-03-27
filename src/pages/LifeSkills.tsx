@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import Layout from "@/components/Layout";
 import DashboardCard from "@/components/DashboardCard";
@@ -19,7 +20,7 @@ const LifeSkills = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
   const [currentPage, setCurrentPage] = useState(1);
-  const [viewMode, setViewMode] = useState<"featured" | "all">("featured");
+  const [viewMode, setViewMode] = useState<"featured" | "all" | "habits">("featured");
   const itemsPerPage = 9;
   
   const categories = Array.from(new Set(lifeSkills.map(skill => skill.category)));
@@ -146,7 +147,7 @@ const LifeSkills = () => {
         <Tabs 
           defaultValue="featured" 
           className="mb-8"
-          onValueChange={(value) => setViewMode(value as "featured" | "all")}
+          onValueChange={(value) => setViewMode(value as "featured" | "all" | "habits")}
         >
           <TabsList className="mb-6">
             <TabsTrigger value="featured">Featured Skills</TabsTrigger>
