@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { RefreshCw, FileText, Check } from "lucide-react";
+import { RefreshCw, FileText, Check, UserCheck } from "lucide-react";
 import { Job } from "../data/types";
 import ResumeGenerationProgress from "./ResumeGenerationProgress";
 import ResumePreview from "./ResumePreview";
@@ -41,7 +41,6 @@ const ResumeGenerator: React.FC<ResumeGeneratorProps> = ({
 
   const handleSaveResume = () => {
     // Any additional logic needed when a resume is saved
-    // This will be called after the save functionality in ResumePreview
   };
   
   return (
@@ -50,10 +49,16 @@ const ResumeGenerator: React.FC<ResumeGeneratorProps> = ({
         <DialogHeader className="mb-2">
           <DialogTitle className="flex items-center gap-2 text-xl">
             <FileText className="h-5 w-5 text-primary" />
-            Tailoring Resume for {job.title}
+            {job.applicationStatus === "not_applied" ? 
+              "Tailoring Resume for " + job.title :
+              "Creating Referral Resume for " + job.title
+            }
           </DialogTitle>
           <DialogDescription className="text-muted-foreground">
-            Creating an ATS-optimized resume specifically for {job.company}
+            {job.applicationStatus === "not_applied" ?
+              `Creating an ATS-optimized resume specifically for ${job.company}` :
+              `Creating a tailored resume for your referral request at ${job.company}`
+            }
           </DialogDescription>
         </DialogHeader>
         
@@ -76,12 +81,15 @@ const ResumeGenerator: React.FC<ResumeGeneratorProps> = ({
             {isApplying ? (
               <>
                 <RefreshCw size={16} className="animate-spin" />
-                Applying...
+                {job.applicationStatus === "not_applied" ? "Applying..." : "Creating Request..."}
               </>
             ) : (
               <>
-                <Check size={16} />
-                Apply Now
+                {job.applicationStatus === "not_applied" ? 
+                  <Check size={16} /> : 
+                  <UserCheck size={16} />
+                }
+                {job.applicationStatus === "not_applied" ? "Apply Now" : "Request Referral"}
               </>
             )}
           </Button>

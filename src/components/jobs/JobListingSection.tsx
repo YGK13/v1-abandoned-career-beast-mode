@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Job } from "./data/types";
 import JobSearch from "./components/JobSearch";
@@ -36,7 +35,10 @@ const JobListingSection: React.FC<JobListingSectionProps> = ({
     { id: "saved", name: "Saved" },
   ];
 
-  const allJobs = [...jobs, ...offMarketJobs];
+  const allJobs = [...jobs, ...offMarketJobs].map((job, index) => ({
+    ...job,
+    id: job.id || `job-${index}`
+  }));
 
   const filteredJobs = (category: string) => {
     let filtered = allJobs;

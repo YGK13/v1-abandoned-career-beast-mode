@@ -1,9 +1,11 @@
 
-import React from "react";
+import React, { useState } from "react";
 import { Job } from "../data/types";
 import JobCard from "@/components/JobCard";
 import JobBadges from "./JobBadges";
 import SourceLabel from "./SourceLabel";
+import LinkedInReferrals from "./LinkedInReferrals";
+import { getConnectionsForCompany } from "../data/linkedInConnectionsData";
 
 interface JobsGridProps {
   jobs: Job[];
@@ -11,6 +13,8 @@ interface JobsGridProps {
 }
 
 const JobsGrid: React.FC<JobsGridProps> = ({ jobs, onApply }) => {
+  const [selectedJob, setSelectedJob] = useState<Job | null>(null);
+
   // Function to determine if a job is fresh (≤ 7 days)
   const isFreshJob = (postedDate: string) => {
     if (postedDate.includes('just now') || postedDate.includes('hour')) return true;
@@ -19,6 +23,12 @@ const JobsGrid: React.FC<JobsGridProps> = ({ jobs, onApply }) => {
       return days <= 7;
     }
     return false;
+  };
+
+  // Toggle showing connections for a specific job
+  const handleJobClick = (job: Job) => {
+    setSelectedJob(selectedJob?.id === job.id ? null : job);
+    if (onApply) onApply(job);
   };
   
   return (
@@ -40,8 +50,15 @@ const JobsGrid: React.FC<JobsGridProps> = ({ jobs, onApply }) => {
             matchScore={job.matchScore}
             skills={job.skills}
             isRecommended={job.isRecommended}
-            onClick={() => onApply && onApply(job)}
+            onClick={() => handleJobClick(job)}
           />
+          
+          {selectedJob?.id === job.id && (
+            <LinkedInReferrals 
+              job={job} 
+              connections={getConnectionsForCompany(job.company)} 
+            />
+          )}
         </div>
       ))}
     </div>
