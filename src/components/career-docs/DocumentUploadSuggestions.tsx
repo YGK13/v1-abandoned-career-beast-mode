@@ -2,7 +2,7 @@
 import React from "react";
 import DashboardCard from "@/components/DashboardCard";
 import { Button } from "@/components/ui/button";
-import { Briefcase, GraduationCap, Award, FileSpreadsheet, FileText } from "lucide-react";
+import { Briefcase, GraduationCap, Award, FileSpreadsheet, FileText, UserSquare } from "lucide-react";
 
 const DocumentUploadSuggestions: React.FC = () => {
   const suggestedDocuments = [
@@ -20,6 +20,11 @@ const DocumentUploadSuggestions: React.FC = () => {
       title: "Pay Records",
       description: "Recent pay stubs and total rewards statements",
       icon: FileSpreadsheet
+    },
+    { 
+      title: "Professional Bio",
+      description: "Your professional biography for platforms and networking",
+      icon: UserSquare
     },
     { 
       title: "Credentials",
@@ -40,7 +45,7 @@ const DocumentUploadSuggestions: React.FC = () => {
         <Button variant="outline" size="sm">See All Suggestions</Button>
       </div>
       
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
         {suggestedDocuments.map((doc, index) => (
           <DashboardCard key={index} className="border-dashed hover:border-primary/50 transition-colors cursor-pointer h-full">
             <div className="flex flex-col items-center text-center h-full">
