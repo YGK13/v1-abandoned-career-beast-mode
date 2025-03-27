@@ -80,7 +80,7 @@ const Navbar: React.FC = () => {
       label: "Build", 
       icon: Building,
       children: [
-        { path: "/career-docs", label: "Career Docs", icon: FileText },
+        { path: "/career-docs", label: "Career Assets", icon: FileText }, // Updated label here
         { path: "/linkedin", label: "LinkedIn", icon: Linkedin },
         { path: "/manage-everything", label: "Manage Everything", icon: Users,
           children: [
