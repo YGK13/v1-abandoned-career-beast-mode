@@ -1,38 +1,17 @@
 
-import React, { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Input } from "@/components/ui/input";
-import { Form, FormField, FormItem, FormLabel, FormControl, FormDescription } from "@/components/ui/form";
-import { useToast } from "@/hooks/use-toast";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
+import React from "react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Linkedin, Twitter, Building, Shield, Save, Briefcase } from "lucide-react";
-
-const platformCredentialsSchema = z.object({
-  linkedin: z.object({
-    enabled: z.boolean().default(false),
-    email: z.string().email().optional(),
-    password: z.string().min(6).optional(),
-    useEasyApply: z.boolean().default(true),
-  }),
-  twitter: z.object({
-    enabled: z.boolean().default(false),
-    username: z.string().optional(),
-    easyApply: z.boolean().default(true),
-  }),
-  custom: z.object({
-    enabled: z.boolean().default(false),
-    webhookUrl: z.string().url().optional().or(z.literal("")),
-  }),
-});
-
-type PlatformCredentials = z.infer<typeof platformCredentialsSchema>;
+import { Switch } from "@/components/ui/switch";
+import { Input } from "@/components/ui/input";
+import { Slider } from "@/components/ui/slider";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Settings, Linkedin, Twitter, Globe, Check, AlertCircle, Zap } from "lucide-react";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from "@/components/ui/form";
 
 interface AutoApplySettingsProps {
   open: boolean;
@@ -40,339 +19,201 @@ interface AutoApplySettingsProps {
 }
 
 const AutoApplySettings: React.FC<AutoApplySettingsProps> = ({ open, onOpenChange }) => {
-  const { toast } = useToast();
-  const [activeTab, setActiveTab] = useState("settings");
-  const [testMode, setTestMode] = useState(true);
-  const [autoApplyLimit, setAutoApplyLimit] = useState(5);
-  
-  const form = useForm<PlatformCredentials>({
-    resolver: zodResolver(platformCredentialsSchema),
-    defaultValues: {
-      linkedin: { enabled: false, useEasyApply: true },
-      twitter: { enabled: false, easyApply: true },
-      custom: { enabled: false, webhookUrl: "" },
-    },
-  });
-
-  const onSubmit = (data: PlatformCredentials) => {
-    // In a real implementation, this would securely store credentials
-    console.log("Auto-apply settings saved:", data);
-    
-    // Save to local storage for demo
-    localStorage.setItem("autoApplySettings", JSON.stringify({
-      platforms: data,
-      testMode,
-      autoApplyLimit,
-    }));
-    
-    toast({
-      title: "Settings saved",
-      description: "Your auto-apply settings have been updated.",
-    });
-  };
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[600px]">
+      <DialogContent className="max-w-3xl">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
-            <Zap size={18} className="text-primary" />
+          <DialogTitle className="text-xl font-bold flex items-center gap-2">
+            <Settings size={20} />
             Auto-apply Settings
           </DialogTitle>
-          <DialogDescription>
-            Configure how you want to automate your job applications across platforms.
-          </DialogDescription>
         </DialogHeader>
-        
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid grid-cols-2 mb-4">
-            <TabsTrigger value="settings">Settings</TabsTrigger>
-            <TabsTrigger value="history">Application History</TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="settings" className="space-y-6">
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                <div className="space-y-4 p-4 border rounded-md">
-                  <h3 className="text-lg font-medium">Global Settings</h3>
-                  
-                  <div className="flex flex-col gap-4">
-                    <div className="flex items-center justify-between">
-                      <div className="space-y-0.5">
-                        <Label htmlFor="test-mode">Test Mode</Label>
-                        <p className="text-sm text-muted-foreground">
-                          Applications won't be sent when in test mode
-                        </p>
-                      </div>
-                      <Switch
-                        id="test-mode"
-                        checked={testMode}
-                        onCheckedChange={setTestMode}
-                      />
-                    </div>
 
-                    <div className="space-y-2">
-                      <Label htmlFor="auto-apply-limit">Daily Auto-Apply Limit</Label>
-                      <Input
-                        id="auto-apply-limit"
-                        type="number"
-                        min={1}
-                        max={20}
-                        value={autoApplyLimit}
-                        onChange={(e) => setAutoApplyLimit(parseInt(e.target.value) || 5)}
-                      />
-                      <p className="text-sm text-muted-foreground">
-                        Maximum number of automatic applications per day
-                      </p>
-                    </div>
+        <Tabs defaultValue="platforms" className="w-full">
+          <TabsList className="grid grid-cols-3 mb-6">
+            <TabsTrigger value="platforms">Platforms</TabsTrigger>
+            <TabsTrigger value="criteria">Apply Criteria</TabsTrigger>
+            <TabsTrigger value="tracking">Application Tracking</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="platforms">
+            <div className="space-y-6">
+              <div className="border rounded-lg p-4 space-y-3">
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center gap-2">
+                    <Linkedin className="text-[#0A66C2]" />
+                    <h3 className="font-medium">LinkedIn Integration</h3>
+                  </div>
+                  <Switch defaultChecked />
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Automatically apply to jobs on LinkedIn that match your criteria
+                </p>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <Label htmlFor="linkedin-username">LinkedIn Email/Username</Label>
+                    <Input id="linkedin-username" placeholder="your.email@example.com" />
+                  </div>
+                  <div>
+                    <Label htmlFor="linkedin-password">LinkedIn Password</Label>
+                    <Input id="linkedin-password" type="password" placeholder="••••••••" />
                   </div>
                 </div>
-                
-                <div className="space-y-4">
-                  <h3 className="text-lg font-medium">Platform Credentials</h3>
-                  <p className="text-sm text-muted-foreground">
-                    Add your credentials for the platforms you want to auto-apply on.
-                  </p>
-                  
-                  {/* LinkedIn Settings */}
-                  <div className="border rounded-md p-4 space-y-3">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <Linkedin className="text-[#0077B5]" size={20} />
-                        <Label htmlFor="linkedin-enabled" className="font-medium">LinkedIn</Label>
-                      </div>
-                      <FormField
-                        control={form.control}
-                        name="linkedin.enabled"
-                        render={({ field }) => (
-                          <Switch
-                            id="linkedin-enabled"
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                          />
-                        )}
-                      />
-                    </div>
-                    
-                    {form.watch("linkedin.enabled") && (
-                      <div className="space-y-3 pt-2">
-                        <FormField
-                          control={form.control}
-                          name="linkedin.email"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Email</FormLabel>
-                              <FormControl>
-                                <Input placeholder="your.email@example.com" {...field} value={field.value || ""} />
-                              </FormControl>
-                            </FormItem>
-                          )}
-                        />
-                        
-                        <FormField
-                          control={form.control}
-                          name="linkedin.password"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Password</FormLabel>
-                              <FormControl>
-                                <Input type="password" placeholder="••••••••" {...field} value={field.value || ""} />
-                              </FormControl>
-                              <FormDescription className="flex items-center gap-1 text-amber-500 dark:text-amber-400">
-                                <Shield size={14} />
-                                Your credentials are stored locally and securely
-                              </FormDescription>
-                            </FormItem>
-                          )}
-                        />
-                        
-                        <FormField
-                          control={form.control}
-                          name="linkedin.useEasyApply"
-                          render={({ field }) => (
-                            <FormItem className="flex items-center justify-between">
-                              <div>
-                                <FormLabel>Use Easy Apply Only</FormLabel>
-                                <FormDescription>Only apply to jobs with LinkedIn Easy Apply</FormDescription>
-                              </div>
-                              <FormControl>
-                                <Switch
-                                  checked={field.value}
-                                  onCheckedChange={field.onChange}
-                                />
-                              </FormControl>
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-                    )}
+                <Button variant="outline" size="sm" className="flex items-center gap-1">
+                  <Check size={14} />
+                  Verify Credentials
+                </Button>
+              </div>
+
+              <div className="border rounded-lg p-4 space-y-3">
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center gap-2">
+                    <Twitter className="text-[#1DA1F2]" />
+                    <h3 className="font-medium">Twitter/X Integration</h3>
                   </div>
-                  
-                  {/* Twitter Settings */}
-                  <div className="border rounded-md p-4 space-y-3">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <Twitter className="text-[#1DA1F2]" size={20} />
-                        <Label htmlFor="twitter-enabled" className="font-medium">Twitter/X</Label>
-                      </div>
-                      <FormField
-                        control={form.control}
-                        name="twitter.enabled"
-                        render={({ field }) => (
-                          <Switch
-                            id="twitter-enabled"
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                          />
-                        )}
-                      />
-                    </div>
-                    
-                    {form.watch("twitter.enabled") && (
-                      <div className="space-y-3 pt-2">
-                        <FormField
-                          control={form.control}
-                          name="twitter.username"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Username</FormLabel>
-                              <FormControl>
-                                <Input placeholder="@yourusername" {...field} value={field.value || ""} />
-                              </FormControl>
-                            </FormItem>
-                          )}
-                        />
-                        
-                        <FormField
-                          control={form.control}
-                          name="twitter.easyApply"
-                          render={({ field }) => (
-                            <FormItem className="flex items-center justify-between">
-                              <div>
-                                <FormLabel>Direct Message Only</FormLabel>
-                                <FormDescription>Only respond to posts with DM application instructions</FormDescription>
-                              </div>
-                              <FormControl>
-                                <Switch
-                                  checked={field.value}
-                                  onCheckedChange={field.onChange}
-                                />
-                              </FormControl>
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-                    )}
-                  </div>
-                  
-                  {/* Custom Webhook Settings */}
-                  <div className="border rounded-md p-4 space-y-3">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <Building size={20} />
-                        <Label htmlFor="custom-enabled" className="font-medium">Custom Application Webhook</Label>
-                      </div>
-                      <FormField
-                        control={form.control}
-                        name="custom.enabled"
-                        render={({ field }) => (
-                          <Switch
-                            id="custom-enabled"
-                            checked={field.value}
-                            onCheckedChange={field.onChange}
-                          />
-                        )}
-                      />
-                    </div>
-                    
-                    {form.watch("custom.enabled") && (
-                      <div className="space-y-3 pt-2">
-                        <FormField
-                          control={form.control}
-                          name="custom.webhookUrl"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Webhook URL</FormLabel>
-                              <FormControl>
-                                <Input placeholder="https://your-webhook-url.com/apply" {...field} value={field.value || ""} />
-                              </FormControl>
-                              <FormDescription>
-                                Send application data to your own webhook for custom integrations
-                              </FormDescription>
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-                    )}
-                  </div>
+                  <Switch />
                 </div>
-                
-                <div className="flex justify-end">
-                  <Button type="submit" className="flex items-center gap-1">
-                    <Save size={16} />
-                    Save Settings
-                  </Button>
+                <p className="text-sm text-muted-foreground">
+                  Monitor Twitter/X for job postings that match your criteria
+                </p>
+              </div>
+
+              <div className="border rounded-lg p-4 space-y-3">
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center gap-2">
+                    <Globe />
+                    <h3 className="font-medium">Custom Webhook Integration</h3>
+                  </div>
+                  <Switch />
                 </div>
-              </form>
-            </Form>
+                <p className="text-sm text-muted-foreground">
+                  Set up custom webhooks to automate applications on other platforms
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <Zap size={16} className="text-amber-500" />
+                <span className="text-sm text-muted-foreground">
+                  Auto-apply is active and has applied to 7 jobs in the last week
+                </span>
+              </div>
+            </div>
           </TabsContent>
-          
-          <TabsContent value="history">
+
+          <TabsContent value="criteria">
+            <div className="space-y-6">
+              <div className="space-y-3">
+                <h3 className="font-medium">Job Match Threshold</h3>
+                <p className="text-sm text-muted-foreground">
+                  Only apply to jobs that match your profile at or above this threshold
+                </p>
+                <div className="py-4">
+                  <Slider defaultValue={[85]} max={100} step={5} />
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span>85% or higher match</span>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                <h3 className="font-medium">Job Types</h3>
+                <div className="space-y-2">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="job-type-full-time" defaultChecked />
+                    <Label htmlFor="job-type-full-time">Full-time</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="job-type-contract" />
+                    <Label htmlFor="job-type-contract">Contract</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="job-type-remote" defaultChecked />
+                    <Label htmlFor="job-type-remote">Remote only</Label>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                <h3 className="font-medium">Maximum Applications</h3>
+                <RadioGroup defaultValue="10" className="space-y-1">
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="5" id="max-5" />
+                    <Label htmlFor="max-5">5 per day</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="10" id="max-10" />
+                    <Label htmlFor="max-10">10 per day</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="25" id="max-25" />
+                    <Label htmlFor="max-25">25 per day</Label>
+                  </div>
+                </RadioGroup>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <AlertCircle size={16} className="text-amber-500" />
+                <span className="text-sm text-muted-foreground">
+                  We recommend applying to no more than 15 jobs per day for best results
+                </span>
+              </div>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="tracking">
             <div className="space-y-4">
-              <h3 className="text-lg font-medium">Recent Applications</h3>
-              
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Job Title</TableHead>
-                    <TableHead>Company</TableHead>
-                    <TableHead>Platform</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Date</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  <TableRow>
-                    <TableCell className="font-medium">Senior Product Manager</TableCell>
-                    <TableCell>TechCorp Inc.</TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-1">
-                        <Linkedin size={14} className="text-[#0077B5]" />
-                        <span>LinkedIn</span>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-800 dark:bg-amber-800/20 dark:text-amber-400">
-                        In Progress
-                      </span>
-                    </TableCell>
-                    <TableCell className="text-muted-foreground">1 day ago</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell className="font-medium">UX Research Lead</TableCell>
-                    <TableCell>DesignFirst Inc.</TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-1">
-                        <Twitter size={14} className="text-[#1DA1F2]" />
-                        <span>Twitter</span>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-800/20 dark:text-green-400">
-                        Completed
-                      </span>
-                    </TableCell>
-                    <TableCell className="text-muted-foreground">2 days ago</TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-              
-              <p className="text-center text-muted-foreground text-sm">
-                Automatic applications are limited to {autoApplyLimit} per day
-              </p>
+              <div className="space-y-2">
+                <h3 className="font-medium">Auto-apply Activity</h3>
+                <p className="text-sm text-muted-foreground">
+                  Your auto-apply system has applied to 23 jobs in the last 30 days
+                </p>
+              </div>
+
+              <div className="border rounded-lg divide-y">
+                <div className="p-3 flex justify-between items-center">
+                  <div>
+                    <p className="font-medium">Senior Product Manager</p>
+                    <p className="text-sm text-muted-foreground">Netflix • Applied yesterday</p>
+                  </div>
+                  <Badge variant="outline" className="bg-green-50 text-green-600 hover:bg-green-50">
+                    Applied
+                  </Badge>
+                </div>
+                <div className="p-3 flex justify-between items-center">
+                  <div>
+                    <p className="font-medium">Product Lead</p>
+                    <p className="text-sm text-muted-foreground">Spotify • Applied 3 days ago</p>
+                  </div>
+                  <Badge variant="outline" className="bg-blue-50 text-blue-600 hover:bg-blue-50">
+                    Interview
+                  </Badge>
+                </div>
+                <div className="p-3 flex justify-between items-center">
+                  <div>
+                    <p className="font-medium">Senior UX Designer</p>
+                    <p className="text-sm text-muted-foreground">Google • Applied 5 days ago</p>
+                  </div>
+                  <Badge variant="outline" className="bg-green-50 text-green-600 hover:bg-green-50">
+                    Applied
+                  </Badge>
+                </div>
+              </div>
+
+              <Button variant="outline" className="w-full">
+                View All Applications
+              </Button>
             </div>
           </TabsContent>
         </Tabs>
+
+        <div className="flex justify-between">
+          <Button variant="outline" onClick={() => onOpenChange(false)}>
+            Cancel
+          </Button>
+          <Button onClick={() => onOpenChange(false)}>
+            Save Settings
+          </Button>
+        </div>
       </DialogContent>
     </Dialog>
   );
