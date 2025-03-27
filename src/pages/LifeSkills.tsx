@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import Layout from "@/components/Layout";
 import DashboardCard from "@/components/DashboardCard";
@@ -10,6 +9,8 @@ import { Check, Search, ChevronLeft, ChevronRight } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import HabitTracker from "@/components/lifeskills/HabitTracker";
+import { Separator } from "@/components/ui/separator";
 
 const LifeSkills = () => {
   const [dailySkill, setDailySkill] = useState<LifeSkill | null>(null);
@@ -21,17 +22,14 @@ const LifeSkills = () => {
   const [viewMode, setViewMode] = useState<"featured" | "all">("featured");
   const itemsPerPage = 9;
   
-  // Get unique categories for filter dropdown
   const categories = Array.from(new Set(lifeSkills.map(skill => skill.category)));
   
   useEffect(() => {
-    // Get deterministic "random" skill based on the date
     const today = new Date();
     const dayOfYear = Math.floor((today.getTime() - new Date(today.getFullYear(), 0, 0).getTime()) / 86400000);
     const skillIndex = dayOfYear % lifeSkills.length;
     setDailySkill(lifeSkills[skillIndex]);
     
-    // Load completed skills from localStorage
     const saved = localStorage.getItem('completedLifeSkills');
     if (saved) {
       setCompletedSkills(JSON.parse(saved));
@@ -39,7 +37,6 @@ const LifeSkills = () => {
   }, []);
   
   useEffect(() => {
-    // Filter skills based on search term and category
     let result = lifeSkills;
     
     if (searchTerm) {
@@ -54,10 +51,9 @@ const LifeSkills = () => {
     }
     
     setFilteredSkills(result);
-    setCurrentPage(1); // Reset to first page when filters change
+    setCurrentPage(1);
   }, [searchTerm, categoryFilter]);
   
-  // Calculate pagination
   const totalPages = Math.ceil(filteredSkills.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const paginatedSkills = filteredSkills.slice(startIndex, startIndex + itemsPerPage);
@@ -155,6 +151,7 @@ const LifeSkills = () => {
           <TabsList className="mb-6">
             <TabsTrigger value="featured">Featured Skills</TabsTrigger>
             <TabsTrigger value="all">All Life Skills</TabsTrigger>
+            <TabsTrigger value="habits">Habit Tracker</TabsTrigger>
           </TabsList>
           
           <TabsContent value="featured">
@@ -300,7 +297,6 @@ const LifeSkills = () => {
               })}
             </div>
             
-            {/* Pagination controls */}
             {totalPages > 1 && (
               <div className="flex items-center justify-center gap-2 mt-8">
                 <Button
@@ -328,6 +324,10 @@ const LifeSkills = () => {
                 </Button>
               </div>
             )}
+          </TabsContent>
+          
+          <TabsContent value="habits">
+            <HabitTracker />
           </TabsContent>
         </Tabs>
         
@@ -371,6 +371,49 @@ const LifeSkills = () => {
               <Button onClick={() => setViewMode("all")}>
                 View All Life Skills
               </Button>
+            </div>
+          </>
+        )}
+
+        {viewMode === "habits" && (
+          <>
+            <Separator className="my-8" />
+            <h2 className="text-2xl font-bold mb-6">Related Life Skills</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {lifeSkills.filter(skill => 
+                skill.title.includes("Habit") || 
+                skill.description.toLowerCase().includes("consistent") ||
+                skill.category === "Self-Improvement"
+              ).slice(0, 3).map(skill => {
+                const Icon = skill.icon;
+                const isCompleted = completedSkills.includes(skill.id);
+                
+                return (
+                  <Card key={skill.id} className={`overflow-hidden ${isCompleted ? 'border-green-500/50' : ''}`}>
+                    <div className="p-5 border-b border-border flex justify-between items-center">
+                      <div className="flex items-center gap-3">
+                        <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
+                          <Icon size={16} />
+                        </div>
+                        <div>
+                          <h3 className="font-medium">{skill.title}</h3>
+                          <Badge variant="outline" className="mt-1 text-xs">
+                            {skill.category}
+                          </Badge>
+                        </div>
+                      </div>
+                      {isCompleted && (
+                        <div className="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center">
+                          <Check size={14} className="text-green-500" />
+                        </div>
+                      )}
+                    </div>
+                    <CardContent className="p-5">
+                      <p className="text-sm text-muted-foreground">{skill.description}</p>
+                    </CardContent>
+                  </Card>
+                );
+              })}
             </div>
           </>
         )}

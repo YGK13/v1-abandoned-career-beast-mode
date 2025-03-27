@@ -99,9 +99,6 @@ const Navbar: React.FC = () => {
         { path: "/coaching", label: "Coaching", icon: GraduationCap },
         { path: "/networking", label: "Networking", icon: Network },
         { path: "/personal-brand", label: "Personal Brand", icon: User },
-        { path: "/monetize-expertise", label: "Monetize Expertise", icon: DollarSign },
-        { path: "/mental-models", label: "Mental Models", icon: Target },
-        { path: "/life-skills", label: "Life Skills", icon: Award }
       ]
     },
     { 
@@ -110,7 +107,10 @@ const Navbar: React.FC = () => {
       icon: GrowthChartIcon,
       children: [
         { path: "/lifedesign", label: "Life Design", icon: Target },
-        { path: "/scale-your-biz", label: "Scale Your Biz", icon: Factory }
+        { path: "/scale-your-biz", label: "Scale Your Biz", icon: Factory },
+        { path: "/monetize-expertise", label: "Monetize Expertise", icon: DollarSign },
+        { path: "/mental-models", label: "Mental Models", icon: Target },
+        { path: "/life-skills", label: "Life Skills", icon: Award }
       ]
     },
     { path: "/jobs", label: "Jobs", icon: Briefcase },

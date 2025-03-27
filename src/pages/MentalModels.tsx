@@ -5,19 +5,26 @@ import DashboardCard from "@/components/DashboardCard";
 import { mentalModels, MentalModel } from "@/data/mentalModelsData";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search, Filter, ChevronLeft, ChevronRight } from "lucide-react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Search, ChevronLeft, ChevronRight, BookmarkPlus, Check, Info } from "lucide-react";
+import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { 
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const MentalModels = () => {
   const [dailyModel, setDailyModel] = useState<MentalModel | null>(null);
+  const [savedModels, setSavedModels] = useState<number[]>([]);
   const [filteredModels, setFilteredModels] = useState<MentalModel[]>(mentalModels);
   const [searchTerm, setSearchTerm] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
   const [currentPage, setCurrentPage] = useState(1);
-  const [viewMode, setViewMode] = useState<"featured" | "all">("featured");
+  const [viewMode, setViewMode] = useState<"featured" | "all" | "saved">("featured");
   const itemsPerPage = 9;
   
   // Get unique categories for filter dropdown
@@ -29,6 +36,12 @@ const MentalModels = () => {
     const dayOfYear = Math.floor((today.getTime() - new Date(today.getFullYear(), 0, 0).getTime()) / 86400000);
     const modelIndex = dayOfYear % mentalModels.length;
     setDailyModel(mentalModels[modelIndex]);
+    
+    // Load saved models from localStorage
+    const saved = localStorage.getItem('savedMentalModels');
+    if (saved) {
+      setSavedModels(JSON.parse(saved));
+    }
   }, []);
   
   useEffect(() => {
@@ -51,9 +64,13 @@ const MentalModels = () => {
   }, [searchTerm, categoryFilter]);
   
   // Calculate pagination
-  const totalPages = Math.ceil(filteredModels.length / itemsPerPage);
+  const displayedModels = viewMode === "saved" 
+    ? filteredModels.filter(model => savedModels.includes(model.id))
+    : filteredModels;
+    
+  const totalPages = Math.ceil(displayedModels.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const paginatedModels = filteredModels.slice(startIndex, startIndex + itemsPerPage);
+  const paginatedModels = displayedModels.slice(startIndex, startIndex + itemsPerPage);
   
   const handleNextPage = () => {
     if (currentPage < totalPages) {
@@ -69,10 +86,21 @@ const MentalModels = () => {
     }
   };
   
+  const toggleSaveModel = (id: number) => {
+    const isSaved = savedModels.includes(id);
+    const updated = isSaved
+      ? savedModels.filter(modelId => modelId !== id)
+      : [...savedModels, id];
+      
+    setSavedModels(updated);
+    localStorage.setItem('savedMentalModels', JSON.stringify(updated));
+  };
+  
   const ModelOfTheDay = () => {
     if (!dailyModel) return null;
     
     const Icon = dailyModel.icon;
+    const isSaved = savedModels.includes(dailyModel.id);
     
     return (
       <Card className="mb-8 overflow-hidden border-primary/20">
@@ -100,10 +128,27 @@ const MentalModels = () => {
           <div>
             <h4 className="text-lg font-medium mb-2">{dailyModel.title}</h4>
             <p className="text-muted-foreground mb-4">{dailyModel.description}</p>
-            <div className="bg-muted/50 p-4 rounded-md">
-              <h5 className="font-medium mb-1">How to Apply This Today:</h5>
+            <div className="bg-muted/50 p-4 rounded-md mb-4">
+              <h5 className="font-medium mb-1">Application:</h5>
               <p>{dailyModel.application}</p>
             </div>
+            <Button 
+              variant={isSaved ? "outline" : "default"} 
+              className="w-full"
+              onClick={() => toggleSaveModel(dailyModel.id)}
+            >
+              {isSaved ? (
+                <>
+                  <Check className="mr-2 h-4 w-4" />
+                  Saved to Your Library
+                </>
+              ) : (
+                <>
+                  <BookmarkPlus className="mr-2 h-4 w-4" />
+                  Save to Your Library
+                </>
+              )}
+            </Button>
           </div>
         </CardContent>
       </Card>
@@ -116,66 +161,65 @@ const MentalModels = () => {
         <header className="mb-8">
           <h1 className="text-4xl font-bold">Mental Models</h1>
           <p className="text-muted-foreground mt-1">
-            Powerful thinking frameworks to improve your decision-making and problem-solving
+            Powerful thinking frameworks to improve your decision making
           </p>
         </header>
         
         <Tabs 
           defaultValue="featured" 
           className="mb-8"
-          onValueChange={(value) => setViewMode(value as "featured" | "all")}
+          onValueChange={(value) => setViewMode(value as "featured" | "all" | "saved")}
         >
           <TabsList className="mb-6">
             <TabsTrigger value="featured">Featured Models</TabsTrigger>
             <TabsTrigger value="all">All Mental Models</TabsTrigger>
+            <TabsTrigger value="saved">Your Library</TabsTrigger>
           </TabsList>
           
           <TabsContent value="featured">
             <ModelOfTheDay />
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <DashboardCard title="What are Mental Models?">
+              <DashboardCard title="Why Mental Models Matter">
                 <div className="prose dark:prose-invert">
                   <p>
                     Mental models are frameworks for thinking that help you understand the world
-                    and make better decisions. They are like tools for your mind.
+                    and make better decisions. They are shortcuts that simplify complex situations
+                    and reveal non-obvious insights.
                   </p>
                   <p>
-                    By learning and applying different mental models, you can:
+                    The benefits of building a diverse toolkit of mental models:
                   </p>
                   <ul className="list-disc pl-6 space-y-1">
-                    <li>Make better decisions with less bias</li>
-                    <li>Solve problems more effectively</li>
-                    <li>Better understand complex situations</li>
-                    <li>Communicate your thoughts more clearly</li>
+                    <li>Better decision making with fewer blind spots</li>
+                    <li>Enhanced problem-solving capabilities</li>
+                    <li>More accurate predictions about future outcomes</li>
+                    <li>Deeper understanding of complex systems</li>
+                    <li>Improved learning efficiency across domains</li>
                   </ul>
-                  <p>
-                    Each day, we'll provide a different mental model for you to learn and apply
-                    in your professional and personal life.
-                  </p>
                 </div>
               </DashboardCard>
               
-              <DashboardCard title="How to Use Mental Models">
+              <DashboardCard title="Building Your Mental Toolbox">
                 <div className="prose dark:prose-invert">
                   <p>
-                    To get the most value from mental models:
+                    Improving your thinking requires deliberate practice:
                   </p>
                   <ol className="list-decimal pl-6 space-y-1">
                     <li>
-                      <strong>Understand the concept</strong> - Read the description and make sure you grasp the core idea
+                      <strong>Study diverse models</strong> - Learn models from different disciplines
                     </li>
                     <li>
-                      <strong>Identify applications</strong> - Think about situations in your life where this model might apply
+                      <strong>Apply them consciously</strong> - Practice using models in real-life situations
                     </li>
                     <li>
-                      <strong>Practice deliberately</strong> - Use the suggested application or create your own practice exercise
+                      <strong>Use multiple models</strong> - Complex problems often require multiple perspectives
                     </li>
                     <li>
-                      <strong>Reflect on results</strong> - Notice how applying the model changes your thinking or outcomes
+                      <strong>Update your models</strong> - Be willing to revise your thinking as you gather new evidence
                     </li>
                     <li>
-                      <strong>Build your collection</strong> - Over time, develop a diverse toolkit of models you can apply
+                      <strong>Teach others</strong> - Explaining mental models helps solidify your understanding
                     </li>
                   </ol>
                 </div>
@@ -221,18 +265,21 @@ const MentalModels = () => {
               </div>
               
               <div className="mt-4 text-sm text-muted-foreground">
-                Showing {filteredModels.length} mental models
+                Showing {displayedModels.length} mental models
                 {categoryFilter !== "all" && ` in ${categoryFilter}`}
                 {searchTerm && ` matching "${searchTerm}"`}
+                {viewMode === "saved" && ` in your library`}
               </div>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {paginatedModels.map(model => {
                 const Icon = model.icon;
+                const isSaved = savedModels.includes(model.id);
+                
                 return (
                   <Card key={model.id} className="overflow-hidden h-full flex flex-col">
-                    <div className="p-5 border-b border-border">
+                    <div className="p-5 border-b border-border flex justify-between items-center">
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
                           <Icon size={16} />
@@ -244,10 +291,31 @@ const MentalModels = () => {
                           </Badge>
                         </div>
                       </div>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className={`h-8 w-8 p-0 ${isSaved ? 'text-primary' : ''}`}
+                              onClick={() => toggleSaveModel(model.id)}
+                            >
+                              {isSaved ? (
+                                <Check size={16} />
+                              ) : (
+                                <BookmarkPlus size={16} />
+                              )}
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            {isSaved ? 'Remove from library' : 'Save to library'}
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
                     </div>
-                    <CardContent className="p-5 flex-1">
+                    <CardContent className="p-5 flex-1 flex flex-col">
                       <p className="text-sm text-muted-foreground mb-4">{model.description}</p>
-                      <div className="bg-muted/30 p-3 rounded-md text-sm">
+                      <div className="bg-muted/30 p-3 rounded-md text-sm mt-auto">
                         <p className="font-medium mb-1">Application</p>
                         <p className="text-muted-foreground">{model.application}</p>
                       </div>
@@ -286,6 +354,94 @@ const MentalModels = () => {
               </div>
             )}
           </TabsContent>
+          
+          <TabsContent value="saved">
+            {savedModels.length === 0 ? (
+              <div className="text-center py-16">
+                <Info className="mx-auto h-12 w-12 text-muted-foreground" />
+                <h3 className="mt-2 text-lg font-semibold">Your library is empty</h3>
+                <p className="mt-1 text-muted-foreground">
+                  Save mental models to build your personal toolkit
+                </p>
+                <Button 
+                  variant="outline" 
+                  className="mt-4"
+                  onClick={() => setViewMode("all")}
+                >
+                  Browse All Mental Models
+                </Button>
+              </div>
+            ) : (
+              <>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {paginatedModels.map(model => {
+                    const Icon = model.icon;
+                    return (
+                      <Card key={model.id} className="overflow-hidden h-full flex flex-col">
+                        <div className="p-5 border-b border-border flex justify-between items-center">
+                          <div className="flex items-center gap-3">
+                            <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
+                              <Icon size={16} />
+                            </div>
+                            <div>
+                              <h3 className="font-medium">{model.title}</h3>
+                              <Badge variant="outline" className="mt-1 text-xs">
+                                {model.category}
+                              </Badge>
+                            </div>
+                          </div>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-8 w-8 p-0 text-primary"
+                            onClick={() => toggleSaveModel(model.id)}
+                          >
+                            <Check size={16} />
+                          </Button>
+                        </div>
+                        <CardContent className="p-5 flex-1 flex flex-col">
+                          <p className="text-sm text-muted-foreground mb-4">{model.description}</p>
+                          <div className="bg-muted/30 p-3 rounded-md text-sm mt-auto">
+                            <p className="font-medium mb-1">Application</p>
+                            <p className="text-muted-foreground">{model.application}</p>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    );
+                  })}
+                </div>
+                
+                {/* Pagination for saved models */}
+                {totalPages > 1 && (
+                  <div className="flex items-center justify-center gap-2 mt-8">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={handlePrevPage}
+                      disabled={currentPage === 1}
+                    >
+                      <ChevronLeft className="h-4 w-4 mr-1" />
+                      Previous
+                    </Button>
+                    
+                    <div className="text-sm mx-4">
+                      Page {currentPage} of {totalPages}
+                    </div>
+                    
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={handleNextPage}
+                      disabled={currentPage === totalPages}
+                    >
+                      Next
+                      <ChevronRight className="h-4 w-4 ml-1" />
+                    </Button>
+                  </div>
+                )}
+              </>
+            )}
+          </TabsContent>
         </Tabs>
         
         {viewMode === "featured" && (
@@ -294,9 +450,11 @@ const MentalModels = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {mentalModels.slice(0, 6).map(model => {
                 const Icon = model.icon;
+                const isSaved = savedModels.includes(model.id);
+                
                 return (
                   <Card key={model.id} className="overflow-hidden">
-                    <div className="p-5 border-b border-border">
+                    <div className="p-5 border-b border-border flex justify-between items-center">
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
                           <Icon size={16} />
@@ -308,6 +466,18 @@ const MentalModels = () => {
                           </Badge>
                         </div>
                       </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className={`h-8 w-8 p-0 ${isSaved ? 'text-primary' : ''}`}
+                        onClick={() => toggleSaveModel(model.id)}
+                      >
+                        {isSaved ? (
+                          <Check size={16} />
+                        ) : (
+                          <BookmarkPlus size={16} />
+                        )}
+                      </Button>
                     </div>
                     <CardContent className="p-5">
                       <p className="text-sm text-muted-foreground">{model.description}</p>

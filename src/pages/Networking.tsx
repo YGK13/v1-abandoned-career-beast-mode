@@ -5,6 +5,7 @@ import NetworkingSuggestions from "@/components/networking/NetworkingSuggestions
 import IndustryGroups from "@/components/networking/IndustryGroups";
 import LocalGroups from "@/components/networking/LocalGroups";
 import FractionalExecutivePlatforms from "@/components/networking/FractionalExecutivePlatforms";
+import CommunityGroups from "@/components/networking/CommunityGroups";
 import { Separator } from "@/components/ui/separator";
 
 const Networking = () => {
@@ -25,6 +26,10 @@ const Networking = () => {
         </div>
         
         <FractionalExecutivePlatforms />
+        
+        <Separator className="my-8" />
+        
+        <CommunityGroups />
       </div>
     </Layout>
   );
