@@ -62,6 +62,10 @@ const PageContainer: React.FC<PageContainerProps> = ({ children }) => {
     if (location.pathname === '/lifedesign') {
       return '/scale/lifedesign';
     }
+
+    if (location.pathname === '/scale-your-biz') {
+      return '/scale/scale-your-biz';
+    }
     
     // Default to the pathname
     return location.pathname;

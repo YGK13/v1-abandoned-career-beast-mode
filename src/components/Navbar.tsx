@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { 
@@ -69,14 +70,7 @@ const Navbar: React.FC = () => {
         { path: "/skills", label: "Skills", icon: Award },
         { path: "/monetize-expertise", label: "Monetize Expertise", icon: DollarSign },
         { path: "/promote-yourself", label: "Promote Yourself", icon: Megaphone },
-        { 
-          path: "/coaching", 
-          label: "Coaching", 
-          icon: GraduationCap,
-          children: [
-            { path: "/coaching/one-on-one", label: "1:1 with Yuri Kruman", icon: User }
-          ]
-        }
+        { path: "/coaching", label: "Coaching", icon: GraduationCap }
       ]
     },
     { 
