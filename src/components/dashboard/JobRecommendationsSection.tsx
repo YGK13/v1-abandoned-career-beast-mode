@@ -9,7 +9,7 @@ import DashboardCard from "@/components/DashboardCard";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { autoApplyToJob } from "@/components/jobs/data/jobsAPI";
-import ResumeGenerator from "@/components/jobs/ResumeGenerator";
+import ResumeGenerator from "@/components/jobs/resume/ResumeGenerator";
 import { Job } from "@/components/jobs/data/types"; // Import the correct Job type
 
 interface JobRecommendationsSectionProps {
