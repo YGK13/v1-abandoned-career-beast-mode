@@ -23,6 +23,7 @@ import ManageEverything from "./pages/ManageEverything";
 import MonetizeExpertise from "./pages/MonetizeExpertise";
 import MonetizePlatformDetails from "./pages/MonetizePlatformDetails";
 import PromoteYourself from "./pages/PromoteYourself";
+import LinkedIn from "./pages/LinkedIn";
 
 const queryClient = new QueryClient();
 
@@ -39,6 +40,7 @@ const App = () => (
               <Route path="/skills" element={<Skills />} />
               <Route path="/skills/:skillName" element={<SkillDetails />} />
               <Route path="/career-docs" element={<CareerDocs />} />
+              <Route path="/linkedin" element={<LinkedIn />} />
               <Route path="/build-business" element={<BuildBusiness />} />
               <Route path="/manage-everything" element={<ManageEverything />} />
               <Route path="/monetize-expertise" element={<MonetizeExpertise />} />

@@ -1,19 +1,17 @@
-
 import React, { useState } from "react";
 import Layout from "@/components/Layout";
 import DashboardCard from "@/components/DashboardCard";
 import DocumentCard from "@/components/DocumentCard";
-import LinkedInProfile from "@/components/career-docs/LinkedInProfile";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Search, Plus, FileText, Upload, Image, ChevronDown, Filter, CloudUpload } from "lucide-react";
+import { Search, Plus, FileText, Upload, Image, ChevronDown, Filter, CloudUpload, FileUp, Briefcase, GraduationCap, Award, FileSpreadsheet } from "lucide-react";
+import DocumentUploadSuggestions from "@/components/career-docs/DocumentUploadSuggestions";
 
 const CareerDocs = () => {
   const [searchQuery, setSearchQuery] = useState("");
   
-  // Mock data
   const documentTypes = [
     { id: "all", name: "All Documents" },
     { id: "resume", name: "Resumes" },
@@ -141,8 +139,7 @@ const CareerDocs = () => {
           </div>
         </header>
         
-        {/* LinkedIn Profile Section */}
-        <LinkedInProfile />
+        <DocumentUploadSuggestions />
         
         <DashboardCard 
           className="mb-8 bg-gradient-to-br from-primary/10 to-accent/5 border-primary/20"

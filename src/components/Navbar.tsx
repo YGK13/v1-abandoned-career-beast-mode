@@ -20,7 +20,8 @@ import {
   Link,
   Users,
   DollarSign,
-  Megaphone
+  Megaphone,
+  Linkedin
 } from "lucide-react";
 import { useSubscription } from "@/context/SubscriptionContext";
 import Logo from "./navbar/Logo";
@@ -56,6 +57,7 @@ const Navbar: React.FC = () => {
       icon: Building,
       children: [
         { path: "/career-docs", label: "Career Docs", icon: FileText },
+        { path: "/linkedin", label: "LinkedIn", icon: Linkedin },
         { path: "/build-business", label: "Build Your Business", icon: Factory },
         { path: "/manage-everything", label: "Manage Everything", icon: Users }
       ]

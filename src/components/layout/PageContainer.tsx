@@ -25,6 +25,10 @@ const PageContainer: React.FC<PageContainerProps> = ({ children }) => {
       return '/build/career-docs';
     }
     
+    if (location.pathname === '/linkedin') {
+      return '/build/linkedin';
+    }
+    
     if (location.pathname === '/build-business') {
       return '/build/build-business';
     }
