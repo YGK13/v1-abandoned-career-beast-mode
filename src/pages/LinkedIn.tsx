@@ -3,6 +3,8 @@ import React from "react";
 import Layout from "@/components/Layout";
 import LinkedInProfile from "@/components/career-docs/LinkedInProfile";
 import LinkedInProfileImport from "@/components/career-docs/LinkedInProfileImport";
+import LinkedInPostSuggestions from "@/components/career-docs/LinkedInPostSuggestions";
+import LinkedInNextSteps from "@/components/career-docs/LinkedInNextSteps";
 
 const LinkedIn: React.FC = () => {
   return (
@@ -33,7 +35,11 @@ const LinkedIn: React.FC = () => {
         {/* LinkedIn Profile Assessment Section */}
         <LinkedInProfile />
         
-        {/* Future LinkedIn optimization tools can go here */}
+        {/* LinkedIn Post Suggestions Section */}
+        <LinkedInPostSuggestions />
+        
+        {/* Next Steps - Navigation options to other sections */}
+        <LinkedInNextSteps />
       </div>
     </Layout>
   );
