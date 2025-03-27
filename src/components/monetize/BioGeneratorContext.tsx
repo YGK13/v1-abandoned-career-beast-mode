@@ -1,74 +1,9 @@
 
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-
-// Form schema
-const bioFormSchema = z.object({
-  expertise: z.string().min(1, "Expertise is required"),
-  experience: z.string().min(1, "Years of experience is required"),
-  achievements: z.string().optional(),
-  targetAudience: z.string().optional(),
-  platform: z.string().optional(),
-  wordLimit: z.string().optional(),
-  includeLinkedIn: z.boolean().default(true),
-  includeCareerDocs: z.boolean().default(true)
-});
-
-type BioFormValues = z.infer<typeof bioFormSchema>;
-
-// LinkedIn data type
-interface LinkedInData {
-  headline: string;
-  skills: string[];
-  positions: Array<{
-    title: string;
-    company: string;
-    duration: string;
-  }>;
-}
-
-// Career document type
-interface CareerDoc {
-  type: string;
-  content: string;
-}
-
-// Define types
-interface BioGeneratorContextType {
-  firstName: string;
-  setFirstName: (value: string) => void;
-  lastName: string;
-  setLastName: (value: string) => void;
-  headline: string;
-  setHeadline: (value: string) => void;
-  years: string;
-  setYears: (value: string) => void;
-  expertise: string[];
-  setExpertise: (value: string[]) => void;
-  tone: string;
-  setTone: (value: string) => void;
-  length: string;
-  setLength: (value: string) => void;
-  includeLinkedIn: boolean;
-  setIncludeLinkedIn: (value: boolean) => void;
-  includeDocuments: boolean;
-  setIncludeDocuments: (value: boolean) => void;
-  generatedBio: string | null;
-  isGenerating: boolean;
-  generateBio: () => void;
-  regenerateBio: () => void;
-  copyToClipboard: () => void;
-  saveBio: () => void;
-  // New properties
-  form: ReturnType<typeof useForm<BioFormValues>>;
-  onSubmit: (values: BioFormValues) => void;
-  linkedInData: LinkedInData | null;
-  careerDocs: CareerDoc[];
-  dataSourcesLoaded: boolean;
-}
+import { BioGeneratorContextType, LinkedInData, CareerDoc } from "./bio-generator/types";
+import { BioFormValues, useBioForm } from "./bio-generator/schema";
+import { getBioTemplates, getMockLinkedInData, getMockCareerDocs } from "./bio-generator/utils";
 
 // Create context
 const BioGeneratorContext = createContext<BioGeneratorContextType | undefined>(undefined);
@@ -92,25 +27,13 @@ export const BioGeneratorProvider: React.FC<{ children: ReactNode }> = ({ childr
   const [generatedBio, setGeneratedBio] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
 
-  // New state for LinkedIn data and career documents
+  // Data sources state
   const [linkedInData, setLinkedInData] = useState<LinkedInData | null>(null);
   const [careerDocs, setCareerDocs] = useState<CareerDoc[]>([]);
   const [dataSourcesLoaded, setDataSourcesLoaded] = useState(true);
 
   // Initialize the form
-  const form = useForm<BioFormValues>({
-    resolver: zodResolver(bioFormSchema),
-    defaultValues: {
-      expertise: "",
-      experience: "",
-      achievements: "",
-      targetAudience: "",
-      platform: "",
-      wordLimit: "150",
-      includeLinkedIn: true,
-      includeCareerDocs: true
-    }
-  });
+  const form = useBioForm();
 
   // Form submission handler
   const onSubmit = (values: BioFormValues) => {
@@ -129,54 +52,14 @@ export const BioGeneratorProvider: React.FC<{ children: ReactNode }> = ({ childr
     }, 1000);
   };
 
-  // Simulate loading LinkedIn data when the component mounts
-  React.useEffect(() => {
-    // Mock LinkedIn data for demonstration
+  // Load mock data on mount
+  useEffect(() => {
     setTimeout(() => {
-      setLinkedInData({
-        headline: "Senior Software Engineer",
-        skills: ["JavaScript", "React", "TypeScript", "Node.js", "Cloud Architecture"],
-        positions: [
-          { 
-            title: "Senior Software Engineer", 
-            company: "Tech Solutions Inc", 
-            duration: "2019 - Present" 
-          },
-          { 
-            title: "Software Developer", 
-            company: "Digital Innovations", 
-            duration: "2016 - 2019" 
-          }
-        ]
-      });
-      
-      setCareerDocs([
-        {
-          type: "Resume",
-          content: "Experienced software engineer with a proven track record in developing scalable web applications..."
-        },
-        {
-          type: "Cover Letter",
-          content: "As a passionate technologist with 7+ years of experience in software development..."
-        },
-        {
-          type: "Previous Bio",
-          content: "John Doe is a senior software engineer specializing in building robust web applications..."
-        }
-      ]);
-      
+      setLinkedInData(getMockLinkedInData());
+      setCareerDocs(getMockCareerDocs());
       setDataSourcesLoaded(true);
     }, 1500);
   }, []);
-
-  // Example bio templates
-  const bioTemplates = {
-    professional: `${firstName} ${lastName} is a ${headline} with ${years} years of experience, specializing in ${expertise.join(", ")}. Known for delivering strategic solutions, ${firstName} has a proven track record of success across various projects and initiatives.`,
-    
-    conversational: `Hey there! I'm ${firstName} ${lastName}, a passionate ${headline} with ${years} years in the field. I love working on ${expertise.join(", ")}, and I'm always looking for new challenges to tackle. Let's connect and explore how we can collaborate!`,
-    
-    academic: `${firstName} ${lastName}, a ${headline} with ${years} years of experience, has developed significant expertise in ${expertise.join(", ")}. Their research and professional work have contributed to advancements in these domains, leading to effective implementations across various contexts.`
-  };
 
   // Generate bio function
   const generateBio = () => {
@@ -192,6 +75,7 @@ export const BioGeneratorProvider: React.FC<{ children: ReactNode }> = ({ childr
     
     // Simulate API call delay
     setTimeout(() => {
+      const bioTemplates = getBioTemplates(firstName, lastName, headline, years, expertise);
       let bio: string;
       
       switch (tone) {
@@ -300,7 +184,7 @@ export const BioGeneratorProvider: React.FC<{ children: ReactNode }> = ({ childr
     regenerateBio,
     copyToClipboard,
     saveBio,
-    // New properties
+    // Form and data properties
     form,
     onSubmit,
     linkedInData,

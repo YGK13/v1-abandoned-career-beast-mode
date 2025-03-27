@@ -7,6 +7,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Linkedin, FileText } from "lucide-react";
 import { useBioGenerator } from "../BioGeneratorContext";
+import { BioFormValues } from "../bio-generator/types";
 
 const FormFields: React.FC = () => {
   const { form, isGenerating, onSubmit } = useBioGenerator();
