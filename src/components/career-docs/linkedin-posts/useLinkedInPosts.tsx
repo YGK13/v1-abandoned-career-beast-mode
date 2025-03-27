@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { PostSuggestion } from "./PostSuggestionTypes";
+import { usePublishedPosts } from "./usePublishedPosts";
 
 const defaultPosts: PostSuggestion[] = [
   {
@@ -40,6 +41,7 @@ const defaultPosts: PostSuggestion[] = [
 
 export const useLinkedInPosts = () => {
   const { toast } = useToast();
+  const { publishPost } = usePublishedPosts();
   const [postSuggestions, setPostSuggestions] = useState<PostSuggestion[]>(defaultPosts);
   const [copiedPostId, setCopiedPostId] = useState<string | null>(null);
 
@@ -54,6 +56,10 @@ export const useLinkedInPosts = () => {
     setTimeout(() => {
       setCopiedPostId(null);
     }, 2000);
+  };
+
+  const handlePublishPost = (content: string, type: string) => {
+    publishPost(content, type);
   };
 
   const toggleExpand = (id: string) => {
@@ -78,6 +84,7 @@ export const useLinkedInPosts = () => {
     postSuggestions,
     copiedPostId,
     handleCopyPost,
+    handlePublishPost,
     toggleExpand,
     refreshPosts
   };

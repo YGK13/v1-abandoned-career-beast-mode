@@ -4,6 +4,7 @@ import Layout from "@/components/Layout";
 import LinkedInProfile from "@/components/career-docs/LinkedInProfile";
 import LinkedInProfileImport from "@/components/career-docs/LinkedInProfileImport";
 import LinkedInPostSuggestions from "@/components/career-docs/LinkedInPostSuggestions";
+import LinkedInPostHistory from "@/components/career-docs/linkedin-posts/LinkedInPostHistory";
 import LinkedInNextSteps from "@/components/career-docs/LinkedInNextSteps";
 
 const LinkedIn: React.FC = () => {
@@ -34,6 +35,9 @@ const LinkedIn: React.FC = () => {
         
         {/* LinkedIn Profile Assessment Section */}
         <LinkedInProfile />
+        
+        {/* LinkedIn Post History & Analytics Section */}
+        <LinkedInPostHistory />
         
         {/* LinkedIn Post Suggestions Section */}
         <LinkedInPostSuggestions />

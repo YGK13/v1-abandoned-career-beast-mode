@@ -8,6 +8,7 @@ const LinkedInPostSuggestionsList: React.FC = () => {
     postSuggestions, 
     copiedPostId, 
     handleCopyPost, 
+    handlePublishPost,
     toggleExpand 
   } = useLinkedInPosts();
   
@@ -20,6 +21,7 @@ const LinkedInPostSuggestionsList: React.FC = () => {
           copiedPostId={copiedPostId}
           onToggleExpand={toggleExpand}
           onCopyPost={handleCopyPost}
+          onPublishPost={handlePublishPost}
         />
       ))}
     </div>

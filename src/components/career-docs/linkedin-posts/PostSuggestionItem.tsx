@@ -14,13 +14,15 @@ interface PostSuggestionItemProps {
   copiedPostId: string | null;
   onToggleExpand: (id: string) => void;
   onCopyPost: (post: string, id: string) => void;
+  onPublishPost: (content: string, type: string) => void;
 }
 
 const PostSuggestionItem: React.FC<PostSuggestionItemProps> = ({ 
   post, 
   copiedPostId, 
   onToggleExpand, 
-  onCopyPost 
+  onCopyPost,
+  onPublishPost
 }) => {
   return (
     <Collapsible 
@@ -51,9 +53,12 @@ const PostSuggestionItem: React.FC<PostSuggestionItemProps> = ({
           />
           
           <PostActions 
-            postId={post.id} 
+            postId={post.id}
+            content={post.content}
+            type={post.type}
             copiedPostId={copiedPostId} 
-            onCopy={() => onCopyPost(post.content, post.id)} 
+            onCopy={() => onCopyPost(post.content, post.id)}
+            onPublish={onPublishPost}
           />
         </div>
       </CollapsibleContent>
