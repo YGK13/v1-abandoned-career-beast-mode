@@ -34,14 +34,10 @@ const CareerAvatar: React.FC<CareerAvatarProps> = ({
       
       <div className="mt-6 text-center">
         <h4 className="font-semibold">{level}</h4>
-        <div className="mt-2 space-y-2 w-full max-w-xs">
-          <div className="flex justify-between text-xs">
-            <span className="text-muted-foreground">Current</span>
-            <span className="text-muted-foreground">Next: {nextMilestone}</span>
-          </div>
-          <Progress value={score} className="h-2" />
-          <p className="text-xs text-muted-foreground pt-1">
-            {100 - score} points until next level
+        <div className="mt-4 text-center">
+          <Progress value={score} variant="circular" size="sm" />
+          <p className="text-xs text-muted-foreground pt-2">
+            {100 - score} points until next level: {nextMilestone}
           </p>
         </div>
       </div>

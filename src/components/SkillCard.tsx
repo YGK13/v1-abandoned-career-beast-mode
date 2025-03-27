@@ -53,12 +53,15 @@ const SkillCard: React.FC<SkillCardProps> = ({
           )}
         </div>
         
-        <div className="flex justify-between text-sm mb-1">
-          <span className="text-muted-foreground text-xs">{getLevelLabel(level)}</span>
-          <span className="text-muted-foreground text-xs">{level}%</span>
+        <div className="flex items-center justify-between mb-3">
+          <Progress 
+            value={level} 
+            variant="circular" 
+            size="sm" 
+            className="mx-auto" 
+          />
+          <span className="text-xs text-muted-foreground ml-3">{getLevelLabel(level)}</span>
         </div>
-        
-        <Progress value={level} className="h-1.5 mb-3" />
         
         <div className="mt-auto flex justify-between items-center">
           <Badge variant="outline" className="text-xs">

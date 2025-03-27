@@ -16,11 +16,10 @@ const ResumeGenerationProgress: React.FC<ResumeGenerationProgressProps> = ({
 }) => {
   return (
     <div className="py-4">
-      <div className="mb-6">
-        <Progress value={progress} className="h-2" />
-        <div className="flex justify-between mt-2 text-sm text-muted-foreground">
+      <div className="mb-6 flex flex-col items-center">
+        <Progress value={progress} variant="circular" size="md" className="mb-2" />
+        <div className="text-sm text-muted-foreground mt-2">
           <span>{currentStage === 'complete' ? 'Complete' : 'Optimizing...'}</span>
-          <span>{Math.round(progress)}%</span>
         </div>
       </div>
       

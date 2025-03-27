@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Link } from "react-router-dom";
 import { 
@@ -36,25 +35,24 @@ const ProgressItem: React.FC<ProgressItemProps> = ({
 }) => {
   return (
     <div className="group relative rounded-xl border p-5 transition-all hover:shadow-md">
-      <div className="flex items-start justify-between mb-4">
-        <div className="flex items-center gap-3">
-          <div className="p-2 rounded-md bg-primary/10 text-primary">
-            <Icon size={20} />
-          </div>
-          <div>
-            <h3 className="font-medium">{title}</h3>
-            <p className="text-sm text-muted-foreground">{description}</p>
-          </div>
+      <div className="flex flex-col items-center text-center mb-4">
+        <div className="mb-3">
+          <Progress 
+            value={progress} 
+            variant="circular" 
+            size="md" 
+            className="mb-2" 
+          />
         </div>
-        <span className="text-xl font-bold text-primary">{progress}%</span>
-      </div>
-      
-      <div className="mb-3">
-        <Progress value={progress} className="h-2" />
+        <div className="p-2 rounded-md bg-primary/10 text-primary">
+          <Icon size={20} />
+        </div>
+        <h3 className="font-medium mt-2">{title}</h3>
+        <p className="text-xs text-muted-foreground mt-1">{description}</p>
       </div>
       
       <Link to={path} className="inline-block w-full">
-        <Button variant="outline" size="sm" className="w-full mt-2">
+        <Button variant="outline" size="sm" className="w-full">
           Continue
         </Button>
       </Link>
@@ -157,7 +155,7 @@ const ProgressSection: React.FC = () => {
         <CardTitle>Your Career Progress</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {progressItems.map((item, index) => (
             <ProgressItem key={index} {...item} />
           ))}

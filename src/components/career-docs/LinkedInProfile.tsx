@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Linkedin, Users, Image, Award, MessageSquare, Globe } from "lucide-react";
 import DashboardCard from "@/components/DashboardCard";
@@ -63,13 +62,9 @@ const LinkedInProfile: React.FC = () => {
           </Button>
         </div>
 
-        <div className="space-y-2">
-          <div className="flex justify-between text-sm">
-            <span>Profile Strength</span>
-            <span className="font-medium">{profileStrength}%</span>
-          </div>
-          <Progress value={profileStrength} className="h-2" />
-          <p className="text-xs text-muted-foreground">
+        <div className="flex flex-col items-center space-y-2">
+          <Progress value={profileStrength} variant="circular" size="md" />
+          <p className="text-xs text-muted-foreground mt-2">
             Your profile is <span className="font-medium">performing better than 64%</span> of profiles in your industry
           </p>
         </div>

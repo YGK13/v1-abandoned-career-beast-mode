@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -32,14 +31,10 @@ const DevelopmentPlans: React.FC<DevelopmentPlansProps> = ({ plans }) => {
             <CardDescription>{plan.description}</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="mb-4">
-              <div className="flex justify-between mb-1">
-                <span className="text-sm font-medium">Progress</span>
-                <span className="text-sm font-medium">{plan.progress}%</span>
-              </div>
-              <Progress value={plan.progress} className="h-2" />
+            <div className="flex items-center justify-center mb-4">
+              <Progress value={plan.progress} variant="circular" size="md" />
             </div>
-            <div className="space-y-3">
+            <div className="space-y-3 mt-4">
               {plan.milestones.map((milestone, index) => (
                 <div key={index} className="flex items-start gap-2">
                   <div className={`mt-0.5 w-4 h-4 rounded-full border flex items-center justify-center ${milestone.completed ? 'bg-primary border-primary' : 'border-muted-foreground'}`}>

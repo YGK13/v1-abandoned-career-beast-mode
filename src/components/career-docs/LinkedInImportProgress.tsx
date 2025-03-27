@@ -9,17 +9,16 @@ interface LinkedInImportProgressProps {
 const LinkedInImportProgress: React.FC<LinkedInImportProgressProps> = ({ importProgress }) => {
   return (
     <div className="space-y-3 py-4">
-      <div className="flex justify-between text-sm">
-        <span>Importing profile data...</span>
-        <span className="font-medium">{importProgress}%</span>
-      </div>
-      <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
-        <div 
-          className="h-full bg-[#0a66c2] transition-all duration-300 ease-out" 
-          style={{ width: `${importProgress}%` }}
+      <div className="flex flex-col items-center">
+        <Progress 
+          value={importProgress} 
+          variant="circular" 
+          size="md" 
+          className="mb-2" 
         />
+        <span className="text-sm font-medium mt-2">Importing profile data...</span>
       </div>
-      <p className="text-xs text-muted-foreground animate-pulse">
+      <p className="text-xs text-muted-foreground animate-pulse text-center">
         Please wait while we analyze and import your profile data...
       </p>
     </div>
