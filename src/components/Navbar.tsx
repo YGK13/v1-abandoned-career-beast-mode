@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { 
@@ -58,7 +57,7 @@ const Navbar: React.FC = () => {
       children: [
         { path: "/career-docs", label: "Career Docs", icon: FileText },
         { path: "/linkedin", label: "LinkedIn", icon: Linkedin },
-        { path: "/build-business", label: "Build Your Business", icon: Factory },
+        { path: "/build-business", label: "Start Your Biz", icon: Factory },
         { path: "/manage-everything", label: "Manage Everything", icon: Users }
       ]
     },
@@ -85,7 +84,8 @@ const Navbar: React.FC = () => {
       label: "Scale", 
       icon: Scale,
       children: [
-        { path: "/lifedesign", label: "Life Design", icon: Target }
+        { path: "/lifedesign", label: "Life Design", icon: Target },
+        { path: "/scale-your-biz", label: "Scale Your Biz", icon: Factory }
       ]
     },
     { 

@@ -24,6 +24,7 @@ import MonetizeExpertise from "./pages/MonetizeExpertise";
 import MonetizePlatformDetails from "./pages/MonetizePlatformDetails";
 import PromoteYourself from "./pages/PromoteYourself";
 import LinkedIn from "./pages/LinkedIn";
+import ScaleYourBiz from "./pages/ScaleYourBiz"; // Add this line
 
 const queryClient = new QueryClient();
 
@@ -50,6 +51,7 @@ const App = () => (
               <Route path="/coaching" element={<Coaching />} />
               <Route path="/coaching/one-on-one" element={<CoachingOneOnOne />} />
               <Route path="/lifedesign" element={<LifeDesign />} />
+              <Route path="/scale-your-biz" element={<ScaleYourBiz />} /> {/* Add this line */}
               <Route path="/help" element={<Help />} />
               <Route path="/pricing" element={<Pricing />} />
               <Route path="/checkout" element={<Checkout />} />
