@@ -4,23 +4,39 @@ import DashboardCard from "@/components/DashboardCard";
 import { Button } from "@/components/ui/button";
 import { CloudUpload } from "lucide-react";
 
-const UploadDocumentSection: React.FC = () => {
+interface UploadDocumentSectionProps {
+  icon?: React.ElementType;
+  title?: string;
+  description?: string;
+  buttonText?: string;
+  onClick?: () => void;
+  className?: string;
+}
+
+const UploadDocumentSection: React.FC<UploadDocumentSectionProps> = ({
+  icon: IconComponent = CloudUpload,
+  title = "Upload your documents securely",
+  description = "Drag and drop files here or click to browse. We support PDF, DOCX, JPG, and PNG.",
+  buttonText = "Upload Files",
+  onClick,
+  className,
+}) => {
   return (
     <DashboardCard 
-      className="mb-8 bg-gradient-to-br from-primary/10 to-accent/5 border-primary/20"
+      className={`mb-8 bg-gradient-to-br from-primary/10 to-accent/5 border-primary/20 ${className || ""}`}
     >
       <div className="flex flex-col md:flex-row items-center gap-6">
         <div className="flex-shrink-0 w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
-          <CloudUpload size={24} className="text-primary" />
+          <IconComponent size={24} className="text-primary" />
         </div>
         <div className="flex-1 text-center md:text-left">
-          <h3 className="text-xl font-semibold mb-1">Upload your documents securely</h3>
+          <h3 className="text-xl font-semibold mb-1">{title}</h3>
           <p className="text-muted-foreground">
-            Drag and drop files here or click to browse. We support PDF, DOCX, JPG, and PNG.
+            {description}
           </p>
         </div>
-        <Button className="flex-shrink-0">
-          Upload Files
+        <Button className="flex-shrink-0" onClick={onClick}>
+          {buttonText}
         </Button>
       </div>
     </DashboardCard>

@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import Layout from "@/components/Layout";
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
@@ -9,6 +8,7 @@ import UpcomingEventsSection from "@/components/dashboard/UpcomingEventsSection"
 import JobRecommendationsSection from "@/components/dashboard/JobRecommendationsSection";
 import CareerPromoSection from "@/components/dashboard/CareerPromoSection";
 import LifeDesignSection from "@/components/dashboard/LifeDesignSection";
+import { User } from "lucide-react";
 
 const Index = () => {
   // Mock data
@@ -90,7 +90,13 @@ const Index = () => {
         
         <JobRecommendationsSection jobs={recommendedJobs} />
         
-        <CareerPromoSection />
+        <CareerPromoSection 
+          icon={User}
+          title="Ready to reach the next level?"
+          description="Build your personal brand and get noticed with our PR opportunity tracking and media mention monitoring."
+          buttonText="Manage Your Brand"
+          buttonLink="/personal-brand"
+        />
       </div>
     </Layout>
   );
