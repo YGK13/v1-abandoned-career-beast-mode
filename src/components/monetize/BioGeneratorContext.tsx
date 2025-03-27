@@ -1,215 +1,198 @@
 
-import React, { createContext, useState, useContext, useEffect, ReactNode } from "react";
-import { useForm, UseFormReturn } from "react-hook-form";
+import React, { createContext, useContext, useState, ReactNode } from "react";
+import { useToast } from "@/hooks/use-toast";
 
-interface BioGeneratorFormValues {
-  expertise: string;
-  experience: string;
-  achievements: string;
-  targetAudience: string;
-  platform: string;
-  wordLimit: number;
-  includeLinkedIn: boolean;
-  includeCareerDocs: boolean;
-}
-
-interface LinkedInData {
-  skills: string[];
-  headline: string;
-  summary: string;
-  positions: {
-    title: string;
-    company: string;
-    duration: string;
-  }[];
-}
-
-interface CareerDoc {
-  type: string;
-  content: string;
-}
-
+// Define types
 interface BioGeneratorContextType {
-  form: UseFormReturn<BioGeneratorFormValues>;
-  generatedBio: string;
-  setGeneratedBio: React.Dispatch<React.SetStateAction<string>>;
+  firstName: string;
+  setFirstName: (value: string) => void;
+  lastName: string;
+  setLastName: (value: string) => void;
+  headline: string;
+  setHeadline: (value: string) => void;
+  years: string;
+  setYears: (value: string) => void;
+  expertise: string[];
+  setExpertise: (value: string[]) => void;
+  tone: string;
+  setTone: (value: string) => void;
+  length: string;
+  setLength: (value: string) => void;
+  includeLinkedIn: boolean;
+  setIncludeLinkedIn: (value: boolean) => void;
+  includeDocuments: boolean;
+  setIncludeDocuments: (value: boolean) => void;
+  generatedBio: string | null;
   isGenerating: boolean;
-  setIsGenerating: React.Dispatch<React.SetStateAction<boolean>>;
-  linkedInData: LinkedInData | null;
-  careerDocs: CareerDoc[];
-  dataSourcesLoaded: boolean;
-  generateEnhancedBio: (data: BioGeneratorFormValues) => string;
-  copyToClipboard: () => void;
+  generateBio: () => void;
   regenerateBio: () => void;
+  copyToClipboard: () => void;
   saveBio: () => void;
-  onSubmit: (data: BioGeneratorFormValues) => void;
 }
 
+// Create context
 const BioGeneratorContext = createContext<BioGeneratorContextType | undefined>(undefined);
 
+// Context provider component
 export const BioGeneratorProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [generatedBio, setGeneratedBio] = useState<string>("");
+  const { toast } = useToast();
+  
+  // Form state
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [headline, setHeadline] = useState("");
+  const [years, setYears] = useState("");
+  const [expertise, setExpertise] = useState<string[]>([]);
+  const [tone, setTone] = useState("professional");
+  const [length, setLength] = useState("medium");
+  const [includeLinkedIn, setIncludeLinkedIn] = useState(true);
+  const [includeDocuments, setIncludeDocuments] = useState(true);
+  
+  // Bio generation state
+  const [generatedBio, setGeneratedBio] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
-  const [linkedInData, setLinkedInData] = useState<LinkedInData | null>(null);
-  const [careerDocs, setCareerDocs] = useState<CareerDoc[]>([]);
-  const [dataSourcesLoaded, setDataSourcesLoaded] = useState(false);
 
-  const form = useForm<BioGeneratorFormValues>({
-    defaultValues: {
-      expertise: "",
-      experience: "",
-      achievements: "",
-      targetAudience: "",
-      platform: "",
-      wordLimit: 150,
-      includeLinkedIn: true,
-      includeCareerDocs: true
-    }
-  });
-
-  // Simulate fetching LinkedIn profile data
-  useEffect(() => {
-    // In a real app, this would connect to your LinkedIn API integration
-    const fetchLinkedInData = () => {
-      // Simulated data
-      return {
-        skills: ["Leadership", "Product Management", "Digital Marketing", "Data Analysis"],
-        headline: "Product Manager with 10+ years experience in SaaS",
-        summary: "Results-driven product leader with experience scaling products from zero to millions in revenue.",
-        positions: [
-          { title: "Senior Product Manager", company: "Tech Solutions Inc.", duration: "3 years" },
-          { title: "Product Manager", company: "Digital Innovations", duration: "4 years" },
-        ]
-      };
-    };
-
-    // Simulate fetching career documents
-    const fetchCareerDocs = () => {
-      // Simulated data
-      return [
-        { type: "Resume", content: "Led cross-functional teams to deliver enterprise solutions..." },
-        { type: "Performance Review", content: "Exceeded targets by 40% through innovative product strategies..." },
-        { type: "Professional Bio", content: "Experienced product leader with a track record of success..." }
-      ];
-    };
-
-    // Set the data
-    setLinkedInData(fetchLinkedInData());
-    setCareerDocs(fetchCareerDocs());
-    setDataSourcesLoaded(true);
-  }, []);
-
-  const generateEnhancedBio = (data: BioGeneratorFormValues) => {
-    const { expertise, experience, achievements, targetAudience, wordLimit, includeLinkedIn, includeCareerDocs } = data;
+  // Example bio templates
+  const bioTemplates = {
+    professional: `${firstName} ${lastName} is a ${headline} with ${years} years of experience, specializing in ${expertise.join(", ")}. Known for delivering strategic solutions, ${firstName} has a proven track record of success across various projects and initiatives.`,
     
-    // Start with basic information
-    let bioContent = `Experienced ${expertise} professional with ${experience} years in the industry. `;
+    conversational: `Hey there! I'm ${firstName} ${lastName}, a passionate ${headline} with ${years} years in the field. I love working on ${expertise.join(", ")}, and I'm always looking for new challenges to tackle. Let's connect and explore how we can collaborate!`,
     
-    // Add achievements if provided
-    if (achievements) {
-      bioContent += `Known for ${achievements}. `;
-    }
-    
-    // Include LinkedIn data if selected
-    if (includeLinkedIn && linkedInData) {
-      bioContent += `Specialized in ${linkedInData.skills.slice(0, 3).join(", ")}. `;
-      bioContent += `${linkedInData.summary.substring(0, 100)}... `;
-      
-      if (linkedInData.positions && linkedInData.positions.length > 0) {
-        const recentPosition = linkedInData.positions[0];
-        bioContent += `Currently working as ${recentPosition.title} at ${recentPosition.company}. `;
-      }
-    }
-    
-    // Include career documents data if selected
-    if (includeCareerDocs && careerDocs.length > 0) {
-      // Extract relevant info from career docs
-      const resumeDoc = careerDocs.find(doc => doc.type === "Resume");
-      const bioDoc = careerDocs.find(doc => doc.type === "Professional Bio");
-      
-      if (resumeDoc) {
-        bioContent += `${resumeDoc.content.substring(0, 80)}... `;
-      }
-      
-      if (bioDoc) {
-        bioContent += `${bioDoc.content.substring(0, 80)}... `;
-      }
-    }
-    
-    // Add target audience if provided
-    if (targetAudience) {
-      bioContent += `Helping ${targetAudience} achieve their goals. `;
-    }
-    
-    // Add a call to action
-    bioContent += "Let's connect to discuss how I can help you succeed!";
-    
-    // Trim to word limit
-    const words = bioContent.split(' ');
-    if (words.length > wordLimit) {
-      bioContent = words.slice(0, wordLimit).join(' ') + '...';
-    }
-    
-    return bioContent;
+    academic: `${firstName} ${lastName}, a ${headline} with ${years} years of experience, has developed significant expertise in ${expertise.join(", ")}. Their research and professional work have contributed to advancements in these domains, leading to effective implementations across various contexts.`
   };
 
-  const onSubmit = (data: BioGeneratorFormValues) => {
+  // Generate bio function
+  const generateBio = () => {
+    if (!firstName || !lastName || !headline || !years || expertise.length === 0) {
+      toast({
+        description: "Please fill in all required fields before generating a bio",
+        variant: "destructive"
+      });
+      return;
+    }
+    
     setIsGenerating(true);
     
-    // Simulate API call with timeout
+    // Simulate API call delay
     setTimeout(() => {
-      // Generate a bio based on the input and integrated data sources
-      const bio = generateEnhancedBio(data);
+      let bio: string;
+      
+      switch (tone) {
+        case "conversational":
+          bio = bioTemplates.conversational;
+          break;
+        case "academic":
+          bio = bioTemplates.academic;
+          break;
+        default:
+          bio = bioTemplates.professional;
+      }
+      
+      // Adjust length
+      if (length === "short") {
+        bio = bio.split(". ").slice(0, 2).join(". ") + ".";
+      } else if (length === "long") {
+        bio = bio + `\n\nThroughout ${firstName}'s career, they have consistently demonstrated the ability to ${expertise[0]} and ${expertise[expertise.length - 1]}. With a focus on delivering high-quality results, ${firstName} approaches each project with a keen analytical mindset and creative problem-solving abilities.`;
+      }
+      
+      // Include LinkedIn data
+      if (includeLinkedIn) {
+        bio += `\n\nAccording to ${firstName}'s LinkedIn profile, they have collaborated with cross-functional teams and stakeholders to drive successful outcomes on multiple projects. Their expertise spans across various domains, enabling them to provide comprehensive solutions.`;
+      }
+      
+      // Include documents data
+      if (includeDocuments) {
+        bio += `\n\nAs documented in their professional portfolio, ${firstName} has received recognition for exceptional work in ${expertise[Math.floor(Math.random() * expertise.length)]}, demonstrating a commitment to excellence and continuous improvement.`;
+      }
+      
       setGeneratedBio(bio);
       setIsGenerating(false);
+      
+      toast({
+        description: "Bio generated successfully!",
+      });
     }, 1500);
   };
-
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(generatedBio);
-    toast({
-      title: "Bio copied to clipboard"
-    });
-  };
-
+  
+  // Regenerate bio
   const regenerateBio = () => {
-    if (form.formState.isValid) {
-      onSubmit(form.getValues());
-    } else {
-      form.trigger();
+    setIsGenerating(true);
+    
+    // Simulate API call delay
+    setTimeout(() => {
+      // Slightly modify the existing bio for demonstration purposes
+      if (generatedBio) {
+        const newBio = generatedBio.replace(
+          /specializing in/,
+          "with specialized focus on"
+        );
+        setGeneratedBio(newBio);
+      }
+      
+      setIsGenerating(false);
+      
+      toast({
+        description: "Bio regenerated with new variations",
+      });
+    }, 1000);
+  };
+  
+  // Copy to clipboard
+  const copyToClipboard = () => {
+    if (generatedBio) {
+      navigator.clipboard.writeText(generatedBio);
+      
+      toast({
+        description: "Bio copied to clipboard",
+      });
+    }
+  };
+  
+  // Save bio
+  const saveBio = () => {
+    if (generatedBio) {
+      toast({
+        description: "Bio saved to your assets",
+      });
     }
   };
 
-  const saveBio = () => {
-    // This would connect to a document storage functionality
-    toast({
-      title: "Bio saved to your Career Assets"
-    });
+  // Context value
+  const value = {
+    firstName,
+    setFirstName,
+    lastName,
+    setLastName,
+    headline,
+    setHeadline,
+    years,
+    setYears,
+    expertise,
+    setExpertise,
+    tone,
+    setTone,
+    length,
+    setLength,
+    includeLinkedIn,
+    setIncludeLinkedIn,
+    includeDocuments,
+    setIncludeDocuments,
+    generatedBio,
+    isGenerating,
+    generateBio,
+    regenerateBio,
+    copyToClipboard,
+    saveBio
   };
 
   return (
-    <BioGeneratorContext.Provider
-      value={{
-        form,
-        generatedBio,
-        setGeneratedBio,
-        isGenerating,
-        setIsGenerating,
-        linkedInData,
-        careerDocs,
-        dataSourcesLoaded,
-        generateEnhancedBio,
-        copyToClipboard,
-        regenerateBio,
-        saveBio,
-        onSubmit
-      }}
-    >
+    <BioGeneratorContext.Provider value={value}>
       {children}
     </BioGeneratorContext.Provider>
   );
 };
 
+// Custom hook to use the context
 export const useBioGenerator = () => {
   const context = useContext(BioGeneratorContext);
   if (context === undefined) {
@@ -217,6 +200,3 @@ export const useBioGenerator = () => {
   }
   return context;
 };
-
-// import toast library
-import { toast } from "sonner";
