@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import Layout from "@/components/Layout";
 import DashboardCard from "@/components/DashboardCard";
@@ -6,8 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Search, Plus, FileText, Upload, Image, ChevronDown, Filter, CloudUpload, FileUp, Briefcase, GraduationCap, Award, FileSpreadsheet } from "lucide-react";
+import { Search, Plus, FileText, Upload, Image, ChevronDown, Filter, CloudUpload } from "lucide-react";
 import DocumentUploadSuggestions from "@/components/career-docs/DocumentUploadSuggestions";
+import CareerTemplates from "@/components/career-docs/CareerTemplates";
+import { careerTemplates } from "@/data/careerTemplatesData";
 
 const CareerDocs = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -138,6 +141,9 @@ const CareerDocs = () => {
             </div>
           </div>
         </header>
+        
+        {/* Career Templates Section - New Addition */}
+        <CareerTemplates templates={careerTemplates} />
         
         <DocumentUploadSuggestions />
         
