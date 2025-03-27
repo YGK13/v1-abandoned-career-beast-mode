@@ -7,6 +7,7 @@ import ActionItemsSection from "@/components/dashboard/ActionItemsSection";
 import JobRecommendationsSection from "@/components/dashboard/JobRecommendationsSection";
 import ProgressSection from "@/components/dashboard/ProgressSection";
 import { Job } from "@/components/jobs/data/types";
+import { Clock, Briefcase, Lightbulb, Globe, FileText } from "lucide-react";
 
 const Index = () => {
   // Mock data
@@ -15,23 +16,35 @@ const Index = () => {
   const actionItems = [
     {
       title: "Update your LinkedIn profile",
-      description: "Your profile hasn't been updated in 3 months",
+      description: "Optimize your profile to increase visibility to recruiters",
       priority: "high" as const,
+      icon: <Globe size={16} />,
+      cta: "Update LinkedIn",
+      link: "/linkedin"
     },
     {
-      title: "Take the Product Strategy assessment",
-      description: "Validate your skills with a certification",
+      title: "Add your professional bio",
+      description: "Create a bio to use across platforms and applications",
       priority: "medium" as const,
+      icon: <FileText size={16} />,
+      cta: "Create Bio",
+      link: "/career-docs"
     },
     {
-      title: "Connect resume to ATS",
-      description: "Improve application tracking",
+      title: "Explore monetization options",
+      description: "Discover 15+ platforms to monetize your expertise",
       priority: "medium" as const,
+      icon: <Lightbulb size={16} />,
+      cta: "View Platforms",
+      link: "/monetize-expertise"
     },
     {
-      title: "Calculate your market salary",
-      description: "See where you stand in the market",
+      title: "Review latest job matches",
+      description: "5 new jobs matching your profile were found this week",
       priority: "high" as const,
+      icon: <Briefcase size={16} />,
+      cta: "See Jobs",
+      link: "/jobs"
     }
   ];
 
