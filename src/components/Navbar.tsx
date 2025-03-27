@@ -20,7 +20,6 @@ import {
   Link,
   Users,
   DollarSign,
-  Megaphone,
   Linkedin,
   Network
 } from "lucide-react";
@@ -70,7 +69,7 @@ const Navbar: React.FC = () => {
       children: [
         { path: "/skills", label: "Skills", icon: Award },
         { path: "/monetize-expertise", label: "Monetize Expertise", icon: DollarSign },
-        { path: "/promote-yourself", label: "Promote Yourself", icon: Megaphone },
+        { path: "/personal-brand", label: "Personal Brand", icon: User },
         { path: "/networking", label: "Networking", icon: Network },
         { path: "/coaching", label: "Coaching", icon: GraduationCap }
       ]

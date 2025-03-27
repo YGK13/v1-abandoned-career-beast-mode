@@ -22,7 +22,7 @@ import Checkout from "./pages/Checkout";
 import ManageEverything from "./pages/ManageEverything";
 import MonetizeExpertise from "./pages/MonetizeExpertise";
 import MonetizePlatformDetails from "./pages/MonetizePlatformDetails";
-import PromoteYourself from "./pages/PromoteYourself";
+import PersonalBrand from "./pages/PersonalBrand";
 import LinkedIn from "./pages/LinkedIn";
 import ScaleYourBiz from "./pages/ScaleYourBiz";
 import Networking from "./pages/Networking";
@@ -47,7 +47,7 @@ const App = () => (
               <Route path="/manage-everything" element={<ManageEverything />} />
               <Route path="/monetize-expertise" element={<MonetizeExpertise />} />
               <Route path="/monetize-expertise/:platformId" element={<MonetizePlatformDetails />} />
-              <Route path="/promote-yourself" element={<PromoteYourself />} />
+              <Route path="/personal-brand" element={<PersonalBrand />} />
               <Route path="/networking" element={<Networking />} />
               <Route path="/jobs" element={<Jobs />} />
               <Route path="/coaching" element={<Coaching />} />
