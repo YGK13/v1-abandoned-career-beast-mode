@@ -20,6 +20,9 @@ import NotFound from "./pages/NotFound";
 import Pricing from "./pages/Pricing";
 import Checkout from "./pages/Checkout";
 import ManageEverything from "./pages/ManageEverything";
+import MonetizeExpertise from "./pages/MonetizeExpertise";
+import MonetizePlatformDetails from "./pages/MonetizePlatformDetails";
+import PromoteYourself from "./pages/PromoteYourself";
 
 const queryClient = new QueryClient();
 
@@ -38,6 +41,9 @@ const App = () => (
               <Route path="/career-docs" element={<CareerDocs />} />
               <Route path="/build-business" element={<BuildBusiness />} />
               <Route path="/manage-everything" element={<ManageEverything />} />
+              <Route path="/monetize-expertise" element={<MonetizeExpertise />} />
+              <Route path="/monetize-expertise/:platformId" element={<MonetizePlatformDetails />} />
+              <Route path="/promote-yourself" element={<PromoteYourself />} />
               <Route path="/jobs" element={<Jobs />} />
               <Route path="/coaching" element={<Coaching />} />
               <Route path="/coaching/one-on-one" element={<CoachingOneOnOne />} />

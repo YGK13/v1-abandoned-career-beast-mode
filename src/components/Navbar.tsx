@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { 
@@ -17,7 +18,9 @@ import {
   Landmark,
   Mailbox,
   Link,
-  Users
+  Users,
+  DollarSign,
+  Megaphone
 } from "lucide-react";
 import { useSubscription } from "@/context/SubscriptionContext";
 import Logo from "./navbar/Logo";
@@ -63,6 +66,8 @@ const Navbar: React.FC = () => {
       icon: Sprout,
       children: [
         { path: "/skills", label: "Skills", icon: Award },
+        { path: "/monetize-expertise", label: "Monetize Expertise", icon: DollarSign },
+        { path: "/promote-yourself", label: "Promote Yourself", icon: Megaphone },
         { 
           path: "/coaching", 
           label: "Coaching", 

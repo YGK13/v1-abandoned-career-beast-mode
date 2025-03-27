@@ -29,9 +29,21 @@ const PageContainer: React.FC<PageContainerProps> = ({ children }) => {
       return '/build/build-business';
     }
     
+    if (location.pathname === '/manage-everything') {
+      return '/build/manage-everything';
+    }
+    
     // For paths under Grow
     if (location.pathname === '/skills') {
       return '/grow/skills';
+    }
+    
+    if (location.pathname === '/monetize-expertise' || location.pathname.startsWith('/monetize-expertise/')) {
+      return '/grow/monetize-expertise';
+    }
+    
+    if (location.pathname === '/promote-yourself') {
+      return '/grow/promote-yourself';
     }
     
     if (location.pathname === '/coaching') {
