@@ -42,9 +42,6 @@ export const BioGeneratorProvider: React.FC<{ children: ReactNode }> = ({ childr
 
   // Form submission handler
   const onSubmit = (values: BioFormValues) => {
-    setIsGenerating(true);
-    console.log("Form values:", values);
-    
     // Update state from form values
     setExpertise(values.expertise.split(",").map(item => item.trim()));
     setYears(values.experience);
