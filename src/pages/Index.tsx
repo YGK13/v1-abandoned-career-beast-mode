@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import Layout from "@/components/Layout";
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
@@ -78,7 +77,7 @@ const Index = () => {
     }
   ];
 
-  // Promotion sections array for easier management
+  // Promotion sections array - updated to reflect new menu order
   const promoSections = [
     {
       icon: Target,
@@ -87,27 +86,6 @@ const Index = () => {
       buttonText: "Salary Calculator",
       buttonLink: "/salary-title",
       highlight: true
-    },
-    {
-      icon: FileText,
-      title: "Organize Your Career Assets",
-      description: "Centralize resumes, certifications, and professional documents in one secure location.",
-      buttonText: "Access Career Docs",
-      buttonLink: "/career-docs"
-    },
-    {
-      icon: User,
-      title: "Build Your Personal Brand",
-      description: "Track PR opportunities and monitor media mentions to boost your professional visibility.",
-      buttonText: "Manage Your Brand",
-      buttonLink: "/personal-brand"
-    },
-    {
-      icon: Network,
-      title: "Expand Your Network",
-      description: "Connect with industry professionals and join relevant groups to strengthen your network.",
-      buttonText: "Network Now",
-      buttonLink: "/networking"
     },
     {
       icon: Award,
@@ -124,11 +102,18 @@ const Index = () => {
       buttonLink: "/coaching"
     },
     {
-      icon: Briefcase,
-      title: "Launch Your Business",
-      description: "Access tools and resources to start your own business or side project.",
-      buttonText: "Start Building",
-      buttonLink: "/build-business"
+      icon: Network,
+      title: "Expand Your Network",
+      description: "Connect with industry professionals and join relevant groups to strengthen your network.",
+      buttonText: "Network Now",
+      buttonLink: "/networking"
+    },
+    {
+      icon: User,
+      title: "Build Your Personal Brand",
+      description: "Track PR opportunities and monitor media mentions to boost your professional visibility.",
+      buttonText: "Manage Your Brand",
+      buttonLink: "/personal-brand"
     },
     {
       icon: Trophy,
@@ -136,6 +121,20 @@ const Index = () => {
       description: "Discover platforms and strategies to turn your knowledge into income streams.",
       buttonText: "Explore Options",
       buttonLink: "/monetize-expertise"
+    },
+    {
+      icon: Briefcase,
+      title: "Find Your Dream Job",
+      description: "Browse job opportunities tailored to your skills and career goals with our job matching system.",
+      buttonText: "View Jobs",
+      buttonLink: "/jobs"
+    },
+    {
+      icon: FileText,
+      title: "Organize Your Career Assets",
+      description: "Centralize resumes, certifications, and professional documents in one secure location.",
+      buttonText: "Access Career Docs",
+      buttonLink: "/career-docs"
     }
   ];
 

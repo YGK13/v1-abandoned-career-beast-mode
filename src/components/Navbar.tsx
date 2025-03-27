@@ -67,12 +67,12 @@ const Navbar: React.FC = () => {
       label: "Grow", 
       icon: Sprout,
       children: [
+        { path: "/salary-title", label: "Salary + Title", icon: Target },
         { path: "/skills", label: "Skills", icon: Award },
         { path: "/coaching", label: "Coaching", icon: GraduationCap },
         { path: "/networking", label: "Networking", icon: Network },
         { path: "/personal-brand", label: "Personal Brand", icon: User },
-        { path: "/monetize-expertise", label: "Monetize Expertise", icon: DollarSign },
-        { path: "/salary-title", label: "Salary + Title", icon: Target }
+        { path: "/monetize-expertise", label: "Monetize Expertise", icon: DollarSign }
       ]
     },
     { 
@@ -84,12 +84,8 @@ const Navbar: React.FC = () => {
         { path: "/scale-your-biz", label: "Scale Your Biz", icon: Factory }
       ]
     },
-    { 
-      path: "/jobs", 
-      label: "Jobs", 
-      icon: Briefcase,
-      locked: !hasJobsAccess
-    },
+    // Removed the locked property from Jobs
+    { path: "/jobs", label: "Jobs", icon: Briefcase },
     { path: "/pricing", label: "Pricing", icon: CreditCard },
     { path: "/help", label: "Help", icon: HelpCircle },
   ];
