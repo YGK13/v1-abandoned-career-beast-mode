@@ -1,4 +1,3 @@
-
 export type Message = {
   id: string;
   content: string;
@@ -7,11 +6,14 @@ export type Message = {
 };
 
 export type Category = 
-  | "interviews"
-  | "salary"
-  | "promotion"
-  | "skills"
-  | "networking"
-  | "career_change"
-  | "leadership"
-  | "general";
+  | "interviews" 
+  | "salary" 
+  | "promotion" 
+  | "skills" 
+  | "networking" 
+  | "career_change" 
+  | "leadership" 
+  | "general"
+  | "salary_data"
+  | "linkedin_optimization"
+  | "document_analysis";
