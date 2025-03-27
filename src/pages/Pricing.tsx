@@ -3,17 +3,48 @@ import React from "react";
 import Layout from "@/components/Layout";
 import PricingPlans from "@/components/pricing/PricingPlans";
 import SatisfactionGuarantee from "@/components/pricing/SatisfactionGuarantee";
+import { CheckCircle } from "lucide-react";
 
 const Pricing: React.FC = () => {
   return (
     <Layout>
       <div className="page-container">
-        <header className="mb-8">
-          <h1 className="text-4xl font-bold">Subscription Plans</h1>
-          <p className="text-muted-foreground mt-1">
-            Choose a plan that's right for your career journey
+        <header className="mb-8 text-center max-w-3xl mx-auto">
+          <h1 className="text-4xl font-bold">Choose Your Career Growth Plan</h1>
+          <p className="text-muted-foreground mt-3">
+            Invest in your future with our powerful career development ecosystem
           </p>
         </header>
+
+        <div className="mb-10 bg-primary/5 rounded-lg p-6 max-w-3xl mx-auto">
+          <h2 className="text-xl font-semibold mb-3">All Plans Include:</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div className="flex items-start gap-2">
+              <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+              <span>Career health dashboard</span>
+            </div>
+            <div className="flex items-start gap-2">
+              <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+              <span>Skills tracking & visualization</span>
+            </div>
+            <div className="flex items-start gap-2">
+              <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+              <span>Document storage & organization</span>
+            </div>
+            <div className="flex items-start gap-2">
+              <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+              <span>Personalized career insights</span>
+            </div>
+            <div className="flex items-start gap-2">
+              <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+              <span>7-day satisfaction guarantee</span>
+            </div>
+            <div className="flex items-start gap-2">
+              <CheckCircle className="h-5 w-5 text-green-500 flex-shrink-0 mt-0.5" />
+              <span>Cancel anytime</span>
+            </div>
+          </div>
+        </div>
 
         <PricingPlans />
         <SatisfactionGuarantee />

@@ -11,8 +11,8 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent } from "@/components/ui/card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button"; // Added this import
-import { Lightbulb } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Lightbulb, MessageSquare, Shield } from "lucide-react";
 
 const Help: React.FC = () => {
   const [dailyTip, setDailyTip] = useState<string>(
@@ -46,10 +46,12 @@ const Help: React.FC = () => {
               <TabsTrigger value="getting-started">Getting Started</TabsTrigger>
               <TabsTrigger value="profile">Profile Management</TabsTrigger>
               <TabsTrigger value="skills">Skills & Development</TabsTrigger>
-              <TabsTrigger value="documents">Documents & Portfolio</TabsTrigger>
-              <TabsTrigger value="jobs">Job Recommendations</TabsTrigger>
+              <TabsTrigger value="career-assets">Career Assets</TabsTrigger>
+              <TabsTrigger value="jobs">Job & Referrals</TabsTrigger>
               <TabsTrigger value="salary">Salary Insights</TabsTrigger>
               <TabsTrigger value="coaching">Career Coaching</TabsTrigger>
+              <TabsTrigger value="business">Business Building</TabsTrigger>
+              <TabsTrigger value="personal-brand">Personal Brand</TabsTrigger>
             </TabsList>
 
             {/* Getting Started Section */}
@@ -79,6 +81,19 @@ const Help: React.FC = () => {
                   </AccordionContent>
                 </AccordionItem>
 
+                <AccordionItem value="subscription-plans">
+                  <AccordionTrigger>What subscription plans are available?</AccordionTrigger>
+                  <AccordionContent>
+                    <p className="mb-2">SkillSync offers three subscription tiers to match your career needs:</p>
+                    <ul className="list-disc pl-5 space-y-2">
+                      <li><strong>Career Essentials ($19.99/month):</strong> Complete career dashboard, skills tracking, career asset management, basic LinkedIn integration, life design fundamentals, mental models access, and daily career tips.</li>
+                      <li><strong>Career Accelerator ($49.99/month):</strong> Everything in Career Essentials plus full access to Jobs section, AI job matching & auto-applying, AI career coaching, LinkedIn profile optimization, ATS-optimized resume generation, and internal referral system.</li>
+                      <li><strong>Career Mastery ($69.99/month):</strong> Everything in Career Accelerator plus monthly live group coaching sessions, executive networking access, personal brand amplification, monetize expertise platform, business building resources, and priority internal referrals.</li>
+                    </ul>
+                    <p className="mt-2">All plans include a 7-day free trial and can be canceled anytime. Visit our Pricing page for more details on each plan.</p>
+                  </AccordionContent>
+                </AccordionItem>
+
                 <AccordionItem value="linkedin-import">
                   <AccordionTrigger>How do I import my LinkedIn profile?</AccordionTrigger>
                   <AccordionContent>
@@ -101,8 +116,11 @@ const Help: React.FC = () => {
                     <ul className="list-disc pl-5 space-y-2">
                       <li><strong>Dashboard:</strong> Your central hub with an overview of your career health, recent activity, and recommended actions.</li>
                       <li><strong>Skills:</strong> Manage your skills inventory, track proficiency levels, and discover recommended skills to develop.</li>
-                      <li><strong>Documents:</strong> Store and organize resumes, performance reviews, certificates, and other career-related documents.</li>
-                      <li><strong>Jobs:</strong> Browse job recommendations tailored to your profile, manage applications, and track application status.</li>
+                      <li><strong>Career Assets:</strong> Store and organize resumes, performance reviews, certificates, and other career-related documents.</li>
+                      <li><strong>Jobs:</strong> Browse job recommendations tailored to your profile, request internal referrals, and use auto-apply functionality.</li>
+                      <li><strong>Life Design:</strong> Access tools and resources for holistic career-life integration.</li>
+                      <li><strong>Personal Brand:</strong> Develop and manage your professional online presence.</li>
+                      <li><strong>Business Building:</strong> Resources for entrepreneurship and side-hustle development.</li>
                       <li><strong>Help:</strong> Access detailed guides, tutorials, and FAQs about using SkillSync effectively.</li>
                     </ul>
                     <p className="mt-2">Use the navigation bar at the top of the screen to move between these sections. On mobile devices, access the menu by tapping the menu icon in the top-right corner.</p>
@@ -148,19 +166,17 @@ const Help: React.FC = () => {
                   </AccordionContent>
                 </AccordionItem>
 
-                <AccordionItem value="upload-performance-reviews">
-                  <AccordionTrigger>How do I upload performance reviews?</AccordionTrigger>
+                <AccordionItem value="career-avatar">
+                  <AccordionTrigger>What is the Career Avatar and how does it work?</AccordionTrigger>
                   <AccordionContent>
-                    <p className="mb-2">Performance reviews provide valuable insights into your strengths and areas for improvement:</p>
-                    <ol className="list-decimal pl-5 space-y-2">
-                      <li>Go to the Documents section of your profile.</li>
-                      <li>Select "Upload New Document" and choose "Performance Review" as the document type.</li>
-                      <li>Upload your performance review document (PDF, Word, or image).</li>
-                      <li>Add relevant metadata such as the review date, manager name, and overall rating.</li>
-                      <li>Tag key strengths and improvement areas mentioned in the review.</li>
-                      <li>If you have a physical copy, you can take a clear photo and upload it as an image.</li>
-                    </ol>
-                    <p className="mt-2">SkillSync's AI will analyze your performance reviews to identify patterns in your strengths and areas for development, which will inform your personalized career coaching recommendations.</p>
+                    <p className="mb-2">Your Career Avatar is a visual representation of your career progress and health:</p>
+                    <ul className="list-disc pl-5 space-y-2">
+                      <li>The circular progress indicator shows your overall career score based on profile completeness, skill development, networking activities, and achievements.</li>
+                      <li>Colors change as your score improves, providing visual feedback on your career development.</li>
+                      <li>Your level indicates your career maturity within the SkillSync ecosystem.</li>
+                      <li>Next milestone information shows what you need to focus on to advance to the next level.</li>
+                    </ul>
+                    <p className="mt-2">The Career Avatar helps you visualize your growth and identify areas for improvement. It updates automatically as you engage with various aspects of the platform.</p>
                   </AccordionContent>
                 </AccordionItem>
 
@@ -210,6 +226,21 @@ const Help: React.FC = () => {
                   </AccordionContent>
                 </AccordionItem>
 
+                <AccordionItem value="skill-card-visualization">
+                  <AccordionTrigger>What do the circular progress indicators on Skill Cards mean?</AccordionTrigger>
+                  <AccordionContent>
+                    <p className="mb-2">Skill Cards use circular progress indicators to visually represent your proficiency levels:</p>
+                    <ul className="list-disc pl-5 space-y-2">
+                      <li>The circular progress shows your current proficiency level as a percentage (0-100%).</li>
+                      <li>Each level corresponds to a text label (Beginner, Basic, Intermediate, Advanced, Expert).</li>
+                      <li>Cards also display trend indicators showing if the skill is growing, stable, or declining in market demand.</li>
+                      <li>"In Demand" badges highlight skills that are currently highly sought after in the job market.</li>
+                      <li>The category tag helps you organize skills by type (technical, soft skills, industry knowledge, etc.).</li>
+                    </ul>
+                    <p className="mt-2">Click on any Skill Card to access detailed information about that skill, including learning resources and job opportunities that require it.</p>
+                  </AccordionContent>
+                </AccordionItem>
+
                 <AccordionItem value="skill-gap-analysis">
                   <AccordionTrigger>How does the skill gap analysis work?</AccordionTrigger>
                   <AccordionContent>
@@ -229,7 +260,7 @@ const Help: React.FC = () => {
                   <AccordionTrigger>How do I upload certificates and credentials?</AccordionTrigger>
                   <AccordionContent>
                     <ol className="list-decimal pl-5 space-y-2">
-                      <li>Go to the Documents section in your SkillSync dashboard.</li>
+                      <li>Go to the Career Assets section in your SkillSync dashboard.</li>
                       <li>Click on "Upload New Document" and select "Certificate/Credential" as the document type.</li>
                       <li>Upload your certificate file (PDF, image, etc.).</li>
                       <li>Add metadata including:
@@ -274,15 +305,15 @@ const Help: React.FC = () => {
               </Accordion>
             </TabsContent>
 
-            {/* Documents Section */}
-            <TabsContent value="documents" className="space-y-6">
-              <h2 className="text-2xl font-semibold mb-4">Documents & Portfolio</h2>
+            {/* Career Assets Section (renamed from Documents) */}
+            <TabsContent value="career-assets" className="space-y-6">
+              <h2 className="text-2xl font-semibold mb-4">Career Assets & Portfolio</h2>
               
               <Accordion type="single" collapsible className="w-full">
                 <AccordionItem value="document-types">
-                  <AccordionTrigger>What types of documents should I upload?</AccordionTrigger>
+                  <AccordionTrigger>What types of career assets should I upload?</AccordionTrigger>
                   <AccordionContent>
-                    <p className="mb-2">SkillSync can store and analyze various career-related documents to enhance your profile:</p>
+                    <p className="mb-2">SkillSync can store and analyze various career-related assets to enhance your profile:</p>
                     <ul className="list-disc pl-5 space-y-2">
                       <li><strong>Resumes & CVs:</strong> Current and past versions</li>
                       <li><strong>Performance Reviews:</strong> Annual or quarterly assessments from employers</li>
@@ -293,13 +324,30 @@ const Help: React.FC = () => {
                       <li><strong>Project Portfolios:</strong> Examples of your work and accomplishments</li>
                       <li><strong>Awards & Recognition:</strong> Documentation of professional achievements</li>
                       <li><strong>Skills Assessments:</strong> Results from skills tests or evaluations</li>
+                      <li><strong>Personal Brand Assets:</strong> Professional photos, bios, and media appearances</li>
                     </ul>
                     <p className="mt-2 text-sm text-muted-foreground">For optimal results, upload documents in PDF format when possible, as this preserves formatting and enables better text extraction for analysis.</p>
                   </AccordionContent>
                 </AccordionItem>
 
+                <AccordionItem value="linkedin-integration">
+                  <AccordionTrigger>How does the LinkedIn integration work?</AccordionTrigger>
+                  <AccordionContent>
+                    <p className="mb-2">SkillSync provides comprehensive LinkedIn integration for career optimization:</p>
+                    <ol className="list-decimal pl-5 space-y-2">
+                      <li><strong>Profile Import:</strong> Import your entire LinkedIn profile with work history, skills, education, and accomplishments.</li>
+                      <li><strong>Connection Analysis:</strong> Identify strategic networking opportunities within your connections.</li>
+                      <li><strong>Content Optimization:</strong> Get suggestions for improving your profile content and visibility.</li>
+                      <li><strong>Post Suggestions:</strong> Receive AI-generated post ideas to build your professional brand.</li>
+                      <li><strong>Referral Access:</strong> Connect with people who can refer you for jobs at their companies.</li>
+                      <li><strong>Progress Tracking:</strong> Track your LinkedIn growth metrics over time.</li>
+                    </ol>
+                    <p className="mt-2">The LinkedIn integration uses circular progress indicators to show the status of imports and analyses in progress. You can disconnect the integration at any time from your profile settings.</p>
+                  </AccordionContent>
+                </AccordionItem>
+
                 <AccordionItem value="document-organization">
-                  <AccordionTrigger>How should I organize my documents?</AccordionTrigger>
+                  <AccordionTrigger>How should I organize my career assets?</AccordionTrigger>
                   <AccordionContent>
                     <p className="mb-2">Proper document organization helps you quickly find what you need and allows SkillSync to provide better insights:</p>
                     <ol className="list-decimal pl-5 space-y-2">
@@ -317,12 +365,13 @@ const Help: React.FC = () => {
                 <AccordionItem value="auto-resume-creation">
                   <AccordionTrigger>How does the automatic resume creation work?</AccordionTrigger>
                   <AccordionContent>
-                    <p className="mb-2">SkillSync can automatically generate tailored resumes for specific job applications:</p>
+                    <p className="mb-2">SkillSync can automatically generate tailored, ATS-optimized resumes for specific job applications:</p>
                     <ol className="list-decimal pl-5 space-y-2">
                       <li>When you find a job you want to apply for, click "Create Custom Resume."</li>
                       <li>SkillSync analyzes the job description to identify key requirements and desired qualifications.</li>
                       <li>The system matches these requirements with your skills, experiences, and achievements.</li>
                       <li>A custom resume is generated that highlights the most relevant aspects of your profile for that specific position.</li>
+                      <li>The circular progress indicator shows you the generation status in real-time.</li>
                       <li>You can review and edit the resume before finalizing it.</li>
                       <li>Choose from different design templates to match the company's culture or industry standards.</li>
                       <li>Save the custom resume to your documents or download it in various formats (PDF, Word, etc.).</li>
@@ -336,7 +385,7 @@ const Help: React.FC = () => {
                   <AccordionContent>
                     <p className="mb-2">A portfolio showcases your work and achievements in a visual, impactful way:</p>
                     <ol className="list-decimal pl-5 space-y-2">
-                      <li>Navigate to the Portfolio section within Documents.</li>
+                      <li>Navigate to the Portfolio section within Career Assets.</li>
                       <li>Click "Create New Portfolio Item" to add a project or work sample.</li>
                       <li>For each portfolio item, include:
                         <ul className="list-disc pl-5 mt-1">
@@ -360,7 +409,7 @@ const Help: React.FC = () => {
 
             {/* Jobs Section */}
             <TabsContent value="jobs" className="space-y-6">
-              <h2 className="text-2xl font-semibold mb-4">Job Recommendations & Applications</h2>
+              <h2 className="text-2xl font-semibold mb-4">Job Recommendations & Referrals</h2>
               
               <Accordion type="single" collapsible className="w-full">
                 <AccordionItem value="job-recommendations">
@@ -387,6 +436,24 @@ const Help: React.FC = () => {
                   </AccordionContent>
                 </AccordionItem>
 
+                <AccordionItem value="internal-referrals">
+                  <AccordionTrigger>How does the internal referral system work?</AccordionTrigger>
+                  <AccordionContent>
+                    <p className="mb-2">The internal referral system helps you leverage your LinkedIn network for job applications:</p>
+                    <ol className="list-decimal pl-5 space-y-2">
+                      <li>When viewing a job listing, SkillSync automatically identifies your LinkedIn connections who work at the company.</li>
+                      <li>Connections are ranked by relationship strength and position relevance.</li>
+                      <li>Click on a connection's name to request a referral.</li>
+                      <li>The system generates an optimized, ATS-friendly resume tailored for that specific position.</li>
+                      <li>A pre-drafted email opens in your default email client, addressed to your connection with an appropriate subject line.</li>
+                      <li>The email includes a personalized message requesting an internal referral and your tailored resume as an attachment.</li>
+                      <li>You can edit the message before sending to add a personal touch.</li>
+                      <li>The referral request is tracked in your application dashboard.</li>
+                    </ol>
+                    <p className="mt-2">Internal referrals significantly increase your chances of getting an interview. Career Mastery subscribers receive priority referral support with additional optimization.</p>
+                  </AccordionContent>
+                </AccordionItem>
+
                 <AccordionItem value="application-process">
                   <AccordionTrigger>How does the automatic job application process work?</AccordionTrigger>
                   <AccordionContent>
@@ -402,6 +469,31 @@ const Help: React.FC = () => {
                       <li>After applying, the job moves to your "Applications" dashboard for tracking.</li>
                     </ol>
                     <p className="mt-2">You maintain control throughout the process. Nothing is submitted without your review and approval, and you can customize your application materials for each position.</p>
+                  </AccordionContent>
+                </AccordionItem>
+
+                <AccordionItem value="auto-apply-settings">
+                  <AccordionTrigger>How do I configure auto-apply settings?</AccordionTrigger>
+                  <AccordionContent>
+                    <p className="mb-2">The auto-apply feature streamlines your job application process:</p>
+                    <ol className="list-decimal pl-5 space-y-2">
+                      <li>Go to the Jobs section and click on "Auto-Apply Settings."</li>
+                      <li>Configure your preferences:
+                        <ul className="list-disc pl-5 mt-1">
+                          <li>Minimum match threshold (e.g., only auto-apply to jobs with 80%+ match)</li>
+                          <li>Target industries and roles</li>
+                          <li>Location preferences and remote options</li>
+                          <li>Salary requirements</li>
+                          <li>Application frequency (daily limit)</li>
+                          <li>Notification settings</li>
+                        </ul>
+                      </li>
+                      <li>Upload your base resume and cover letter templates.</li>
+                      <li>Review and approve the email signature to be used.</li>
+                      <li>Set up automated follow-up preferences.</li>
+                      <li>Save your settings to activate the auto-apply functionality.</li>
+                    </ol>
+                    <p className="mt-2">The system will generate custom, ATS-optimized documents for each application and send you confirmation emails. You can pause or modify auto-apply settings at any time.</p>
                   </AccordionContent>
                 </AccordionItem>
 
@@ -427,29 +519,6 @@ const Help: React.FC = () => {
                       <li>Compare offers with the salary comparison tool when you reach that stage.</li>
                     </ol>
                     <p className="mt-2 text-sm text-muted-foreground">SkillSync can monitor your email (with permission) to automatically detect responses from employers and update application statuses accordingly.</p>
-                  </AccordionContent>
-                </AccordionItem>
-
-                <AccordionItem value="email-integration">
-                  <AccordionTrigger>How does email integration work for job tracking?</AccordionTrigger>
-                  <AccordionContent>
-                    <p className="mb-2">Email integration enhances your job application tracking experience:</p>
-                    <ol className="list-decimal pl-5 space-y-2">
-                      <li>Go to Settings and select "Connect Email Account."</li>
-                      <li>Choose your email provider and grant SkillSync limited access to scan for job-related emails.</li>
-                      <li>SkillSync identifies emails from employers, recruiters, and job boards.</li>
-                      <li>The system automatically:
-                        <ul className="list-disc pl-5 mt-1">
-                          <li>Updates application statuses based on responses</li>
-                          <li>Adds interview invitations to your calendar</li>
-                          <li>Alerts you to time-sensitive communications</li>
-                          <li>Categorizes and organizes job-related emails</li>
-                        </ul>
-                      </li>
-                      <li>View all communication related to a specific application in one place.</li>
-                      <li>Get reminders to follow up when an appropriate time has passed with no response.</li>
-                    </ol>
-                    <p className="mt-2">SkillSync uses secure protocols and limited access permissions. We only scan for job-related emails and never read personal communications. You can disconnect email integration at any time.</p>
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>
@@ -580,6 +649,31 @@ const Help: React.FC = () => {
               <h2 className="text-2xl font-semibold mb-4">AI Career Coaching</h2>
               
               <Accordion type="single" collapsible className="w-full">
+                <AccordionItem value="ai-coach">
+                  <AccordionTrigger>How does the AI Career Coach work?</AccordionTrigger>
+                  <AccordionContent>
+                    <p className="mb-2">The AI Career Coach provides personalized guidance and advice based on your specific situation:</p>
+                    <ul className="list-disc pl-5 space-y-2">
+                      <li>Available to Career Accelerator and Career Mastery subscribers.</li>
+                      <li>The coach is trained on expert career development materials and best practices.</li>
+                      <li>It analyzes your profile, skills, goals, and job market data to provide targeted advice.</li>
+                      <li>You can chat with the coach about:
+                        <ul className="list-circle pl-5 mt-1">
+                          <li>Career transitions and pivots</li>
+                          <li>Interview preparation and strategies</li>
+                          <li>Resume and cover letter feedback</li>
+                          <li>Skill development recommendations</li>
+                          <li>Networking approaches</li>
+                          <li>Workplace challenges and solutions</li>
+                        </ul>
+                      </li>
+                      <li>The coach provides actionable steps and resources for implementation.</li>
+                      <li>Conversations are saved for future reference and progress tracking.</li>
+                    </ul>
+                    <p className="mt-2">For complex situations, Career Mastery subscribers can escalate to live coaching sessions with human career experts.</p>
+                  </AccordionContent>
+                </AccordionItem>
+
                 <AccordionItem value="daily-tips">
                   <AccordionTrigger>How do the daily career tips work?</AccordionTrigger>
                   <AccordionContent>
@@ -641,6 +735,30 @@ const Help: React.FC = () => {
                   </AccordionContent>
                 </AccordionItem>
 
+                <AccordionItem value="group-coaching">
+                  <AccordionTrigger>What are the monthly group coaching sessions?</AccordionTrigger>
+                  <AccordionContent>
+                    <p className="mb-2">Career Mastery subscribers have access to monthly live group coaching sessions:</p>
+                    <ul className="list-disc pl-5 space-y-2">
+                      <li>Sessions are conducted via video conference with career development experts.</li>
+                      <li>Each month features a different career development theme or topic.</li>
+                      <li>Sessions include:
+                        <ul className="list-circle pl-5 mt-1">
+                          <li>Expert presentation on the monthly topic</li>
+                          <li>Q&A opportunities with the expert</li>
+                          <li>Peer networking and discussion</li>
+                          <li>Practical exercises and worksheets</li>
+                          <li>Action planning for implementation</li>
+                        </ul>
+                      </li>
+                      <li>All sessions are recorded and available for later viewing.</li>
+                      <li>Additional resources related to each session are provided for deeper learning.</li>
+                      <li>Follow-up micro-coaching is available after each session.</li>
+                    </ul>
+                    <p className="mt-2">Register for upcoming sessions from the Events calendar in your dashboard. You'll receive email reminders with connection details before each session.</p>
+                  </AccordionContent>
+                </AccordionItem>
+
                 <AccordionItem value="leadership-development">
                   <AccordionTrigger>How can I develop leadership skills?</AccordionTrigger>
                   <AccordionContent>
@@ -667,32 +785,224 @@ const Help: React.FC = () => {
                     <p className="mt-2">Leadership development is integrated with your career plan and skill development tracking, helping you build a well-rounded leadership profile aligned with your career goals.</p>
                   </AccordionContent>
                 </AccordionItem>
+              </Accordion>
+            </TabsContent>
 
-                <AccordionItem value="soft-skills">
-                  <AccordionTrigger>How can I improve my soft skills?</AccordionTrigger>
+            {/* Business Building Section (New) */}
+            <TabsContent value="business" className="space-y-6">
+              <h2 className="text-2xl font-semibold mb-4">Business Building Resources</h2>
+              
+              <Accordion type="single" collapsible className="w-full">
+                <AccordionItem value="business-planning">
+                  <AccordionTrigger>How can I use the business planning tools?</AccordionTrigger>
                   <AccordionContent>
-                    <p className="mb-2">Soft skills are critical for career advancement. SkillSync helps you develop them systematically:</p>
+                    <p className="mb-2">SkillSync provides comprehensive business planning resources for entrepreneurs:</p>
                     <ol className="list-decimal pl-5 space-y-2">
-                      <li>Go to the Skills section and select the "Soft Skills" category.</li>
-                      <li>Take the comprehensive soft skills assessment to establish your baseline.</li>
-                      <li>Based on your assessment and career goals, get personalized development paths for key soft skills:
+                      <li>Navigate to the Business Building section in your dashboard.</li>
+                      <li>Select "Business Planning" to access the planning toolkit.</li>
+                      <li>The toolkit includes:
                         <ul className="list-disc pl-5 mt-1">
-                          <li>Communication (written, verbal, presentation)</li>
-                          <li>Collaboration and teamwork</li>
-                          <li>Adaptability and resilience</li>
-                          <li>Creativity and innovation</li>
-                          <li>Critical thinking and problem-solving</li>
-                          <li>Time management and organization</li>
-                          <li>Emotional intelligence and empathy</li>
-                          <li>Negotiation and conflict resolution</li>
+                          <li>Business plan templates and examples</li>
+                          <li>Market analysis frameworks</li>
+                          <li>Competitive research tools</li>
+                          <li>Financial planning spreadsheets</li>
+                          <li>Pricing strategy calculators</li>
+                          <li>SWOT analysis templates</li>
+                          <li>Goal setting and milestone tracking</li>
                         </ul>
                       </li>
-                      <li>Access micro-learning exercises designed to be practiced daily.</li>
-                      <li>Use interactive simulations to practice difficult workplace scenarios.</li>
-                      <li>Receive specific prompts to apply soft skills in your current role.</li>
-                      <li>Track your progress through periodic self-assessments and reflection exercises.</li>
+                      <li>Each tool includes step-by-step instructions and best practices.</li>
+                      <li>Save your work as you go and export completed plans in various formats.</li>
+                      <li>Get AI feedback on your business plans and strategies.</li>
                     </ol>
-                    <p className="mt-2 text-sm text-muted-foreground">For optimal results, focus on developing 1-2 soft skills at a time, with consistent daily practice rather than occasional intensive efforts.</p>
+                    <p className="mt-2">Career Mastery subscribers can schedule one-on-one business plan review sessions with experienced entrepreneurs in their industry.</p>
+                  </AccordionContent>
+                </AccordionItem>
+
+                <AccordionItem value="side-hustle">
+                  <AccordionTrigger>How do I develop a side hustle while employed?</AccordionTrigger>
+                  <AccordionContent>
+                    <p className="mb-2">SkillSync offers specialized guidance for developing side businesses:</p>
+                    <ul className="list-disc pl-5 space-y-2">
+                      <li><strong>Side Hustle Planner:</strong> Tools to help you identify viable side business opportunities based on your skills and market demand.</li>
+                      <li><strong>Time Management:</strong> Resources for balancing full-time employment with entrepreneurial activities.</li>
+                      <li><strong>Legal Considerations:</strong> Guidance on navigating employment contracts and non-compete agreements.</li>
+                      <li><strong>Growth Strategies:</strong> Frameworks for scaling a side business into a full-time venture when ready.</li>
+                      <li><strong>Financial Planning:</strong> Tools for managing income from multiple sources and reinvesting in your side business.</li>
+                      <li><strong>Risk Management:</strong> Strategies to minimize risks while exploring entrepreneurial opportunities.</li>
+                    </ul>
+                    <p className="mt-2">The Side Hustle Roadmap provides a step-by-step guide to launching and growing a business while maintaining your current job, with specific milestones and validation points.</p>
+                  </AccordionContent>
+                </AccordionItem>
+
+                <AccordionItem value="monetize-expertise">
+                  <AccordionTrigger>How can I monetize my professional expertise?</AccordionTrigger>
+                  <AccordionContent>
+                    <p className="mb-2">SkillSync provides multiple pathways to monetize your knowledge and skills:</p>
+                    <ol className="list-decimal pl-5 space-y-2">
+                      <li>Access the "Monetize Expertise" section in the Business Building area.</li>
+                      <li>Take the expertise assessment to identify your most valuable knowledge areas.</li>
+                      <li>Explore monetization channels tailored to your expertise:
+                        <ul className="list-disc pl-5 mt-1">
+                          <li>Consulting and freelancing</li>
+                          <li>Online course creation</li>
+                          <li>Digital product development</li>
+                          <li>Coaching programs</li>
+                          <li>Content creation and thought leadership</li>
+                          <li>Subscription services</li>
+                          <li>Speaking engagements</li>
+                        </ul>
+                      </li>
+                      <li>Each channel includes platform recommendations, pricing guidelines, and marketing strategies.</li>
+                      <li>Use the Market Testing tools to validate your offerings before full launch.</li>
+                      <li>Access templates for proposals, contracts, and service agreements.</li>
+                    </ol>
+                    <p className="mt-2">The Expert Platform Directory connects you with established marketplaces and platforms that match your expertise area, with special partnership discounts for SkillSync users.</p>
+                  </AccordionContent>
+                </AccordionItem>
+
+                <AccordionItem value="growth-strategies">
+                  <AccordionTrigger>What growth strategies are available for my business?</AccordionTrigger>
+                  <AccordionContent>
+                    <p className="mb-2">SkillSync provides various business growth frameworks and strategies:</p>
+                    <ul className="list-disc pl-5 space-y-2">
+                      <li><strong>Market Expansion:</strong> Tools for identifying new market segments and territories.</li>
+                      <li><strong>Product Development:</strong> Frameworks for creating new offerings and service lines.</li>
+                      <li><strong>Digital Marketing:</strong> Resources for growing your online presence and customer acquisition.</li>
+                      <li><strong>Strategic Partnerships:</strong> Guidance for identifying and establishing valuable partnerships.</li>
+                      <li><strong>Operational Efficiency:</strong> Tools for optimizing processes and reducing costs.</li>
+                      <li><strong>Team Building:</strong> Resources for hiring, onboarding, and managing teams.</li>
+                      <li><strong>Funding Options:</strong> Information on bootstrapping, loans, investors, and grants.</li>
+                    </ul>
+                    <p className="mt-2">The Growth Strategy Selector helps you determine which approaches are most appropriate for your specific business stage, industry, and goals. Each strategy includes case studies and implementation guides.</p>
+                  </AccordionContent>
+                </AccordionItem>
+
+                <AccordionItem value="enterprise-tools">
+                  <AccordionTrigger>What enterprise tools are included?</AccordionTrigger>
+                  <AccordionContent>
+                    <p className="mb-2">Career Mastery subscribers have access to premium business and enterprise tools:</p>
+                    <ul className="list-disc pl-5 space-y-2">
+                      <li><strong>Financial Modeling:</strong> Advanced forecasting and scenario planning templates.</li>
+                      <li><strong>Customer Relationship Management:</strong> Basic CRM system with customer tracking.</li>
+                      <li><strong>Project Management:</strong> Tools for managing business projects and initiatives.</li>
+                      <li><strong>Legal Document Library:</strong> Templates for common business legal documents.</li>
+                      <li><strong>Competitor Analysis:</strong> Framework for deep competitive intelligence gathering.</li>
+                      <li><strong>Brand Development:</strong> Tools for creating and evolving your business brand.</li>
+                      <li><strong>Marketing Automation:</strong> Basic automation workflows for customer communications.</li>
+                    </ul>
+                    <p className="mt-2">Enterprise tools include integration capabilities with popular business platforms, and many come with special discount offers for premium subscriptions to standalone services.</p>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+            </TabsContent>
+
+            {/* Personal Brand Section (New) */}
+            <TabsContent value="personal-brand" className="space-y-6">
+              <h2 className="text-2xl font-semibold mb-4">Personal Brand Development</h2>
+              
+              <Accordion type="single" collapsible className="w-full">
+                <AccordionItem value="brand-assessment">
+                  <AccordionTrigger>How do I assess my current personal brand?</AccordionTrigger>
+                  <AccordionContent>
+                    <p className="mb-2">SkillSync provides tools to analyze and evaluate your current professional brand:</p>
+                    <ol className="list-decimal pl-5 space-y-2">
+                      <li>Go to the Personal Brand section and select "Brand Assessment."</li>
+                      <li>The assessment analyzes multiple dimensions of your brand:
+                        <ul className="list-disc pl-5 mt-1">
+                          <li>Online presence and digital footprint</li>
+                          <li>Reputation and perception analysis</li>
+                          <li>Content and messaging consistency</li>
+                          <li>Visual brand elements</li>
+                          <li>Audience engagement levels</li>
+                          <li>Industry positioning</li>
+                        </ul>
+                      </li>
+                      <li>Connect your social profiles for a more comprehensive analysis.</li>
+                      <li>Receive a detailed report with brand strength scores in each area.</li>
+                      <li>Get actionable recommendations for improvement based on identified gaps.</li>
+                      <li>Compare your brand metrics to industry benchmarks and competitors.</li>
+                    </ol>
+                    <p className="mt-2">This assessment creates a baseline for measuring the impact of your brand development efforts over time. We recommend reassessing your brand quarterly to track progress.</p>
+                  </AccordionContent>
+                </AccordionItem>
+
+                <AccordionItem value="content-strategy">
+                  <AccordionTrigger>How do I develop a personal brand content strategy?</AccordionTrigger>
+                  <AccordionContent>
+                    <p className="mb-2">SkillSync helps you create a structured content plan to build your professional reputation:</p>
+                    <ol className="list-decimal pl-5 space-y-2">
+                      <li>Access the "Content Strategy Builder" in the Personal Brand section.</li>
+                      <li>Define your brand positioning and core message pillars.</li>
+                      <li>Identify your target audience and preferred platforms.</li>
+                      <li>The system helps you develop:
+                        <ul className="list-disc pl-5 mt-1">
+                          <li>Content themes aligned with your expertise areas</li>
+                          <li>Content calendar with posting frequency</li>
+                          <li>Content format mix (articles, videos, posts, etc.)</li>
+                          <li>Engagement strategies and community building</li>
+                          <li>Content repurposing workflows</li>
+                        </ul>
+                      </li>
+                      <li>Access AI content generation tools for post ideas and outlines.</li>
+                      <li>Get platform-specific best practices for optimal reach and engagement.</li>
+                    </ol>
+                    <p className="mt-2">Career Mastery subscribers receive additional content review services and personalized feedback on their content strategy from industry experts.</p>
+                  </AccordionContent>
+                </AccordionItem>
+
+                <AccordionItem value="opportunity-tracking">
+                  <AccordionTrigger>How does opportunity tracking work?</AccordionTrigger>
+                  <AccordionContent>
+                    <p className="mb-2">The Personal Brand section includes tools to monitor and pursue visibility opportunities:</p>
+                    <ul className="list-disc pl-5 space-y-2">
+                      <li><strong>Media Opportunities:</strong> Database of podcasts, publications, and shows accepting guest contributions.</li>
+                      <li><strong>Speaking Engagements:</strong> Directory of upcoming conferences, webinars, and events seeking speakers.</li>
+                      <li><strong>Collaboration Prospects:</strong> Potential partners for joint content and projects in your space.</li>
+                      <li><strong>Award Nominations:</strong> Industry awards and recognition opportunities with deadlines.</li>
+                      <li><strong>PR Connections:</strong> Journalist and media contact database for pitching story ideas.</li>
+                    </ul>
+                    <p className="mt-2">Each opportunity includes application requirements, deadlines, audience details, and submission guidelines. You can track your applications and follow-ups from the Opportunities dashboard. The system also provides templates for outreach and pitch messages tailored to each opportunity type.</p>
+                  </AccordionContent>
+                </AccordionItem>
+
+                <AccordionItem value="mentions-monitoring">
+                  <AccordionTrigger>How does mentions monitoring work?</AccordionTrigger>
+                  <AccordionContent>
+                    <p className="mb-2">SkillSync's brand monitoring tools help you track and leverage mentions of your name and work:</p>
+                    <ol className="list-decimal pl-5 space-y-2">
+                      <li>Set up your monitoring profile with your name, company, and key terms.</li>
+                      <li>The system scans various sources for mentions:
+                        <ul className="list-disc pl-5 mt-1">
+                          <li>News and media outlets</li>
+                          <li>Blogs and industry publications</li>
+                          <li>Social media platforms</li>
+                          <li>Forums and discussion boards</li>
+                          <li>Academic citations and research papers</li>
+                        </ul>
+                      </li>
+                      <li>Each mention is categorized by source type, sentiment, and reach.</li>
+                      <li>Receive alerts for new mentions based on your notification preferences.</li>
+                      <li>Access engagement recommendations for responding to mentions appropriately.</li>
+                      <li>Track mentions growth over time with visual analytics.</li>
+                    </ol>
+                    <p className="mt-2">The Mentions feature helps you identify your brand ambassadors and critics, allowing you to nurture positive relationships and address potential reputation issues proactively.</p>
+                  </AccordionContent>
+                </AccordionItem>
+
+                <AccordionItem value="network-amplification">
+                  <AccordionTrigger>How can I amplify my personal brand through networking?</AccordionTrigger>
+                  <AccordionContent>
+                    <p className="mb-2">SkillSync provides strategic networking tools to expand your brand reach:</p>
+                    <ul className="list-disc pl-5 space-y-2">
+                      <li><strong>Network Mapping:</strong> Visualize your professional connections and identify strategic gaps.</li>
+                      <li><strong>Influencer Identification:</strong> Find key influencers in your industry for potential collaboration.</li>
+                      <li><strong>Engagement Strategies:</strong> Personalized approaches for connecting with different audience segments.</li>
+                      <li><strong>Community Building:</strong> Tools for creating and nurturing your own professional community.</li>
+                      <li><strong>Relationship Management:</strong> System for tracking interactions and follow-ups with key contacts.</li>
+                      <li><strong>Networking Calendar:</strong> Industry events and virtual gatherings relevant to your field.</li>
+                    </ul>
+                    <p className="mt-2">Career Mastery subscribers gain access to exclusive networking groups and facilitated introductions to industry leaders through our Executive Network feature.</p>
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>
@@ -705,11 +1015,11 @@ const Help: React.FC = () => {
               <p className="text-muted-foreground mb-4">Our support team is available to assist you with any questions you might have about using SkillSync.</p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Button className="flex items-center gap-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                  <MessageSquare className="h-4 w-4" />
                   Contact Support
                 </Button>
                 <Button variant="outline" className="flex items-center gap-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/><line x1="4.93" y1="4.93" x2="9.17" y2="9.17"/><line x1="14.83" y1="14.83" x2="19.07" y2="19.07"/><line x1="14.83" y1="9.17" x2="19.07" y2="4.93"/><line x1="14.83" y1="9.17" x2="18.36" y2="5.64"/><line x1="4.93" y1="19.07" x2="9.17" y2="14.83"/></svg>
+                  <Shield className="h-4 w-4" />
                   Schedule a Demo
                 </Button>
               </div>

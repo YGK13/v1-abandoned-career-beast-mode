@@ -1,6 +1,6 @@
 
 import React from "react";
-import { BadgeDollarSign, Briefcase } from "lucide-react";
+import { BadgeDollarSign, Briefcase, Award } from "lucide-react";
 
 export interface PricingPlanData {
   id: string;
@@ -15,42 +15,51 @@ export interface PricingPlanData {
 export const pricingPlansData: PricingPlanData[] = [
   {
     id: "basic",
-    title: "Basic",
-    price: "$5",
-    description: "Essential career tools and resources to get started",
+    title: "Career Essentials",
+    price: "$19.99",
+    description: "Essential career tools and resources for career growth",
     icon: <BadgeDollarSign className="w-7 h-7 text-muted-foreground" />,
     features: [
-      { text: "Career dashboard" },
-      { text: "Basic skills tracking" },
-      { text: "Document management" },
-      { text: "Life design tips" },
+      { text: "Complete career dashboard" },
+      { text: "Skills tracking & development" },
+      { text: "Career asset management" },
+      { text: "Basic LinkedIn integration" },
+      { text: "Life design fundamentals" },
+      { text: "Mental models access" },
+      { text: "Daily career tips" },
     ],
   },
   {
     id: "jobs",
-    title: "Jobs Access",
-    price: "$9.99",
-    description: "Advanced job matching and application tools",
+    title: "Career Accelerator",
+    price: "$49.99",
+    description: "Advanced job matching and automated career growth tools",
     icon: <Briefcase className="w-7 h-7 text-primary" />,
     isPopular: true,
     features: [
-      { text: "Everything in Basic" },
+      { text: "Everything in Career Essentials" },
       { text: "<strong>Full access to Jobs section</strong>" },
-      { text: "AI job matching" },
-      { text: "Auto-apply functionality" },
+      { text: "<strong>AI job matching & auto-applying</strong>" },
+      { text: "AI career coaching" },
+      { text: "LinkedIn profile optimization" },
+      { text: "ATS-optimized resume generation" },
+      { text: "Internal referral system" },
     ],
   },
   {
     id: "premium",
-    title: "Premium",
-    price: "$19.99",
-    description: "Complete career support and advanced features",
-    icon: <BadgeDollarSign className="w-7 h-7 text-muted-foreground" />,
+    title: "Career Mastery",
+    price: "$69.99",
+    description: "Complete career ecosystem with executive-level support",
+    icon: <Award className="w-7 h-7 text-yellow-500" />,
     features: [
-      { text: "Everything in Jobs Access" },
-      { text: "Monthly group coaching sessions" },
-      { text: "Premium newsletter access" },
-      { text: "Priority support" },
+      { text: "Everything in Career Accelerator" },
+      { text: "Monthly live group coaching sessions" },
+      { text: "Executive networking access" },
+      { text: "Personal brand amplification" },
+      { text: "Monetize expertise platform" },
+      { text: "Business building resources" },
+      { text: "Priority internal referrals" },
     ],
   },
 ];
