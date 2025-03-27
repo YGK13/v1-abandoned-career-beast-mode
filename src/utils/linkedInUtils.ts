@@ -1,6 +1,7 @@
 
 import { z } from "zod";
 import { toast } from "@/hooks/use-toast";
+import React from "react";
 
 export const linkedInProfileSchema = z.object({
   profileUrl: z.string().url("Please enter a valid LinkedIn URL").includes("linkedin.com", {
@@ -33,3 +34,14 @@ export const simulateImportProcess = (
     });
   }, 700);
 };
+
+// New auth-related utilities
+export type SSOProvider = "linkedin" | "google" | "microsoft" | "apple" | "github";
+
+export interface SSOConfig {
+  id: SSOProvider;
+  name: string;
+  icon: React.FC<{ className?: string }>;
+  color: string;
+  hoverColor: string;
+}
