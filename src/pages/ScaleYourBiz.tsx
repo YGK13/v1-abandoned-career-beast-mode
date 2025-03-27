@@ -3,6 +3,7 @@ import React from "react";
 import Layout from "@/components/Layout";
 import EnterpriseToolsSection from "@/components/business/EnterpriseToolsSection";
 import BusinessResourcesDashboard from "@/components/business/BusinessResourcesDashboard";
+import GrowthStrategiesSection from "@/components/business/GrowthStrategiesSection";
 
 const ScaleYourBiz = () => {
   return (
@@ -15,6 +16,7 @@ const ScaleYourBiz = () => {
 
         <div className="space-y-10">
           <BusinessResourcesDashboard />
+          <GrowthStrategiesSection />
           <EnterpriseToolsSection />
         </div>
       </div>
