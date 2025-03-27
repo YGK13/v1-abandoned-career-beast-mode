@@ -49,7 +49,10 @@ const MonetizeExpertise = () => {
                 <Button variant="outline" asChild>
                   <Link to="#" className="flex items-center gap-1" onClick={(e) => {
                     e.preventDefault();
-                    document.querySelector('[data-value="all"]')?.click();
+                    const tabElement = document.querySelector('[data-value="all"]');
+                    if (tabElement instanceof HTMLElement) {
+                      tabElement.click();
+                    }
                   }}>
                     View all platforms <ChevronRight className="h-4 w-4" />
                   </Link>
