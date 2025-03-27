@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Job } from "../JobsData";
+import { Job } from "../data/types";
 import JobCard from "@/components/JobCard";
 import JobBadges from "./JobBadges";
 import SourceLabel from "./SourceLabel";

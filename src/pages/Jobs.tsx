@@ -5,7 +5,7 @@ import JobsHeader from "@/components/jobs/JobsHeader";
 import JobFilters from "@/components/jobs/JobFilters";
 import JobListingSection from "@/components/jobs/JobListingSection";
 import AutoApplySettings from "@/components/jobs/AutoApplySettings";
-import { jobs, offMarketJobs, getApplicationStats } from "@/components/jobs/JobsData";
+import { jobs, offMarketJobs, getApplicationStats } from "@/components/jobs/data";
 import DashboardCard from "@/components/DashboardCard";
 import { Badge } from "@/components/ui/badge";
 import { Clock, Check, Building, Briefcase } from "lucide-react";

@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Job } from "./JobsData";
+import { Job } from "./data/types";
 import JobSearch from "./components/JobSearch";
 import JobCategoryTabs, { JobCategory } from "./components/JobCategoryTabs";
 import EmptyJobsState from "./components/EmptyJobsState";

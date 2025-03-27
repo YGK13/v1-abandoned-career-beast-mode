@@ -2,7 +2,7 @@
 import React from "react";
 import { Badge } from "@/components/ui/badge";
 import { Zap, Check } from "lucide-react";
-import { Job } from "../JobsData";
+import { Job } from "../data/types";
 
 interface JobBadgesProps {
   job: Job;
