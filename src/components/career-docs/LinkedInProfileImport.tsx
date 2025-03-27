@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import { Linkedin, UserCheck, Upload, RefreshCw } from "lucide-react";
+import { Linkedin, UserCheck, Upload, RefreshCw, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import DashboardCard from "@/components/DashboardCard";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
@@ -10,6 +10,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import TwoFactorAuth from "@/components/auth/TwoFactorAuth";
 
 const linkedInProfileSchema = z.object({
   profileUrl: z.string().url("Please enter a valid LinkedIn URL").includes("linkedin.com", {
@@ -24,6 +25,8 @@ const LinkedInProfileImport: React.FC = () => {
   const [showConnectDialog, setShowConnectDialog] = useState(false);
   const [importProgress, setImportProgress] = useState(0);
   const [isImportComplete, setIsImportComplete] = useState(false);
+  const [show2FADialog, setShow2FADialog] = useState(false);
+  const [isSecured, setIsSecured] = useState(false);
   const { toast } = useToast();
 
   const form = useForm<LinkedInProfileFormValues>({
@@ -44,11 +47,8 @@ const LinkedInProfileImport: React.FC = () => {
           clearInterval(interval);
           setTimeout(() => {
             setIsImporting(false);
-            setIsImportComplete(true);
-            toast({
-              title: "Profile Imported Successfully",
-              description: "Your LinkedIn profile data has been imported and analyzed.",
-            });
+            // After import is complete, show 2FA dialog
+            setShow2FADialog(true);
           }, 500);
           return 100;
         }
@@ -65,6 +65,16 @@ const LinkedInProfileImport: React.FC = () => {
     setShowConnectDialog(false);
   };
 
+  const handle2FAComplete = () => {
+    setShow2FADialog(false);
+    setIsSecured(true);
+    setIsImportComplete(true);
+    toast({
+      title: "Profile Imported and Secured",
+      description: "Your LinkedIn profile data has been imported and your account is now secured with 2FA.",
+    });
+  };
+
   const handleConnectClick = () => {
     setShowConnectDialog(true);
   };
@@ -73,6 +83,7 @@ const LinkedInProfileImport: React.FC = () => {
     setIsImportComplete(false);
     setImportProgress(0);
     setIsImporting(false);
+    setIsSecured(false);
     form.reset();
   };
 
@@ -143,6 +154,17 @@ const LinkedInProfileImport: React.FC = () => {
                     </span>
                     <span>Education history imported</span>
                   </li>
+                  {isSecured && (
+                    <li className="flex items-center gap-2">
+                      <span className="w-4 h-4 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+                        <span className="text-xs text-green-600 dark:text-green-400">✓</span>
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Shield size={12} className="text-green-600 dark:text-green-400" />
+                        <span>Account secured with 2FA</span>
+                      </span>
+                    </li>
+                  )}
                 </ul>
               </div>
             </div>
@@ -211,6 +233,14 @@ const LinkedInProfileImport: React.FC = () => {
             </Form>
           </DialogContent>
         </Dialog>
+
+        {/* Two-Factor Authentication Dialog */}
+        <TwoFactorAuth 
+          open={show2FADialog}
+          onClose={() => setShow2FADialog(false)}
+          onComplete={handle2FAComplete}
+          email="your.email@example.com"
+        />
       </div>
     </DashboardCard>
   );
