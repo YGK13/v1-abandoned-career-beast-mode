@@ -33,7 +33,7 @@ const ManageEverything = () => {
 
             {Object.entries(managementTips).map(([key, category]) => (
               <TabsContent key={key} value={key}>
-                <ManagementCategoryContent category={category} />
+                <ManagementCategoryContent category={category} date={date} />
               </TabsContent>
             ))}
           </Tabs>

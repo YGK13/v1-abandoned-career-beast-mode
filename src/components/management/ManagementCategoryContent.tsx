@@ -8,9 +8,22 @@ import { ManagementCategory } from "@/data/managementTipsData";
 
 interface ManagementCategoryContentProps {
   category: ManagementCategory;
+  date: string;
 }
 
-const ManagementCategoryContent: React.FC<ManagementCategoryContentProps> = ({ category }) => {
+const ManagementCategoryContent: React.FC<ManagementCategoryContentProps> = ({ category, date }) => {
+  // Get a daily rotating tip based on the date
+  const getTipOfTheDay = () => {
+    // Parse the date to get day of the year (1-366)
+    const dayOfYear = Math.floor((new Date(date).getTime() - new Date(date).getTimezoneOffset() * 60000) / 86400000);
+    
+    // Use the day of the year to rotate through tips
+    // This ensures tips don't repeat too frequently
+    return category.tips[dayOfYear % category.tips.length];
+  };
+
+  const dailyTip = getTipOfTheDay();
+
   return (
     <div className="grid gap-6">
       <Card>
@@ -22,16 +35,14 @@ const ManagementCategoryContent: React.FC<ManagementCategoryContentProps> = ({ c
             <div>
               <CardTitle>{category.title}</CardTitle>
               <CardDescription>
-                Best practices and actionable insights
+                Daily rotating best practices and actionable insights
               </CardDescription>
             </div>
           </div>
         </CardHeader>
         <CardContent>
           <div className="space-y-6">
-            {category.tips.map((tip) => (
-              <ManagementTipCard key={tip.id} tip={tip} />
-            ))}
+            <ManagementTipCard tip={dailyTip} />
           </div>
         </CardContent>
       </Card>
