@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, forwardRef } from "react";
 import { useLocation } from "react-router-dom";
 import { 
   Home, 
@@ -20,7 +20,8 @@ import {
   Users,
   DollarSign,
   Linkedin,
-  Network
+  Network,
+  LucideProps
 } from "lucide-react";
 import { useSubscription } from "@/context/SubscriptionContext";
 import Logo from "./navbar/Logo";
@@ -29,9 +30,10 @@ import MobileMenu from "./navbar/MobileMenu";
 import UserMenu from "./navbar/UserMenu";
 import { NavItem } from "./navbar/NavLink";
 
-// Create a custom GrowthChartIcon component with the hockey stick growth shape
-const GrowthChartIcon = (props) => (
+// Create a custom GrowthChartIcon component with the hockey stick growth shape that's compatible with Lucide format
+const GrowthChartIcon = forwardRef<SVGSVGElement, LucideProps>((props, ref) => (
   <svg
+    ref={ref}
     xmlns="http://www.w3.org/2000/svg"
     width={props.size || 24}
     height={props.size || 24}
@@ -47,7 +49,10 @@ const GrowthChartIcon = (props) => (
     <path d="M18 3v4h4" />
     <path d="M18 7 9 16l-3-3-3 3" />
   </svg>
-);
+));
+
+// Add display name for better debugging
+GrowthChartIcon.displayName = "GrowthChartIcon";
 
 const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
