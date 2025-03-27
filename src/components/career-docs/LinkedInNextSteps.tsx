@@ -36,7 +36,7 @@ const LinkedInNextSteps: React.FC = () => {
       highlight: false
     },
     {
-      title: "Career Documents",
+      title: "Career Assets",
       description: "Manage your resume, cover letters and other career assets",
       icon: Lightbulb,
       path: "/career-docs",

@@ -78,7 +78,7 @@ const CareerDocs = () => {
         <header className="mb-8">
           <div className="flex flex-col md:flex-row justify-between md:items-end gap-4">
             <div>
-              <h1 className="text-4xl font-bold">Career Documentation</h1>
+              <h1 className="text-4xl font-bold">Career Assets</h1>
               <p className="text-muted-foreground mt-1">Manage and optimize your career assets</p>
             </div>
             <DocumentActions />
