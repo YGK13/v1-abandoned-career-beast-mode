@@ -1,9 +1,8 @@
-
 import React, { useState } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { 
   Megaphone, 
-  Settings, It's actually `Settings` not `Cog`, but we use the valid imported property
+  Settings,
   Users, 
   BadgePercent, 
   BarChart 
