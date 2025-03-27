@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import Layout from "@/components/Layout";
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
@@ -8,7 +9,7 @@ import UpcomingEventsSection from "@/components/dashboard/UpcomingEventsSection"
 import JobRecommendationsSection from "@/components/dashboard/JobRecommendationsSection";
 import CareerPromoSection from "@/components/dashboard/CareerPromoSection";
 import LifeDesignSection from "@/components/dashboard/LifeDesignSection";
-import { User } from "lucide-react";
+import { Award, Briefcase, FileText, User, Users, Calendar, Trophy } from "lucide-react";
 
 const Index = () => {
   // Mock data
@@ -72,6 +73,52 @@ const Index = () => {
     }
   ];
 
+  // Promotion sections array for easier management
+  const promoSections = [
+    {
+      icon: FileText,
+      title: "Organize Your Career Assets",
+      description: "Centralize resumes, certifications, and professional documents in one secure location.",
+      buttonText: "Access Career Docs",
+      buttonLink: "/career-docs"
+    },
+    {
+      icon: User,
+      title: "Build Your Personal Brand",
+      description: "Track PR opportunities and monitor media mentions to boost your professional visibility.",
+      buttonText: "Manage Your Brand",
+      buttonLink: "/personal-brand"
+    },
+    {
+      icon: Users,
+      title: "Expand Your Network",
+      description: "Connect with industry professionals and join relevant groups to strengthen your network.",
+      buttonText: "Network Now",
+      buttonLink: "/networking"
+    },
+    {
+      icon: Award,
+      title: "Enhance Your Skills",
+      description: "Analyze your current skills, identify gaps, and create development plans tailored to your goals.",
+      buttonText: "View Skills",
+      buttonLink: "/skills"
+    },
+    {
+      icon: Briefcase,
+      title: "Launch Your Business",
+      description: "Access tools and resources to start your own business or side project.",
+      buttonText: "Start Building",
+      buttonLink: "/build-business"
+    },
+    {
+      icon: Trophy,
+      title: "Monetize Your Expertise",
+      description: "Discover platforms and strategies to turn your knowledge into income streams.",
+      buttonText: "Explore Options",
+      buttonLink: "/monetize-expertise"
+    }
+  ];
+
   return (
     <Layout>
       <div className="page-container">
@@ -90,13 +137,21 @@ const Index = () => {
         
         <JobRecommendationsSection jobs={recommendedJobs} />
         
-        <CareerPromoSection 
-          icon={User}
-          title="Ready to reach the next level?"
-          description="Build your personal brand and get noticed with our PR opportunity tracking and media mention monitoring."
-          buttonText="Manage Your Brand"
-          buttonLink="/personal-brand"
-        />
+        <div className="mb-8">
+          <h2 className="text-xl font-semibold mb-4">Tools & Resources</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {promoSections.map((section, index) => (
+              <CareerPromoSection
+                key={index}
+                icon={section.icon}
+                title={section.title}
+                description={section.description}
+                buttonText={section.buttonText}
+                buttonLink={section.buttonLink}
+              />
+            ))}
+          </div>
+        </div>
       </div>
     </Layout>
   );
