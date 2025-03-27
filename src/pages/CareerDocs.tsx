@@ -6,7 +6,10 @@ import DocumentActions from "@/components/career-docs/DocumentActions";
 import UploadDocumentSection from "@/components/career-docs/UploadDocumentSection";
 import DocumentUploadSuggestions from "@/components/career-docs/DocumentUploadSuggestions";
 import CareerTemplates from "@/components/career-docs/CareerTemplates";
+import LinkedInProfileImport from "@/components/career-docs/LinkedInProfileImport";
+import CareerSyncRoadmap from "@/components/career-docs/CareerSyncRoadmap";
 import { careerTemplates } from "@/data/careerTemplatesData";
+import { FileSymlink } from "lucide-react";
 
 const CareerDocs = () => {
   // Document data would ideally come from an API or context
@@ -82,17 +85,28 @@ const CareerDocs = () => {
           </div>
         </header>
         
-        {/* Career Templates Section */}
-        <CareerTemplates templates={careerTemplates} />
+        {/* Career Sync Roadmap - New component with clear steps */}
+        <CareerSyncRoadmap />
+        
+        {/* LinkedIn Profile Sync Section */}
+        <LinkedInProfileImport />
         
         {/* Document Upload Suggestions */}
         <DocumentUploadSuggestions />
         
         {/* Upload Document Section */}
-        <UploadDocumentSection />
+        <UploadDocumentSection 
+          icon={FileSymlink}
+          title="Manual Document Upload"
+          description="Upload your career documents one by one to build a comprehensive portfolio. We support PDF, DOCX, JPG, and PNG."
+          buttonText="Upload Files"
+        />
         
         {/* Documents List */}
         <DocumentsList documents={documents} />
+        
+        {/* Career Templates Section - Moved to the bottom */}
+        <CareerTemplates templates={careerTemplates} />
       </div>
     </Layout>
   );
