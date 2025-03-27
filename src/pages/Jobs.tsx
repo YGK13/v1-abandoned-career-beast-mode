@@ -104,6 +104,7 @@ const Jobs = () => {
           matchThreshold={matchThreshold}
           onlyRemote={onlyRemote}
           onApply={(job) => console.log("Apply to job:", job)}
+          onResetFilters={handleResetFilters}
         />
         
         <AutoApplySettings
