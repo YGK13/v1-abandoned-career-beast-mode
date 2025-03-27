@@ -9,7 +9,7 @@ interface JobsHeaderProps {
 }
 
 const JobsHeader: React.FC<JobsHeaderProps> = ({ 
-  title = "Job Opportunities", 
+  title = "Jobs", 
   subtitle = "Discover and track jobs tailored to your skills" 
 }) => {
   return (

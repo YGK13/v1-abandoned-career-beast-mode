@@ -4,6 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { NavItem } from "./NavLink";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { cn } from "@/lib/utils";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -15,6 +16,9 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, navLinks }) => {
   const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({});
   
   if (!isOpen) return null;
+  
+  // Standardized font styling for mobile menu
+  const menuItemStyle = "font-medium text-sm";
   
   const toggleSubMenu = (path: string) => {
     setExpandedItems(prev => ({
@@ -33,11 +37,14 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, navLinks }) => {
               <Accordion type="single" collapsible key={link.path}>
                 <AccordionItem value={link.path} className="border-0">
                   <AccordionTrigger
-                    className={`px-4 py-3 rounded-md flex items-center space-x-3 transition-colors ${
+                    className={cn(
+                      "px-4 py-3 rounded-md flex items-center space-x-3 transition-colors",
+                      menuItemStyle,
                       location.pathname === link.path
                         ? "text-primary bg-primary/10"
-                        : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
-                    } ${link.locked ? "opacity-75" : ""}`}
+                        : "text-muted-foreground hover:text-foreground hover:bg-muted/50",
+                      link.locked ? "opacity-75" : ""
+                    )}
                   >
                     <span className="flex items-center space-x-3">
                       <link.icon size={18} />
@@ -53,11 +60,14 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, navLinks }) => {
                           return (
                             <div key={child.path} className="rounded-md">
                               <div 
-                                className={`px-4 py-3 rounded-md flex items-center justify-between transition-colors ${
+                                className={cn(
+                                  "px-4 py-3 rounded-md flex items-center justify-between transition-colors", 
+                                  menuItemStyle,
                                   location.pathname === child.path
                                     ? "text-primary bg-primary/10"
-                                    : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
-                                } ${child.locked ? "opacity-75" : ""}`}
+                                    : "text-muted-foreground hover:text-foreground hover:bg-muted/50",
+                                  child.locked ? "opacity-75" : ""
+                                )}
                                 onClick={() => toggleSubMenu(child.path)}
                               >
                                 <div className="flex items-center space-x-3">
@@ -78,11 +88,14 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, navLinks }) => {
                                     <Link
                                       key={grandchild.path}
                                       to={grandchild.path}
-                                      className={`px-4 py-3 rounded-md flex items-center space-x-3 transition-colors ${
+                                      className={cn(
+                                        "px-4 py-3 rounded-md flex items-center space-x-3 transition-colors",
+                                        menuItemStyle,
                                         location.pathname === grandchild.path
                                           ? "text-primary bg-primary/10"
-                                          : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
-                                      } ${grandchild.locked ? "opacity-75" : ""}`}
+                                          : "text-muted-foreground hover:text-foreground hover:bg-muted/50",
+                                        grandchild.locked ? "opacity-75" : ""
+                                      )}
                                     >
                                       <grandchild.icon size={18} />
                                       <span>{grandchild.label}</span>
@@ -100,11 +113,14 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, navLinks }) => {
                           <Link
                             key={child.path}
                             to={child.path}
-                            className={`px-4 py-3 rounded-md flex items-center space-x-3 transition-colors ${
+                            className={cn(
+                              "px-4 py-3 rounded-md flex items-center space-x-3 transition-colors",
+                              menuItemStyle,
                               location.pathname === child.path
                                 ? "text-primary bg-primary/10"
-                                : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
-                            } ${child.locked ? "opacity-75" : ""}`}
+                                : "text-muted-foreground hover:text-foreground hover:bg-muted/50",
+                              child.locked ? "opacity-75" : ""
+                            )}
                           >
                             <child.icon size={18} />
                             <span>{child.label}</span>
@@ -124,11 +140,14 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, navLinks }) => {
             <Link
               key={link.path}
               to={link.path}
-              className={`px-4 py-3 rounded-md flex items-center space-x-3 transition-colors ${
+              className={cn(
+                "px-4 py-3 rounded-md flex items-center space-x-3 transition-colors",
+                menuItemStyle,
                 location.pathname === link.path
                   ? "text-primary bg-primary/10"
-                  : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
-              } ${link.locked ? "opacity-75" : ""}`}
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted/50",
+                link.locked ? "opacity-75" : ""
+              )}
             >
               <link.icon size={18} />
               <span>{link.label}</span>

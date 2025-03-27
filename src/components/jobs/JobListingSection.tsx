@@ -3,8 +3,9 @@ import React from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Badge } from "@/components/ui/badge";
 import JobCard from "@/components/JobCard";
-import { Search, Briefcase } from "lucide-react";
+import { Search, Briefcase, Linkedin, Twitter } from "lucide-react";
 import OffMarketBanner from "./OffMarketBanner";
 
 interface JobCategory {
@@ -22,6 +23,7 @@ interface Job {
   skills: string[];
   isRecommended: boolean;
   status: string;
+  source: string;
 }
 
 interface JobListingSectionProps {
@@ -74,19 +76,45 @@ const JobListingSection: React.FC<JobListingSectionProps> = ({
     return filtered;
   };
 
+  // Function to render source icon
+  const renderSourceIcon = (source: string) => {
+    switch (source.toLowerCase()) {
+      case 'linkedin':
+        return <Linkedin size={14} className="text-[#0077B5]" />;
+      case 'twitter':
+        return <Twitter size={14} className="text-[#1DA1F2]" />;
+      default:
+        return null;
+    }
+  };
+
+  // Function to determine if a job is fresh (≤ 7 days)
+  const isFreshJob = (postedDate: string) => {
+    if (postedDate.includes('just now') || postedDate.includes('hour')) return true;
+    if (postedDate.includes('day')) {
+      const days = parseInt(postedDate.split(' ')[0]);
+      return days <= 7;
+    }
+    return false;
+  };
+
   return (
     <>
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
         <h2 className="text-xl font-semibold">Job Listings</h2>
-        
-        <div className="relative w-full sm:w-72">
-          <Search size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
-          <Input
-            placeholder="Search jobs..."
-            className="pl-9"
-            value={searchQuery}
-            onChange={(e) => onSearchChange(e.target.value)}
-          />
+        <div className="flex items-center gap-2">
+          <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 dark:bg-green-950/20 dark:text-green-400 dark:border-green-800">
+            Updated daily
+          </Badge>
+          <div className="relative w-full sm:w-72">
+            <Search size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
+            <Input
+              placeholder="Search jobs..."
+              className="pl-9"
+              value={searchQuery}
+              onChange={(e) => onSearchChange(e.target.value)}
+            />
+          </div>
         </div>
       </div>
       
@@ -103,17 +131,27 @@ const JobListingSection: React.FC<JobListingSectionProps> = ({
           <TabsContent key={category.id} value={category.id} className="mt-0">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {filteredJobs(category.id).map((job, index) => (
-                <JobCard
-                  key={index}
-                  title={job.title}
-                  company={job.company}
-                  location={job.location}
-                  salary={job.salary}
-                  postedDate={job.postedDate}
-                  matchScore={job.matchScore}
-                  skills={job.skills}
-                  isRecommended={job.isRecommended}
-                />
+                <div key={index} className="relative">
+                  {isFreshJob(job.postedDate) && (
+                    <div className="absolute -top-2 -right-2 z-10">
+                      <Badge className="bg-green-500 text-white border-0">Fresh</Badge>
+                    </div>
+                  )}
+                  <div className="absolute top-3 right-3 z-10 flex items-center gap-1">
+                    {renderSourceIcon(job.source)}
+                    <span className="text-xs text-muted-foreground">{job.source}</span>
+                  </div>
+                  <JobCard
+                    title={job.title}
+                    company={job.company}
+                    location={job.location}
+                    salary={job.salary}
+                    postedDate={job.postedDate}
+                    matchScore={job.matchScore}
+                    skills={job.skills}
+                    isRecommended={job.isRecommended}
+                  />
+                </div>
               ))}
             </div>
             

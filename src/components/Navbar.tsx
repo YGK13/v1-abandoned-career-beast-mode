@@ -12,7 +12,7 @@ import {
   CreditCard,
   Building,
   Sprout,
-  Scale,
+  ChartBarIcon,
   Factory,
   User,
   Landmark,
@@ -29,6 +29,26 @@ import NavLinks from "./navbar/NavLinks";
 import MobileMenu from "./navbar/MobileMenu";
 import UserMenu from "./navbar/UserMenu";
 import { NavItem } from "./navbar/NavLink";
+
+// Create a custom ChartBarIcon component with the hockey stick growth shape
+const ChartBarIcon = (props) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={props.size || 24}
+    height={props.size || 24}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke={props.color || "currentColor"}
+    strokeWidth={props.strokeWidth || 2}
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <path d="M3 3v18h18" />
+    <path d="M18 3v4h4" />
+    <path d="M18 7 9 16l-3-3-3 3" />
+  </svg>
+);
 
 const Navbar: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -58,8 +78,11 @@ const Navbar: React.FC = () => {
       children: [
         { path: "/career-docs", label: "Career Docs", icon: FileText },
         { path: "/linkedin", label: "LinkedIn", icon: Linkedin },
-        { path: "/build-business", label: "Start Your Biz", icon: Factory },
-        { path: "/manage-everything", label: "Manage Everything", icon: Users }
+        { path: "/manage-everything", label: "Manage Everything", icon: Users,
+          children: [
+            { path: "/build-business", label: "Start Your Biz", icon: Factory },
+          ] 
+        }
       ]
     },
     { 
@@ -78,13 +101,12 @@ const Navbar: React.FC = () => {
     { 
       path: "/scale", 
       label: "Scale", 
-      icon: Scale,
+      icon: ChartBarIcon,
       children: [
         { path: "/lifedesign", label: "Life Design", icon: Target },
         { path: "/scale-your-biz", label: "Scale Your Biz", icon: Factory }
       ]
     },
-    // Removed the locked property from Jobs
     { path: "/jobs", label: "Jobs", icon: Briefcase },
     { path: "/pricing", label: "Pricing", icon: CreditCard },
     { path: "/help", label: "Help", icon: HelpCircle },

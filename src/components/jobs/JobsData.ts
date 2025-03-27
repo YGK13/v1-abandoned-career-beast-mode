@@ -9,6 +9,7 @@ export interface Job {
   skills: string[];
   isRecommended: boolean;
   status: string;
+  source: string;
 }
 
 export const jobs: Job[] = [
@@ -21,18 +22,20 @@ export const jobs: Job[] = [
     matchScore: 92,
     skills: ["Product Strategy", "Agile", "User Research", "Roadmapping", "Analytics"],
     isRecommended: true,
-    status: "recommended"
+    status: "recommended",
+    source: "LinkedIn"
   },
   {
     title: "Product Marketing Lead",
     company: "InnovateLabs",
     location: "Remote",
     salary: "$110K - $135K",
-    postedDate: "1 week ago",
+    postedDate: "1 day ago",
     matchScore: 87,
     skills: ["Marketing Strategy", "Product Launches", "Analytics", "Content Strategy"],
     isRecommended: true,
-    status: "recommended"
+    status: "recommended",
+    source: "LinkedIn"
   },
   {
     title: "Senior Data Analyst",
@@ -43,7 +46,8 @@ export const jobs: Job[] = [
     matchScore: 84,
     skills: ["SQL", "Python", "Data Visualization", "Statistical Analysis"],
     isRecommended: true,
-    status: "recommended"
+    status: "recommended",
+    source: "AngelList"
   },
   {
     title: "Technical Product Manager",
@@ -54,40 +58,44 @@ export const jobs: Job[] = [
     matchScore: 81,
     skills: ["API Development", "Technical Requirements", "Agile", "Product Strategy"],
     isRecommended: false,
-    status: "saved"
+    status: "saved",
+    source: "Y Combinator"
   },
   {
     title: "Marketing Director",
     company: "BrandBuilders",
     location: "Remote",
     salary: "$130K - $160K",
-    postedDate: "1 week ago",
+    postedDate: "6 days ago",
     matchScore: 79,
     skills: ["Digital Marketing", "Brand Strategy", "Team Leadership", "Budget Management"],
     isRecommended: false,
-    status: "saved"
+    status: "saved",
+    source: "LinkedIn"
   },
   {
     title: "UX Research Lead",
     company: "DesignFirst Inc.",
     location: "Seattle, WA",
     salary: "$110K - $140K",
-    postedDate: "2 weeks ago",
+    postedDate: "just now",
     matchScore: 76,
     skills: ["User Research", "Usability Testing", "Personas", "Journey Mapping"],
     isRecommended: false,
-    status: "applied"
+    status: "applied",
+    source: "Twitter"
   },
   {
     title: "Product Operations Manager",
     company: "OptiFlow",
     location: "Chicago, IL",
     salary: "$95K - $120K",
-    postedDate: "1 week ago",
+    postedDate: "4 days ago",
     matchScore: 74,
     skills: ["Process Improvement", "Cross-functional Collaboration", "Analytics", "Documentation"],
     isRecommended: false,
-    status: "applied"
+    status: "applied",
+    source: "Wellfound"
   },
   {
     title: "Growth Product Manager",
@@ -98,7 +106,8 @@ export const jobs: Job[] = [
     matchScore: 71,
     skills: ["A/B Testing", "User Acquisition", "Retention Strategies", "Analytics"],
     isRecommended: false,
-    status: "applied"
+    status: "applied",
+    source: "Twitter"
   },
 ];
 
@@ -112,28 +121,39 @@ export const offMarketJobs: Job[] = [
     matchScore: 94,
     skills: ["Corporate Governance", "Technology Strategy", "Risk Management", "Executive Leadership"],
     isRecommended: true,
-    status: "offmarket"
+    status: "offmarket",
+    source: "Executive Network"
   },
   {
     title: "Non-Executive Director - Financial Services",
     company: "VirtualNonExecs",
     location: "London / Remote",
     salary: "£40K - £60K",
-    postedDate: "1 week ago",
+    postedDate: "1 day ago",
     matchScore: 89,
     skills: ["Regulatory Compliance", "Financial Oversight", "Strategic Planning", "Board Experience"],
     isRecommended: true,
-    status: "offmarket"
+    status: "offmarket",
+    source: "Executive Network"
   },
   {
     title: "Advisory Board Chair - Healthcare",
     company: "VirtualNonExecs",
     location: "New York / Remote",
     salary: "$60K - $90K",
-    postedDate: "5 days ago",
+    postedDate: "just now",
     matchScore: 86,
     skills: ["Healthcare Governance", "Industry Networks", "Strategic Guidance", "Fundraising"],
     isRecommended: false,
-    status: "offmarket"
+    status: "offmarket",
+    source: "LinkedIn"
   }
 ];
+
+// Update function that will be called daily to refresh job listings
+export const updateJobListings = async () => {
+  // This would connect to APIs from LinkedIn, Twitter, etc.
+  // and refresh the job listings to ensure they're all within 7 days
+  console.log("Job listings updated:", new Date().toISOString());
+  // The actual implementation would call APIs and update the jobs array
+};

@@ -38,6 +38,9 @@ const NavLink: React.FC<NavLinkProps> = ({ path, label, icon: Icon, locked, chil
                   ));
   const [open, setOpen] = useState(false);
   
+  // Standardized font styling for all menu items
+  const menuItemStyle = "font-medium text-sm";
+  
   // If this is a parent link with children
   if (children && children.length > 0) {
     return (
@@ -47,6 +50,7 @@ const NavLink: React.FC<NavLinkProps> = ({ path, label, icon: Icon, locked, chil
             <NavigationMenuTrigger
               className={cn(
                 "px-3 py-2 rounded-md flex items-center space-x-1 transition-colors",
+                menuItemStyle,
                 isActive
                   ? "text-primary bg-primary/10"
                   : "text-muted-foreground hover:text-foreground hover:bg-muted/50",
@@ -68,6 +72,7 @@ const NavLink: React.FC<NavLinkProps> = ({ path, label, icon: Icon, locked, chil
                         <div
                           className={cn(
                             "flex items-center justify-between space-x-2 p-2 rounded-md cursor-pointer",
+                            menuItemStyle,
                             location.pathname === child.path
                               ? "text-primary bg-primary/10"
                               : "text-muted-foreground hover:text-foreground hover:bg-muted/50",
@@ -91,6 +96,7 @@ const NavLink: React.FC<NavLinkProps> = ({ path, label, icon: Icon, locked, chil
                                 to={grandchild.path}
                                 className={cn(
                                   "flex items-center space-x-2 p-2 rounded-md",
+                                  menuItemStyle,
                                   location.pathname === grandchild.path
                                     ? "text-primary bg-primary/10"
                                     : "text-muted-foreground hover:text-foreground hover:bg-muted/50",
@@ -115,6 +121,7 @@ const NavLink: React.FC<NavLinkProps> = ({ path, label, icon: Icon, locked, chil
                         to={child.path}
                         className={cn(
                           "flex items-center space-x-2 p-2 rounded-md",
+                          menuItemStyle,
                           location.pathname === child.path
                             ? "text-primary bg-primary/10"
                             : "text-muted-foreground hover:text-foreground hover:bg-muted/50",
@@ -142,6 +149,7 @@ const NavLink: React.FC<NavLinkProps> = ({ path, label, icon: Icon, locked, chil
       to={path}
       className={cn(
         "px-3 py-2 rounded-md flex items-center space-x-1 transition-colors",
+        menuItemStyle,
         isActive
           ? "text-primary bg-primary/10"
           : "text-muted-foreground hover:text-foreground hover:bg-muted/50",
