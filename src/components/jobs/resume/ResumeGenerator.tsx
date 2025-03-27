@@ -46,13 +46,13 @@ const ResumeGenerator: React.FC<ResumeGeneratorProps> = ({
   
   return (
     <Dialog open={openModal} onOpenChange={handleModalClose}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
+      <DialogContent className="sm:max-w-lg p-6 rounded-xl">
+        <DialogHeader className="mb-2">
+          <DialogTitle className="flex items-center gap-2 text-xl">
             <FileText className="h-5 w-5 text-primary" />
             Tailoring Resume for {job.title}
           </DialogTitle>
-          <DialogDescription>
+          <DialogDescription className="text-muted-foreground">
             Creating an ATS-optimized resume specifically for {job.company}
           </DialogDescription>
         </DialogHeader>
@@ -64,14 +64,14 @@ const ResumeGenerator: React.FC<ResumeGeneratorProps> = ({
         
         {resumeData && <ResumePreview resumeData={resumeData} job={job} onSaveResume={handleSaveResume} />}
         
-        <div className="flex justify-end gap-2 mt-2">
-          <Button variant="outline" onClick={handleModalClose} disabled={isApplying}>
+        <div className="flex justify-end gap-3 mt-4">
+          <Button variant="outline" onClick={handleModalClose} disabled={isApplying} className="rounded-lg font-medium">
             Cancel
           </Button>
           <Button 
             onClick={handleApply} 
             disabled={!resumeData || isApplying}
-            className="gap-2"
+            className="gap-2 rounded-lg font-medium"
           >
             {isApplying ? (
               <>

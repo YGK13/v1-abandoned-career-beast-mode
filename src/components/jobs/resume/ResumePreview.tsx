@@ -71,21 +71,21 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ resumeData, job, onSaveRe
   };
   
   return (
-    <DashboardCard className="mt-6">
-      <div className="flex items-center justify-between mb-3">
+    <DashboardCard className="mt-6 p-5 card-shadow rounded-xl border border-border/60">
+      <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <FileText className="h-5 w-5 text-primary" />
-          <h4 className="font-medium">ATS-Optimized Resume</h4>
+          <h4 className="font-semibold">ATS-Optimized Resume</h4>
         </div>
-        <Badge variant="outline" className={`${atsScoreColor} font-medium`}>
+        <Badge variant="outline" className={`${atsScoreColor} font-medium px-2.5 py-1 rounded-full`}>
           {resumeData.atsScore}% ATS Score
         </Badge>
       </div>
       
-      <div className="space-y-3">
-        <div className="flex flex-col gap-1">
+      <div className="space-y-4">
+        <div className="flex flex-col gap-1.5">
           <div className="flex items-center gap-2">
-            <Briefcase className="h-4 w-4 text-muted-foreground" />
+            <Briefcase className="h-4 w-4 text-primary/80" />
             <p className="text-sm font-medium">{job.title}</p>
           </div>
           <div className="flex items-center gap-2">
@@ -99,13 +99,13 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ resumeData, job, onSaveRe
         </div>
         
         <div>
-          <div className="flex items-center gap-2 mb-1.5">
+          <div className="flex items-center gap-2 mb-2">
             <Star className="h-4 w-4 text-amber-500" />
             <p className="text-sm font-medium">Key Skills Highlighted:</p>
           </div>
-          <div className="flex flex-wrap gap-1.5">
+          <div className="flex flex-wrap gap-2">
             {job.skills.map((skill, index) => (
-              <Badge key={index} variant="secondary" className="text-xs font-medium">
+              <Badge key={index} variant="secondary" className="text-xs font-medium px-2 py-1 rounded-full bg-secondary/70">
                 <div className="flex items-center gap-1">
                   <CheckCircle className="h-3 w-3 text-green-600" />
                   {skill}
@@ -115,7 +115,7 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ resumeData, job, onSaveRe
           </div>
         </div>
         
-        <div className="flex justify-between items-center mt-4 pt-2 border-t">
+        <div className="flex justify-between items-center mt-4 pt-3 border-t border-border/60">
           <p className="text-xs text-muted-foreground">
             This resume has been automatically tailored to match this job's requirements
             and optimized to pass ATS filters with a high score.
@@ -123,10 +123,10 @@ const ResumePreview: React.FC<ResumePreviewProps> = ({ resumeData, job, onSaveRe
           <Button 
             variant="outline" 
             size="sm" 
-            className="flex items-center gap-1"
+            className="flex items-center gap-1.5 rounded-lg"
             onClick={handleSaveResume}
           >
-            <Save className="h-4 w-4" />
+            <Save className="h-3.5 w-3.5" />
             Save
           </Button>
         </div>
