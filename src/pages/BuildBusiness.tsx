@@ -5,6 +5,7 @@ import FormLLCSection from "@/components/business/FormLLCSection";
 import BusinessBankingSection from "@/components/business/BusinessBankingSection";
 import BusinessAddressSection from "@/components/business/BusinessAddressSection";
 import PremiumResourcesSection from "@/components/business/PremiumResourcesSection";
+import BusinessRoadmap from "@/components/business/BusinessRoadmap";
 
 const BuildBusiness = () => {
   return (
@@ -14,6 +15,8 @@ const BuildBusiness = () => {
         <p className="text-muted-foreground mb-8">
           Essential resources to establish and grow your business
         </p>
+
+        <BusinessRoadmap />
 
         <div className="grid md:grid-cols-2 gap-6 mb-12">
           <FormLLCSection />
