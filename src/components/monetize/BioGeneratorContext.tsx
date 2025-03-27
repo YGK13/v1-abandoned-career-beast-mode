@@ -48,20 +48,18 @@ export const BioGeneratorProvider: React.FC<{ children: ReactNode }> = ({ childr
     setIncludeLinkedIn(values.includeLinkedIn);
     setIncludeDocuments(values.includeCareerDocs);
     
-    // Simulate API call delay
-    setTimeout(() => {
-      generateBio(
-        firstName, 
-        lastName, 
-        headline, 
-        values.experience, 
-        values.expertise.split(",").map(item => item.trim()),
-        tone,
-        length,
-        values.includeLinkedIn,
-        values.includeCareerDocs
-      );
-    }, 1000);
+    // Generate bio with the updated values
+    generateBio(
+      firstName, 
+      lastName, 
+      headline, 
+      values.experience, 
+      values.expertise.split(",").map(item => item.trim()),
+      tone,
+      length,
+      values.includeLinkedIn,
+      values.includeCareerDocs
+    );
   };
 
   // Context value
