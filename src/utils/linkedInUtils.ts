@@ -12,7 +12,7 @@ export type LinkedInProfileFormValues = z.infer<typeof linkedInProfileSchema>;
 
 export const simulateImportProcess = (
   setIsImporting: (value: boolean) => void,
-  setImportProgress: (value: number) => void,
+  setImportProgress: React.Dispatch<React.SetStateAction<number>>,
   onImportComplete: () => void
 ) => {
   setIsImporting(true);
