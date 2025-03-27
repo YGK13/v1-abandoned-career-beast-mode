@@ -1,7 +1,7 @@
 
 import React from "react";
 import { Link } from "react-router-dom";
-import { CheckCircle2, LinkedinIcon, FileUp, FileCheck, ArrowRight } from "lucide-react";
+import { CheckCircle2, LinkedinIcon, FileUp, FileCheck, ArrowRight, LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import DashboardCard from "@/components/DashboardCard";
 
@@ -9,7 +9,7 @@ interface RoadmapStep {
   id: string;
   title: string;
   description: string;
-  icon: React.FC<{ size?: number; className?: string }>;
+  icon: LucideIcon;
   completed?: boolean;
   action?: {
     label: string;
