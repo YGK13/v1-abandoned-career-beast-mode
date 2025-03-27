@@ -50,6 +50,10 @@ const PageContainer: React.FC<PageContainerProps> = ({ children }) => {
       return '/grow/promote-yourself';
     }
     
+    if (location.pathname === '/networking') {
+      return '/grow/networking';
+    }
+    
     if (location.pathname === '/coaching') {
       return '/grow/coaching';
     }
