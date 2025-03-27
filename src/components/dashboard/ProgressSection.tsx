@@ -9,7 +9,11 @@ import {
   Workflow, 
   Briefcase, 
   Target,
-  User
+  User,
+  Heart,
+  Brain,
+  Lightbulb,
+  Building
 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -116,6 +120,34 @@ const ProgressSection: React.FC = () => {
       progress: 55,
       path: "/jobs",
       description: "Discover opportunities matched to your profile"
+    },
+    {
+      icon: Heart,
+      title: "Life Design",
+      progress: 40,
+      path: "/lifedesign",
+      description: "Design a life of purpose and meaning"
+    },
+    {
+      icon: Building,
+      title: "Start a Business",
+      progress: 15,
+      path: "/scale-your-biz",
+      description: "Tools and resources to start your business"
+    },
+    {
+      icon: Brain,
+      title: "Mental Models",
+      progress: 25,
+      path: "/mental-models",
+      description: "Powerful thinking frameworks for better decisions"
+    },
+    {
+      icon: Lightbulb,
+      title: "Life Skills",
+      progress: 30,
+      path: "/life-skills",
+      description: "Essential skills for personal effectiveness"
     }
   ];
 

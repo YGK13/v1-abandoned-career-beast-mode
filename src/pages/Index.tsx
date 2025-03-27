@@ -4,7 +4,6 @@ import Layout from "@/components/Layout";
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
 import CareerHealthSection from "@/components/dashboard/CareerHealthSection";
 import ActionItemsSection from "@/components/dashboard/ActionItemsSection";
-import LifeDesignSection from "@/components/dashboard/LifeDesignSection";
 import JobRecommendationsSection from "@/components/dashboard/JobRecommendationsSection";
 import ProgressSection from "@/components/dashboard/ProgressSection";
 import { Job } from "@/components/jobs/data/types";
@@ -72,10 +71,9 @@ const Index = () => {
         <DashboardHeader />
 
         {/* Career Highlights Section */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           <CareerHealthSection careerScore={careerScore} />
           <ActionItemsSection actionItems={actionItems} />
-          <LifeDesignSection />
         </div>
         
         {/* Progress-based Dashboard */}
