@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import Layout from "@/components/Layout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -8,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { GraduationCap, TrendingUp, Users, Briefcase, Calendar, BookOpen, Lightbulb, Award } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
+import AiCareerCoach from "@/components/coaching/AiCareerCoach";
 
 // Mock data for daily tips
 const dailyTips = [
@@ -188,12 +188,18 @@ const Coaching: React.FC = () => {
         </Card>
 
         {/* Main Content Tabs */}
-        <Tabs defaultValue="development" className="mb-8">
-          <TabsList className="grid grid-cols-3 mb-8">
+        <Tabs defaultValue="aicoach" className="mb-8">
+          <TabsList className="grid grid-cols-4 mb-8">
+            <TabsTrigger value="aicoach">AI Coach</TabsTrigger>
             <TabsTrigger value="development">Development Plans</TabsTrigger>
             <TabsTrigger value="resources">Career Resources</TabsTrigger>
             <TabsTrigger value="calendar">Learning Calendar</TabsTrigger>
           </TabsList>
+          
+          {/* AI Coach Tab */}
+          <TabsContent value="aicoach">
+            <AiCareerCoach />
+          </TabsContent>
           
           {/* Development Plans Tab */}
           <TabsContent value="development">
