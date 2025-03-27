@@ -7,6 +7,7 @@ import { Job } from "../data/types";
 import ResumeGenerationProgress from "./ResumeGenerationProgress";
 import ResumePreview from "./ResumePreview";
 import { useResumeGenerator } from "./useResumeGenerator";
+import { useToast } from "@/hooks/use-toast";
 
 interface ResumeGeneratorProps {
   job: Job;
@@ -25,6 +26,7 @@ const ResumeGenerator: React.FC<ResumeGeneratorProps> = ({
 }) => {
   const [openModal, setOpenModal] = useState(true);
   const { progress, currentStage, resumeData } = useResumeGenerator(isGenerating, job);
+  const { toast } = useToast();
   
   const handleModalClose = () => {
     setOpenModal(false);
@@ -35,6 +37,11 @@ const ResumeGenerator: React.FC<ResumeGeneratorProps> = ({
     if (resumeData) {
       onApply(resumeData);
     }
+  };
+
+  const handleSaveResume = () => {
+    // Any additional logic needed when a resume is saved
+    // This will be called after the save functionality in ResumePreview
   };
   
   return (
@@ -55,7 +62,7 @@ const ResumeGenerator: React.FC<ResumeGeneratorProps> = ({
           currentStage={currentStage} 
         />
         
-        {resumeData && <ResumePreview resumeData={resumeData} job={job} />}
+        {resumeData && <ResumePreview resumeData={resumeData} job={job} onSaveResume={handleSaveResume} />}
         
         <div className="flex justify-end gap-2 mt-2">
           <Button variant="outline" onClick={handleModalClose} disabled={isApplying}>

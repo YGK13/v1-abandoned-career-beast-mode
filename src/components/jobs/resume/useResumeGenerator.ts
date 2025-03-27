@@ -47,11 +47,14 @@ export const useResumeGenerator = (isGenerating: boolean, job: Job) => {
           }
           
           if (currentStageIndex === stages.length - 1) {
+            // Create a unique ID including job details for better identification
+            const uniqueId = `resume-${job.title.replace(/\s+/g, '-').toLowerCase()}-${Date.now()}`;
+            
             setResumeData({
               jobTitle: job.title,
               company: job.company,
               tailoredSkills: job.skills,
-              resumeId: `resume-${Date.now()}`,
+              resumeId: uniqueId,
               atsScore: Math.floor(Math.random() * 11) + 90,
               keywords: job.skills.slice(0, 3)
             });
