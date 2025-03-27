@@ -1,5 +1,5 @@
 
-import { TrendingUp, Users, BookOpen, Briefcase, Award } from "lucide-react";
+import { TrendingUp, Users, BookOpen, Briefcase, Award, FileText, Clipboard, BarChart, Calendar, GraduationCap, Zap, Target, Link, MessageCircle, Clock } from "lucide-react";
 import { CareerResource } from "@/components/coaching/CareerResources";
 import { DevelopmentPlan } from "@/components/coaching/DevelopmentPlans";
 
@@ -65,6 +65,8 @@ export const careerResources: CareerResource[] = [
       { text: "Research Industry Standards", url: "#" },
       { text: "Negotiation Scripts", url: "#" },
       { text: "Benefits Evaluation Guide", url: "#" },
+      { text: "Counter-Offer Templates", url: "#" },
+      { text: "Total Compensation Calculator", url: "#" },
     ],
     icon: TrendingUp,
   },
@@ -75,8 +77,46 @@ export const careerResources: CareerResource[] = [
       { text: "Self-Assessment Template", url: "#" },
       { text: "Achievement Documentation", url: "#" },
       { text: "Feedback Reception Guide", url: "#" },
+      { text: "360-Degree Review Preparation", url: "#" },
+      { text: "Goal Setting Framework", url: "#" },
     ],
     icon: Award,
+  },
+  {
+    title: "Resume Building",
+    description: "Create a standout resume that gets results",
+    links: [
+      { text: "Achievement-Based Resume Templates", url: "#" },
+      { text: "Industry-Specific Keywords Guide", url: "#" },
+      { text: "Applicant Tracking System Tips", url: "#" },
+      { text: "Executive Resume Samples", url: "#" },
+      { text: "Resume Review Checklist", url: "#" },
+    ],
+    icon: FileText,
+  },
+  {
+    title: "Interview Preparation",
+    description: "Master interview techniques for any position",
+    links: [
+      { text: "STAR-L Response Framework", url: "#" },
+      { text: "Behavioral Question Database", url: "#" },
+      { text: "Technical Interview Guides", url: "#" },
+      { text: "Case Study Interview Practice", url: "#" },
+      { text: "Post-Interview Follow-up Templates", url: "#" },
+    ],
+    icon: Clipboard,
+  },
+  {
+    title: "Career Transition",
+    description: "Navigate successful career changes with confidence",
+    links: [
+      { text: "Transferable Skills Assessment", url: "#" },
+      { text: "Industry Transition Roadmaps", url: "#" },
+      { text: "Career Pivot Narrative Templates", url: "#" },
+      { text: "Informational Interview Guide", url: "#" },
+      { text: "Skills Gap Analysis Tool", url: "#" },
+    ],
+    icon: Target,
   },
   {
     title: "Project Management",
@@ -85,19 +125,83 @@ export const careerResources: CareerResource[] = [
       { text: "Agile Methodology Guide", url: "#" },
       { text: "Stakeholder Management", url: "#" },
       { text: "Risk Assessment Framework", url: "#" },
+      { text: "Project Documentation Templates", url: "#" },
+      { text: "Cross-functional Team Leadership", url: "#" },
     ],
     icon: Briefcase,
   },
   {
-    title: "People Management",
-    description: "Develop skills for leading teams effectively",
+    title: "Leadership Development",
+    description: "Build your leadership capabilities at any level",
     links: [
+      { text: "Emotional Intelligence Assessment", url: "#" },
+      { text: "Strategic Delegation Framework", url: "#" },
       { text: "Team Motivation Strategies", url: "#" },
-      { text: "Conflict Resolution Techniques", url: "#" },
-      { text: "Performance Management Guide", url: "#" },
+      { text: "Difficult Conversation Scripts", url: "#" },
+      { text: "Executive Presence Development", url: "#" },
     ],
     icon: Users,
   },
+  {
+    title: "Continuous Learning",
+    description: "Strategic skill development for your career path",
+    links: [
+      { text: "Personal Skill Development Matrix", url: "#" },
+      { text: "High-ROI Certification Guide", url: "#" },
+      { text: "Learning Accountability System", url: "#" },
+      { text: "Knowledge Management Templates", url: "#" },
+      { text: "Skill Practice Implementation Plan", url: "#" },
+    ],
+    icon: GraduationCap,
+  },
+  {
+    title: "Networking Strategy",
+    description: "Build and maintain a powerful professional network",
+    links: [
+      { text: "Relationship Portfolio Template", url: "#" },
+      { text: "Give-First Value Matrix", url: "#" },
+      { text: "Connection Nurturing System", url: "#" },
+      { text: "Strategic Event Selection Guide", url: "#" },
+      { text: "Network Diversity Assessment", url: "#" },
+    ],
+    icon: Link,
+  },
+  {
+    title: "Productivity Systems",
+    description: "Optimize your work habits for maximum impact",
+    links: [
+      { text: "Energy Management Audit", url: "#" },
+      { text: "Deep Work Scheduling Templates", url: "#" },
+      { text: "Decision-Making Frameworks", url: "#" },
+      { text: "Personal Kanban System", url: "#" },
+      { text: "Meeting Efficiency Protocols", url: "#" },
+    ],
+    icon: Zap,
+  },
+  {
+    title: "Personal Branding",
+    description: "Develop and manage your professional reputation",
+    links: [
+      { text: "Brand Statement Generator", url: "#" },
+      { text: "Content Strategy Templates", url: "#" },
+      { text: "Online Presence Audit", url: "#" },
+      { text: "Thought Leadership Framework", url: "#" },
+      { text: "Speaking Opportunity Guide", url: "#" },
+    ],
+    icon: BookOpen,
+  },
+  {
+    title: "Data Storytelling",
+    description: "Present information in compelling, impactful ways",
+    links: [
+      { text: "Data Visualization Best Practices", url: "#" },
+      { text: "Executive Presentation Templates", url: "#" },
+      { text: "Numerical Narrative Frameworks", url: "#" },
+      { text: "Impact Quantification Tools", url: "#" },
+      { text: "Business Case Development", url: "#" },
+    ],
+    icon: BarChart,
+  }
 ];
 
 // Learning calendar data
