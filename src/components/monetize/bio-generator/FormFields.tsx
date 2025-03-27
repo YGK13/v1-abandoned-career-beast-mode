@@ -2,19 +2,30 @@
 import React from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
-import { Linkedin, FileText } from "lucide-react";
+import { Linkedin, FileText, AlertCircle } from "lucide-react";
 import { useBioGenerator } from "../BioGeneratorContext";
-import { BioFormValues } from "../bio-generator/types";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const FormFields: React.FC = () => {
   const { form, isGenerating, onSubmit } = useBioGenerator();
-
+  const formErrors = form.formState.errors;
+  const hasErrors = Object.keys(formErrors).length > 0;
+  
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+        {hasErrors && (
+          <Alert variant="destructive" className="mb-4">
+            <AlertCircle className="h-4 w-4" />
+            <AlertDescription>
+              Please fix the errors below before submitting
+            </AlertDescription>
+          </Alert>
+        )}
+        
         <FormField
           control={form.control}
           name="expertise"
@@ -24,6 +35,7 @@ const FormFields: React.FC = () => {
               <FormControl>
                 <Input placeholder="e.g., Digital Marketing, Leadership, Data Science" {...field} />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -37,6 +49,7 @@ const FormFields: React.FC = () => {
               <FormControl>
                 <Input type="number" min="1" {...field} />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -50,6 +63,7 @@ const FormFields: React.FC = () => {
               <FormControl>
                 <Textarea placeholder="e.g., Increased revenue by 30%, Published author, Industry awards" {...field} />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -63,6 +77,7 @@ const FormFields: React.FC = () => {
               <FormControl>
                 <Input placeholder="e.g., Startups, Enterprise companies, Professionals" {...field} />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -77,6 +92,7 @@ const FormFields: React.FC = () => {
                 <Input placeholder="e.g., LinkedIn, Upwork, Clarity.fm" {...field} />
               </FormControl>
               <FormDescription>Optimize your bio for a specific platform</FormDescription>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -91,6 +107,7 @@ const FormFields: React.FC = () => {
                 <Input type="number" min="50" max="500" {...field} />
               </FormControl>
               <FormDescription>Most platforms recommend 100-150 words</FormDescription>
+              <FormMessage />
             </FormItem>
           )}
         />

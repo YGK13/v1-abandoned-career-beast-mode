@@ -22,7 +22,10 @@ describe("FormFields", () => {
         includeCareerDocs: true
       });
     },
-    formState: { errors: {} },
+    control: jest.fn(),
+    formState: { 
+      errors: {} 
+    },
     watch: jest.fn().mockReturnValue("professional"),
   };
   
@@ -30,16 +33,6 @@ describe("FormFields", () => {
   
   beforeEach(() => {
     (useBioGenerator as jest.Mock).mockReturnValue({
-      firstName: "John",
-      setFirstName: jest.fn(),
-      lastName: "Doe",
-      setLastName: jest.fn(),
-      headline: "Software Engineer",
-      setHeadline: jest.fn(),
-      tone: "professional",
-      setTone: jest.fn(),
-      length: "medium",
-      setLength: jest.fn(),
       form: mockForm,
       onSubmit: mockOnSubmit,
       isGenerating: false,
@@ -53,20 +46,17 @@ describe("FormFields", () => {
   it("should render form fields", () => {
     render(<FormFields />);
     
-    expect(screen.getByLabelText(/first name/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/last name/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/professional headline/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/areas of expertise/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/your area of expertise/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/years of experience/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/key achievements/i)).toBeInTheDocument();
   });
 
   it("should handle form submission", () => {
     render(<FormFields />);
     
     // Fill out form
-    fireEvent.change(screen.getByLabelText(/first name/i), { target: { value: "John" } });
-    fireEvent.change(screen.getByLabelText(/last name/i), { target: { value: "Doe" } });
-    fireEvent.change(screen.getByLabelText(/professional headline/i), { target: { value: "Software Engineer" } });
+    fireEvent.change(screen.getByLabelText(/your area of expertise/i), { target: { value: "React, JavaScript" } });
+    fireEvent.change(screen.getByLabelText(/years of experience/i), { target: { value: "5" } });
     
     // Submit form
     fireEvent.click(screen.getByRole("button", { name: /generate bio/i }));
@@ -81,16 +71,6 @@ describe("FormFields", () => {
 
   it("should disable submit button when generating", () => {
     (useBioGenerator as jest.Mock).mockReturnValue({
-      firstName: "John",
-      setFirstName: jest.fn(),
-      lastName: "Doe",
-      setLastName: jest.fn(),
-      headline: "Software Engineer",
-      setHeadline: jest.fn(),
-      tone: "professional",
-      setTone: jest.fn(),
-      length: "medium",
-      setLength: jest.fn(),
       form: mockForm,
       onSubmit: mockOnSubmit,
       isGenerating: true,
@@ -98,7 +78,33 @@ describe("FormFields", () => {
     
     render(<FormFields />);
     
-    const submitButton = screen.getByRole("button", { name: /generate bio/i });
+    const submitButton = screen.getByRole("button", { name: /generating/i });
     expect(submitButton).toBeDisabled();
+  });
+
+  it("should display validation errors", () => {
+    const formWithErrors = {
+      ...mockForm,
+      formState: {
+        errors: {
+          expertise: {
+            message: "Expertise is required"
+          },
+          experience: {
+            message: "Years of experience is required"
+          }
+        }
+      }
+    };
+    
+    (useBioGenerator as jest.Mock).mockReturnValue({
+      form: formWithErrors,
+      onSubmit: mockOnSubmit,
+      isGenerating: false,
+    });
+    
+    render(<FormFields />);
+    
+    expect(screen.getByText(/please fix the errors below/i)).toBeInTheDocument();
   });
 });
