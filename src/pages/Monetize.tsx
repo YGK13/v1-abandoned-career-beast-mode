@@ -4,7 +4,7 @@ import Layout from "@/components/Layout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ExpertPlatformCard from "@/components/monetize/ExpertPlatformCard";
 import DailyPlatformTip from "@/components/monetize/DailyPlatformTip";
-import { expertPlatformsData } from "@/data/expertPlatformsData";
+import { expertPlatforms } from "@/data/expertPlatformsData";
 
 const Monetize = () => {
   return (
@@ -26,7 +26,7 @@ const Monetize = () => {
               
               <TabsContent value="platforms" className="space-y-4">
                 <div className="grid sm:grid-cols-2 gap-4">
-                  {expertPlatformsData.map((platform) => (
+                  {expertPlatforms.map((platform) => (
                     <ExpertPlatformCard key={platform.id} platform={platform} />
                   ))}
                 </div>
@@ -85,7 +85,16 @@ const Monetize = () => {
           </div>
           
           <div>
-            <DailyPlatformTip />
+            <DailyPlatformTip 
+              platform={{
+                id: "daily-tip",
+                name: "Daily Platform Tip",
+                description: "Quick tips to help you grow your online presence",
+                url: "#",
+                logo: "/placeholder.svg"
+              }}
+              date={new Date().toISOString()}
+            />
           </div>
         </div>
       </div>

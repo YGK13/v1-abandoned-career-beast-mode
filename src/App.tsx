@@ -1,3 +1,4 @@
+
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
@@ -17,6 +18,8 @@ import Coaching from "./pages/Coaching";
 import LifeDesign from "./pages/LifeDesign";
 import Business from "./pages/Business";
 import Monetize from "./pages/Monetize";
+import ScaleYourBiz from "./pages/ScaleYourBiz";
+import Pricing from "./pages/Pricing";
 
 const App: React.FC = () => {
   return (
@@ -36,6 +39,8 @@ const App: React.FC = () => {
         <Route path="/life-design" element={<LifeDesign />} />
         <Route path="/business" element={<Business />} />
         <Route path="/monetize" element={<Monetize />} />
+        <Route path="/scale-your-biz" element={<ScaleYourBiz />} />
+        <Route path="/pricing" element={<Pricing />} />
       </Routes>
     </Router>
   );
