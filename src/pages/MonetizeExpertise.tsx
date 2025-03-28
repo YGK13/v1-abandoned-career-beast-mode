@@ -13,8 +13,8 @@ const MonetizeExpertise = () => {
     id: expertPlatforms[0]?.id || "daily-tip",
     name: expertPlatforms[0]?.name || "Expert Platform",
     description: expertPlatforms[0]?.description || "Tips to grow your online presence",
-    url: expertPlatforms[0]?.url || "#",
-    logo: expertPlatforms[0]?.logo || "/placeholder.svg"
+    url: "#", // Default URL if not available
+    logo: "/placeholder.svg" // Default logo if not available
   };
 
   return (

@@ -1,8 +1,9 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "@/components/Layout";
 import DashboardCard from "@/components/DashboardCard";
 import { Button } from "@/components/ui/button";
+import OnboardingModal from "@/components/onboarding/OnboardingModal";
 import { 
   CreditCard, 
   DollarSign, 
@@ -16,13 +17,14 @@ const Checkout = () => {
   const { checkoutJobs } = useSubscription();
   const navigate = useNavigate();
   const [isProcessing, setIsProcessing] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(false);
 
   const handleCheckout = async (provider: "stripe" | "paypal") => {
     setIsProcessing(true);
     await checkoutJobs(provider);
     setIsProcessing(false);
-    // Navigate to jobs after successful subscription
-    navigate("/jobs");
+    // Show onboarding modal after successful subscription
+    setShowOnboarding(true);
   };
 
   return (
@@ -108,6 +110,12 @@ const Checkout = () => {
             </div>
           </div>
         </DashboardCard>
+        
+        {/* Onboarding modal shown after successful checkout */}
+        <OnboardingModal 
+          isOpen={showOnboarding} 
+          onOpenChange={setShowOnboarding} 
+        />
       </div>
     </Layout>
   );

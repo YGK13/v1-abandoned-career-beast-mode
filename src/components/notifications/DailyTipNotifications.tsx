@@ -5,11 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
-import { Bell, Calendar, Check, Shield } from "lucide-react";
+import { Bell, Calendar, Check, Shield, Clock } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 // Types for our tips notification system
-type NotificationType = "career" | "skills" | "networking" | "mindset" | "productivity";
+type NotificationType = "career" | "skills" | "networking" | "mindset" | "productivity" | "onboarding";
 
 interface TipCategory {
   id: NotificationType;
@@ -23,6 +23,12 @@ interface NotificationMethod {
   name: string;
   description: string;
   enabled: boolean;
+}
+
+interface OnboardingSequence {
+  enabled: boolean;
+  daysRemaining: number;
+  lastSent: string | null;
 }
 
 const DailyTipNotifications: React.FC = () => {
@@ -59,6 +65,12 @@ const DailyTipNotifications: React.FC = () => {
       name: "Productivity",
       description: "Tips to increase efficiency and manage your workflow better",
       enabled: false
+    },
+    {
+      id: "onboarding",
+      name: "15-Day Onboarding",
+      description: "Special onboarding sequence for new subscribers (first 15 days)",
+      enabled: true
     }
   ]);
   
@@ -84,6 +96,13 @@ const DailyTipNotifications: React.FC = () => {
     }
   ]);
   
+  // State for onboarding sequence 
+  const [onboardingSequence, setOnboardingSequence] = useState<OnboardingSequence>({
+    enabled: true,
+    daysRemaining: 15,
+    lastSent: null
+  });
+  
   // Toggle tip category
   const toggleTipCategory = (id: NotificationType) => {
     setTipCategories(categories =>
@@ -104,6 +123,32 @@ const DailyTipNotifications: React.FC = () => {
           : method
       )
     );
+  };
+  
+  // Toggle onboarding sequence
+  const toggleOnboardingSequence = () => {
+    setOnboardingSequence(prev => ({
+      ...prev,
+      enabled: !prev.enabled
+    }));
+    
+    // Also toggle the onboarding category
+    toggleTipCategory("onboarding");
+  };
+  
+  // Reset onboarding sequence (for demo purposes)
+  const resetOnboardingSequence = () => {
+    setOnboardingSequence({
+      enabled: true,
+      daysRemaining: 15,
+      lastSent: null
+    });
+    
+    toast({
+      title: "Onboarding sequence reset",
+      description: "Your 15-day onboarding sequence has been reset",
+      variant: "default"
+    });
   };
   
   // Save notification preferences
@@ -142,6 +187,41 @@ const DailyTipNotifications: React.FC = () => {
             </div>
           </div>
           
+          {/* Onboarding Sequence Banner - shown only if onboarding is active */}
+          {onboardingSequence.enabled && onboardingSequence.daysRemaining > 0 && (
+            <div className="rounded-md border-2 border-primary/30 p-4 bg-primary/5">
+              <div className="flex items-start gap-3">
+                <Clock className="h-5 w-5 text-primary mt-0.5" />
+                <div className="flex-1">
+                  <h3 className="font-medium">15-Day Onboarding Sequence</h3>
+                  <p className="text-sm text-muted-foreground">
+                    You're currently receiving our special 15-day onboarding sequence with 
+                    daily guidance to help you get the most from your subscription.
+                  </p>
+                  <div className="mt-2 flex items-center gap-2">
+                    <Badge variant="outline" className="bg-primary/10 text-primary">
+                      {onboardingSequence.daysRemaining} days remaining
+                    </Badge>
+                    <Button 
+                      variant="ghost" 
+                      size="sm"
+                      onClick={toggleOnboardingSequence}
+                    >
+                      {onboardingSequence.enabled ? "Pause" : "Resume"}
+                    </Button>
+                    <Button 
+                      variant="ghost" 
+                      size="sm"
+                      onClick={resetOnboardingSequence}
+                    >
+                      Restart Sequence
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          
           <Tabs defaultValue="categories">
             <TabsList className="grid grid-cols-2 mb-4">
               <TabsTrigger value="categories">Tip Categories</TabsTrigger>
@@ -152,7 +232,9 @@ const DailyTipNotifications: React.FC = () => {
               {tipCategories.map(category => (
                 <div 
                   key={category.id}
-                  className="flex items-center justify-between rounded-md border p-4"
+                  className={`flex items-center justify-between rounded-md border p-4 ${
+                    category.id === "onboarding" ? "border-primary/20 bg-primary/5" : ""
+                  }`}
                 >
                   <div className="flex-1">
                     <h3 className="font-medium">{category.name}</h3>

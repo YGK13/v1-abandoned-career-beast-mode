@@ -24,6 +24,7 @@ import Pricing from "./pages/Pricing";
 import CareerTracking from "./pages/CareerTracking";
 import Checkout from "./pages/Checkout";
 import MonetizeExpertise from "./pages/MonetizeExpertise";
+import OnboardingPage from "./pages/OnboardingPage";
 
 const App: React.FC = () => {
   return (
@@ -49,6 +50,7 @@ const App: React.FC = () => {
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/career-tracking" element={<CareerTracking />} />
           <Route path="/checkout" element={<Checkout />} />
+          <Route path="/onboarding" element={<OnboardingPage />} />
         </Routes>
       </Router>
     </SubscriptionProvider>
