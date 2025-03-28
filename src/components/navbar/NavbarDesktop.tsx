@@ -1,17 +1,16 @@
 
 import React from "react";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { NavItem } from "./NavLink";
 import {
   NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
   NavigationMenuList,
+  NavigationMenuItem,
   NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
+  NavigationMenuContent,
+  NavigationMenuLink,
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
-import { NavItem } from "./NavLink";
 
 interface NavbarDesktopProps {
   navLinks: NavItem[];
@@ -20,58 +19,73 @@ interface NavbarDesktopProps {
 const NavbarDesktop: React.FC<NavbarDesktopProps> = ({ navLinks }) => {
   const location = useLocation();
 
+  // Style for navigation link items
+  const navLinkStyles = "flex items-center gap-2 text-sm font-medium transition-colors";
+  const activeStyles = "text-primary";
+  const inactiveStyles = "text-muted-foreground hover:text-foreground";
+
   return (
-    <div className="hidden md:flex items-center">
+    <div className="hidden md:flex md:flex-1 justify-center">
       <NavigationMenu>
         <NavigationMenuList>
           {navLinks.map((link) => {
-            // If link has children, create a dropdown
+            const isActive = location.pathname === link.path;
+            
+            // If this is a link with children (dropdown)
             if (link.children && link.children.length > 0) {
               return (
                 <NavigationMenuItem key={link.path}>
-                  <NavigationMenuTrigger className="flex items-center gap-2">
-                    <link.icon className="h-4 w-4" />
-                    {link.label}
+                  <NavigationMenuTrigger 
+                    className={cn(
+                      navLinkStyles,
+                      isActive ? activeStyles : inactiveStyles
+                    )}
+                  >
+                    <link.icon size={18} />
+                    <span>{link.label}</span>
                   </NavigationMenuTrigger>
-                  <NavigationMenuContent className="bg-background border border-border rounded-md shadow-md">
-                    <ul className="grid w-[250px] gap-1 p-2">
+                  <NavigationMenuContent>
+                    <div className="w-[220px] p-2">
                       {link.children.map((child) => (
-                        <li key={child.path}>
-                          <NavigationMenuLink asChild>
-                            <a
-                              href={child.path}
-                              className={cn(
-                                "flex items-center gap-2 select-none rounded-md p-3 text-sm leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-                                location.pathname === child.path && "bg-accent text-accent-foreground"
-                              )}
-                            >
-                              <child.icon className="h-4 w-4" />
-                              <span>{child.label}</span>
-                            </a>
-                          </NavigationMenuLink>
-                        </li>
+                        <Link
+                          key={child.path}
+                          to={child.path}
+                          className={cn(
+                            "block select-none rounded-md px-3 py-2 text-sm font-medium",
+                            location.pathname === child.path
+                              ? "bg-primary/10 text-primary"
+                              : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+                          )}
+                        >
+                          <div className="flex items-center gap-2">
+                            <child.icon size={16} />
+                            <span>{child.label}</span>
+                          </div>
+                        </Link>
                       ))}
-                    </ul>
+                    </div>
                   </NavigationMenuContent>
                 </NavigationMenuItem>
-              )
+              );
             }
-            // Regular link without dropdown
+            
+            // For simple links without children
             return (
               <NavigationMenuItem key={link.path}>
-                <a
-                  href={link.path}
+                <Link
+                  to={link.path}
                   className={cn(
-                    navigationMenuTriggerStyle(),
-                    "flex items-center gap-2",
-                    location.pathname === link.path && "bg-accent text-accent-foreground"
+                    "flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors",
+                    isActive
+                      ? "text-primary"
+                      : "text-muted-foreground hover:text-foreground"
                   )}
                 >
-                  <link.icon className="h-4 w-4" />
-                  {link.label}
-                </a>
+                  <link.icon size={18} />
+                  <span>{link.label}</span>
+                </Link>
               </NavigationMenuItem>
-            )
+            );
           })}
         </NavigationMenuList>
       </NavigationMenu>
