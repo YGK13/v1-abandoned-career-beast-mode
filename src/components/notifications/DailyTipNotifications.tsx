@@ -3,39 +3,19 @@ import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Switch } from "@/components/ui/switch";
-import { Badge } from "@/components/ui/badge";
-import { Bell, Calendar, Check, Shield, Clock } from "lucide-react";
+import { Bell, Calendar, Check } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-
-// Types for our tips notification system
-type NotificationType = "career" | "skills" | "networking" | "mindset" | "productivity" | "onboarding";
-
-interface TipCategory {
-  id: NotificationType;
-  name: string;
-  description: string;
-  enabled: boolean;
-}
-
-interface NotificationMethod {
-  id: string;
-  name: string;
-  description: string;
-  enabled: boolean;
-}
-
-interface OnboardingSequence {
-  enabled: boolean;
-  daysRemaining: number;
-  lastSent: string | null;
-}
+import { TipCategory as TipCategoryType, NotificationMethod as NotificationMethodType, OnboardingSequence, NotificationType } from "./types";
+import TipCategory from "./TipCategory";
+import NotificationMethod from "./NotificationMethod";
+import OnboardingBanner from "./OnboardingBanner";
+import PrivacyNotice from "./PrivacyNotice";
 
 const DailyTipNotifications: React.FC = () => {
   const { toast } = useToast();
   
   // State for tip categories
-  const [tipCategories, setTipCategories] = useState<TipCategory[]>([
+  const [tipCategories, setTipCategories] = useState<TipCategoryType[]>([
     {
       id: "career",
       name: "Career Growth",
@@ -75,7 +55,7 @@ const DailyTipNotifications: React.FC = () => {
   ]);
   
   // State for notification methods
-  const [notificationMethods, setNotificationMethods] = useState<NotificationMethod[]>([
+  const [notificationMethods, setNotificationMethods] = useState<NotificationMethodType[]>([
     {
       id: "email",
       name: "Email",
@@ -187,40 +167,12 @@ const DailyTipNotifications: React.FC = () => {
             </div>
           </div>
           
-          {/* Onboarding Sequence Banner - shown only if onboarding is active */}
-          {onboardingSequence.enabled && onboardingSequence.daysRemaining > 0 && (
-            <div className="rounded-md border-2 border-primary/30 p-4 bg-primary/5">
-              <div className="flex items-start gap-3">
-                <Clock className="h-5 w-5 text-primary mt-0.5" />
-                <div className="flex-1">
-                  <h3 className="font-medium">15-Day Onboarding Sequence</h3>
-                  <p className="text-sm text-muted-foreground">
-                    You're currently receiving our special 15-day onboarding sequence with 
-                    daily guidance to help you get the most from your subscription.
-                  </p>
-                  <div className="mt-2 flex items-center gap-2">
-                    <Badge variant="outline" className="bg-primary/10 text-primary">
-                      {onboardingSequence.daysRemaining} days remaining
-                    </Badge>
-                    <Button 
-                      variant="ghost" 
-                      size="sm"
-                      onClick={toggleOnboardingSequence}
-                    >
-                      {onboardingSequence.enabled ? "Pause" : "Resume"}
-                    </Button>
-                    <Button 
-                      variant="ghost" 
-                      size="sm"
-                      onClick={resetOnboardingSequence}
-                    >
-                      Restart Sequence
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
+          {/* Onboarding Sequence Banner */}
+          <OnboardingBanner 
+            onboardingSequence={onboardingSequence}
+            onToggle={toggleOnboardingSequence}
+            onReset={resetOnboardingSequence}
+          />
           
           <Tabs defaultValue="categories">
             <TabsList className="grid grid-cols-2 mb-4">
@@ -230,56 +182,24 @@ const DailyTipNotifications: React.FC = () => {
             
             <TabsContent value="categories" className="space-y-4">
               {tipCategories.map(category => (
-                <div 
+                <TipCategory 
                   key={category.id}
-                  className={`flex items-center justify-between rounded-md border p-4 ${
-                    category.id === "onboarding" ? "border-primary/20 bg-primary/5" : ""
-                  }`}
-                >
-                  <div className="flex-1">
-                    <h3 className="font-medium">{category.name}</h3>
-                    <p className="text-sm text-muted-foreground">{category.description}</p>
-                  </div>
-                  <Switch
-                    checked={category.enabled}
-                    onCheckedChange={() => toggleTipCategory(category.id)}
-                  />
-                </div>
+                  category={category}
+                  onToggle={() => toggleTipCategory(category.id)}
+                />
               ))}
             </TabsContent>
             
             <TabsContent value="delivery" className="space-y-4">
               {notificationMethods.map(method => (
-                <div 
+                <NotificationMethod
                   key={method.id}
-                  className="flex items-center justify-between rounded-md border p-4"
-                >
-                  <div className="flex-1">
-                    <h3 className="font-medium">{method.name}</h3>
-                    <p className="text-sm text-muted-foreground">{method.description}</p>
-                  </div>
-                  <Switch
-                    checked={method.enabled}
-                    onCheckedChange={() => toggleNotificationMethod(method.id)}
-                  />
-                </div>
+                  method={method}
+                  onToggle={() => toggleNotificationMethod(method.id)}
+                />
               ))}
               
-              <div className="rounded-md border p-4 bg-muted/30">
-                <div className="flex items-start gap-3">
-                  <Shield className="h-5 w-5 text-muted-foreground mt-0.5" />
-                  <div>
-                    <h3 className="font-medium">Privacy Notice</h3>
-                    <p className="text-sm text-muted-foreground mb-2">
-                      We value your privacy. Your contact information is only used for sending 
-                      the career tips you've requested and will never be shared with third parties.
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      You can opt out at any time by disabling all notification methods.
-                    </p>
-                  </div>
-                </div>
-              </div>
+              <PrivacyNotice />
             </TabsContent>
           </Tabs>
           
