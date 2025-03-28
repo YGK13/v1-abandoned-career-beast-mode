@@ -69,6 +69,32 @@ const HelpContent: React.FC = () => {
           <p className="text-lg mb-4">
             Learn how to optimize your Career BEAST MODE profile for maximum visibility and impact.
           </p>
+          
+          <div className="space-y-6">
+            <div className="border-b pb-4">
+              <h3 className="text-2xl font-semibold mb-3">Complete Your Profile</h3>
+              <p className="text-lg">
+                Profiles with complete information receive up to 40% more engagement. Make sure to fill out all sections 
+                of your Career BEAST MODE profile, including work history, education, skills, and achievements.
+              </p>
+            </div>
+            
+            <div className="border-b pb-4">
+              <h3 className="text-2xl font-semibold mb-3">Highlight Your Achievements</h3>
+              <p className="text-lg">
+                Quantify your accomplishments with specific metrics and results. Career BEAST MODE helps you 
+                phrase your achievements in a way that captures attention and demonstrates your value.
+              </p>
+            </div>
+            
+            <div className="border-b pb-4">
+              <h3 className="text-2xl font-semibold mb-3">Update Regularly</h3>
+              <p className="text-lg">
+                Set a reminder to update your Career BEAST MODE profile monthly with new skills, projects, 
+                or accomplishments to ensure your professional presence stays current.
+              </p>
+            </div>
+          </div>
         </TabsContent>
         
         <TabsContent value="skills">
@@ -76,6 +102,32 @@ const HelpContent: React.FC = () => {
           <p className="text-lg mb-4">
             Discover how to showcase your skills and get endorsements from colleagues in Career BEAST MODE.
           </p>
+          
+          <div className="space-y-6">
+            <div className="border-b pb-4">
+              <h3 className="text-2xl font-semibold mb-3">Add Relevant Skills</h3>
+              <p className="text-lg">
+                Career BEAST MODE recommends in-demand skills for your industry and role. Add these to your 
+                profile to increase your visibility to recruiters and potential employers.
+              </p>
+            </div>
+            
+            <div className="border-b pb-4">
+              <h3 className="text-2xl font-semibold mb-3">Skill Assessments</h3>
+              <p className="text-lg">
+                Take skill assessments in Career BEAST MODE to verify your proficiency and earn badges 
+                that appear on your profile, increasing your credibility with hiring managers.
+              </p>
+            </div>
+            
+            <div className="border-b pb-4">
+              <h3 className="text-2xl font-semibold mb-3">Request Endorsements</h3>
+              <p className="text-lg">
+                Use Career BEAST MODE's one-click endorsement request feature to ask colleagues and 
+                connections to vouch for your skills and expertise.
+              </p>
+            </div>
+          </div>
         </TabsContent>
       </Tabs>
     </div>
