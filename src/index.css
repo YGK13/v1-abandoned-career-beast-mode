@@ -1,4 +1,3 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap');
 
 @tailwind base;
@@ -147,11 +146,46 @@
   .card-shadow {
     @apply shadow-[0_2px_10px_rgba(0,0,0,0.04)];
   }
+  
+  .mobile-container {
+    @apply px-3 py-3 sm:px-6 sm:py-6;
+  }
+  
+  .mobile-text {
+    @apply text-sm sm:text-base;
+  }
+  
+  .mobile-heading {
+    @apply text-lg sm:text-xl md:text-2xl;
+  }
+  
+  .touch-target {
+    @apply min-h-[44px] min-w-[44px]; /* Minimum 44x44px touch target per accessibility guidelines */
+  }
 }
 
 /* Smooth scrolling */
 :root {
   scroll-behavior: smooth;
+}
+
+/* Media query for mobile views */
+@media (max-width: 640px) {
+  h1 {
+    @apply text-3xl;
+  }
+  
+  h2 {
+    @apply text-2xl;
+  }
+  
+  h3 {
+    @apply text-xl;
+  }
+  
+  .container {
+    @apply px-4;
+  }
 }
 
 /* Animations */
