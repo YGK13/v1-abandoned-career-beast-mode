@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { TipCategory, NotificationMethod, OnboardingSequence, NotificationType } from "./types";
+import { TipCategory, NotificationMethod, OnboardingSequence, NotificationType, TimePreference } from "./types";
 import { useToast } from "@/hooks/use-toast";
 
 export function useNotificationState() {
@@ -49,20 +49,23 @@ export function useNotificationState() {
     {
       id: "email",
       name: "Email",
-      description: "Receive daily tips via email at 8:00 AM",
-      enabled: true
+      description: "Receive daily tips via email",
+      enabled: true,
+      timePreference: "morning"
     },
     {
       id: "sms",
       name: "SMS",
-      description: "Receive daily tips via text message at 8:00 AM",
-      enabled: false
+      description: "Receive daily tips via text message",
+      enabled: false,
+      timePreference: "morning"
     },
     {
       id: "app",
       name: "In-App",
       description: "See daily tips when you open the app",
-      enabled: true
+      enabled: true,
+      timePreference: "morning"
     }
   ]);
   
@@ -87,6 +90,16 @@ export function useNotificationState() {
       methods.map(method =>
         method.id === id
           ? { ...method, enabled: !method.enabled }
+          : method
+      )
+    );
+  };
+  
+  const updateNotificationTime = (id: string, timePreference: TimePreference) => {
+    setNotificationMethods(methods =>
+      methods.map(method =>
+        method.id === id
+          ? { ...method, timePreference }
           : method
       )
     );
@@ -129,6 +142,7 @@ export function useNotificationState() {
     onboardingSequence,
     toggleTipCategory,
     toggleNotificationMethod,
+    updateNotificationTime,
     toggleOnboardingSequence,
     resetOnboardingSequence,
     savePreferences

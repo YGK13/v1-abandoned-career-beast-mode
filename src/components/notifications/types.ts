@@ -9,11 +9,14 @@ export interface TipCategory {
   enabled: boolean;
 }
 
+export type TimePreference = "morning" | "afternoon" | "evening";
+
 export interface NotificationMethod {
   id: string;
   name: string;
   description: string;
   enabled: boolean;
+  timePreference: TimePreference;
 }
 
 export interface OnboardingSequence {

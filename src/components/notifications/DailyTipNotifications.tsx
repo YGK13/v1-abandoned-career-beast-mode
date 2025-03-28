@@ -17,6 +17,7 @@ const DailyTipNotifications: React.FC = () => {
     onboardingSequence,
     toggleTipCategory,
     toggleNotificationMethod,
+    updateNotificationTime,
     toggleOnboardingSequence,
     resetOnboardingSequence,
     savePreferences
@@ -57,6 +58,7 @@ const DailyTipNotifications: React.FC = () => {
               <DeliveryMethodList
                 methods={notificationMethods}
                 onToggle={toggleNotificationMethod}
+                onTimeChange={updateNotificationTime}
               />
             </TabsContent>
           </Tabs>
