@@ -1,8 +1,8 @@
-
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import Layout from "@/components/Layout";
 import { Button } from "@/components/ui/button";
+import WaitlistForm from "@/components/WaitlistForm";
 import { 
   Award, 
   Briefcase, 
@@ -23,35 +23,46 @@ const Index = () => {
 
   return (
     <Layout>
-      {/* Hero Section */}
+      {/* Hero Section with Waitlist */}
       <section className="relative bg-gradient-to-br from-primary/5 via-background to-primary/10 py-20 overflow-hidden">
         <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-3xl mx-auto text-center mb-12">
-            <div className="inline-block bg-primary/20 text-primary font-medium rounded-full px-4 py-1.5 mb-6">
-              Your Career. Unleashed.
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <div className="inline-block bg-primary/20 text-primary font-medium rounded-full px-4 py-1.5 mb-6">
+                Your Career. Unleashed.
+              </div>
+              <h1 className="text-4xl md:text-6xl font-bold mb-6 tracking-tight">
+                Break Free From Career <span className="text-primary">Stagnation</span>
+              </h1>
+              <p className="text-xl text-muted-foreground mb-8">
+                All-in-one platform for professionals who want to accelerate their career growth without spending thousands on coaches and courses.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 mb-8">
+                <Button 
+                  size="lg" 
+                  className="gap-2 text-lg px-8" 
+                  onClick={() => {
+                    const waitlistElement = document.getElementById('waitlist');
+                    if (waitlistElement) {
+                      waitlistElement.scrollIntoView({ behavior: 'smooth' });
+                    }
+                  }}
+                >
+                  Get Started <Zap size={18} />
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="lg" 
+                  className="gap-2 text-lg" 
+                  onClick={() => navigate("/help")}
+                >
+                  How It Works <ChevronRight size={18} />
+                </Button>
+              </div>
             </div>
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 tracking-tight">
-              Break Free From Career <span className="text-primary">Stagnation</span>
-            </h1>
-            <p className="text-xl text-muted-foreground mb-8">
-              All-in-one platform for professionals who want to accelerate their career growth without spending thousands on coaches and courses.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button 
-                size="lg" 
-                className="gap-2 text-lg px-8" 
-                onClick={() => navigate("/pricing")}
-              >
-                Get Started <Zap size={18} />
-              </Button>
-              <Button 
-                variant="outline" 
-                size="lg" 
-                className="gap-2 text-lg" 
-                onClick={() => navigate("/help")}
-              >
-                How It Works <ChevronRight size={18} />
-              </Button>
+            
+            <div id="waitlist">
+              <WaitlistForm />
             </div>
           </div>
           
