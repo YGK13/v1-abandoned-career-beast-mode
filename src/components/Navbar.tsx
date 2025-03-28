@@ -129,7 +129,7 @@ const Navbar: React.FC = () => {
     >
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         <Logo />
-        <NavLinks links={navLinks} />
+        <NavLinks />
         <UserMenu 
           isMobileMenuOpen={isMobileMenuOpen} 
           toggleMobileMenu={toggleMobileMenu} 
