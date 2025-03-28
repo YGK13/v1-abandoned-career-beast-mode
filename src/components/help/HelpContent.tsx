@@ -653,7 +653,7 @@ const HelpContent = () => {
               <div className="border-b pb-4">
                 <h3 className="font-medium mb-2">How do I change my subscription plan?</h3>
                 <p className="text-sm text-muted-foreground">
-                  To change your subscription, go to Settings &gt; Billing &gt; Subscription and click "Change Plan." 
+                  To change your subscription, go to Settings {'->'} Billing {'->'} Subscription and click "Change Plan." 
                   From there, you can select a different plan that better suits your needs. Changes to a lower-tier 
                   plan will take effect at the end of your current billing cycle, while upgrades are applied immediately.
                 </p>
@@ -662,7 +662,7 @@ const HelpContent = () => {
               <div className="border-b pb-4">
                 <h3 className="font-medium mb-2">How do I update my payment method?</h3>
                 <p className="text-sm text-muted-foreground">
-                  To update your payment information, navigate to Settings &gt; Billing &gt; Payment Methods. 
+                  To update your payment information, navigate to Settings {'->'} Billing {'->'} Payment Methods. 
                   Click "Add Payment Method" to add a new card or bank account, or select an existing payment method 
                   and click "Edit" to update its details. You can also select a different default payment method.
                 </p>
@@ -671,7 +671,7 @@ const HelpContent = () => {
               <div className="border-b pb-4">
                 <h3 className="font-medium mb-2">How do I cancel my subscription?</h3>
                 <p className="text-sm text-muted-foreground">
-                  To cancel your subscription, go to Settings &gt; Billing &gt; Subscription and click "Cancel Subscription." 
+                  To cancel your subscription, go to Settings {'->'} Billing {'->'} Subscription and click "Cancel Subscription." 
                   You'll be asked to provide a reason for canceling and may be offered alternative options. 
                   After confirming cancellation, you'll continue to have access until the end of your current billing period.
                 </p>
@@ -689,7 +689,7 @@ const HelpContent = () => {
               <div className="border-b pb-4">
                 <h3 className="font-medium mb-2">How do I download my billing history and receipts?</h3>
                 <p className="text-sm text-muted-foreground">
-                  To access your billing history, go to Settings &gt; Billing &gt; Billing History. 
+                  To access your billing history, go to Settings {'->'} Billing {'->'} Billing History. 
                   From there, you can view all past transactions and download individual receipts 
                   by clicking the "Download" button next to each transaction.
                 </p>
@@ -728,7 +728,7 @@ const HelpContent = () => {
                   If you cancel your subscription, your account will remain active until the end of your current billing period. 
                   After that, your account will be downgraded to our free tier with limited features. Your data will be retained 
                   for 90 days, after which it may be permanently deleted. You can export your data at any time from 
-                  Settings &gt; Account &gt; Export Data.
+                  Settings {'->'} Account {'->'} Export Data.
                 </p>
               </div>
             </CardContent>
@@ -830,7 +830,7 @@ const HelpContent = () => {
                 <ol className="list-decimal pl-5 text-sm space-y-1">
                   <li>Check your spam or junk folder</li>
                   <li>Add support@careerbeastmode.com to your contacts or safe senders list</li>
-                  <li>Check your notification settings in Settings > Notifications</li>
+                  <li>Check your notification settings in Settings {'->'} Notifications</li>
                   <li>Verify that your email address is correct in your account profile</li>
                   <li>Check if your email provider is blocking emails from our domain</li>
                   <li>Try changing your email address in your profile settings</li>
@@ -853,7 +853,7 @@ const HelpContent = () => {
                     <h3 className="font-medium mb-1">Suspicious Activity on My Account</h3>
                     <p className="text-sm text-muted-foreground">
                       If you notice any suspicious activity, immediately change your password and contact our support team. 
-                      Review recent account activity in Settings > Security > Activity Log.
+                      Review recent account activity in Settings {'->'} Security {'->'} Activity Log.
                     </p>
                   </div>
                   
@@ -869,7 +869,7 @@ const HelpContent = () => {
                     <h3 className="font-medium mb-1">Data Privacy Concerns</h3>
                     <p className="text-sm text-muted-foreground">
                       All your data is encrypted and stored securely. You can review our privacy practices and manage your 
-                      data sharing preferences in Settings > Privacy. You can request a full data export or deletion at any time.
+                      data sharing preferences in Settings {'->'} Privacy. You can request a full data export or deletion at any time.
                     </p>
                   </div>
                 </div>
@@ -905,7 +905,7 @@ const HelpContent = () => {
                     <h3 className="font-medium mb-1">Missing Uploaded Documents</h3>
                     <p className="text-sm text-muted-foreground">
                       If you can't find a document you've uploaded, check all folders in the Career Assets section. Use the search 
-                      function to locate it by name. If truly missing, check your upload history in Settings > Activity Log.
+                      function to locate it by name. If truly missing, check your upload history in Settings {'->'} Activity Log.
                     </p>
                   </div>
                 </div>
@@ -1148,3 +1148,4 @@ const HelpContent = () => {
 };
 
 export default HelpContent;
+
