@@ -5,9 +5,10 @@ import AnimatedTransition from "../AnimatedTransition";
 
 interface PageContainerProps {
   children: ReactNode;
+  className?: string; // Make className optional
 }
 
-const PageContainer: React.FC<PageContainerProps> = ({ children }) => {
+const PageContainer: React.FC<PageContainerProps> = ({ children, className = "" }) => {
   const location = useLocation();
   
   const getRouteKey = () => {
@@ -80,7 +81,7 @@ const PageContainer: React.FC<PageContainerProps> = ({ children }) => {
   };
   
   return (
-    <main className="flex-1 w-full">
+    <main className={`flex-1 w-full ${className}`}>
       <AnimatedTransition key={getRouteKey()}>
         {children}
       </AnimatedTransition>

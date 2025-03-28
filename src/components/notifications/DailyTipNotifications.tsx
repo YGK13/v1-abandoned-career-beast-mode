@@ -1,9 +1,9 @@
-
 import React, { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Bell, Calendar, Check } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
 import { TipCategory as TipCategoryType, NotificationMethod as NotificationMethodType, OnboardingSequence, NotificationType } from "./types";
 import TipCategory from "./TipCategory";
@@ -14,7 +14,6 @@ import PrivacyNotice from "./PrivacyNotice";
 const DailyTipNotifications: React.FC = () => {
   const { toast } = useToast();
   
-  // State for tip categories
   const [tipCategories, setTipCategories] = useState<TipCategoryType[]>([
     {
       id: "career",
@@ -54,7 +53,6 @@ const DailyTipNotifications: React.FC = () => {
     }
   ]);
   
-  // State for notification methods
   const [notificationMethods, setNotificationMethods] = useState<NotificationMethodType[]>([
     {
       id: "email",
@@ -76,14 +74,12 @@ const DailyTipNotifications: React.FC = () => {
     }
   ]);
   
-  // State for onboarding sequence 
   const [onboardingSequence, setOnboardingSequence] = useState<OnboardingSequence>({
     enabled: true,
     daysRemaining: 15,
     lastSent: null
   });
   
-  // Toggle tip category
   const toggleTipCategory = (id: NotificationType) => {
     setTipCategories(categories =>
       categories.map(category =>
@@ -94,7 +90,6 @@ const DailyTipNotifications: React.FC = () => {
     );
   };
   
-  // Toggle notification method
   const toggleNotificationMethod = (id: string) => {
     setNotificationMethods(methods =>
       methods.map(method =>
@@ -105,18 +100,15 @@ const DailyTipNotifications: React.FC = () => {
     );
   };
   
-  // Toggle onboarding sequence
   const toggleOnboardingSequence = () => {
     setOnboardingSequence(prev => ({
       ...prev,
       enabled: !prev.enabled
     }));
     
-    // Also toggle the onboarding category
     toggleTipCategory("onboarding");
   };
   
-  // Reset onboarding sequence (for demo purposes)
   const resetOnboardingSequence = () => {
     setOnboardingSequence({
       enabled: true,
@@ -131,9 +123,7 @@ const DailyTipNotifications: React.FC = () => {
     });
   };
   
-  // Save notification preferences
   const savePreferences = () => {
-    // In a real app, this would make an API call to save user preferences
     toast({
       title: "Notification preferences saved",
       description: "Your daily tip notification settings have been updated",
@@ -167,7 +157,6 @@ const DailyTipNotifications: React.FC = () => {
             </div>
           </div>
           
-          {/* Onboarding Sequence Banner */}
           <OnboardingBanner 
             onboardingSequence={onboardingSequence}
             onToggle={toggleOnboardingSequence}
