@@ -1,489 +1,331 @@
 
-import React, { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from "@/components/ui/card";
-import { Calendar } from "@/components/ui/calendar";
+import React, { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
-import { Badge } from "@/components/ui/badge";
-import { useToast } from "@/hooks/use-toast";
-import { CalendarIcon, CheckSquare, Calendar as CalendarIcon2, BarChart, Award, Share2 } from "lucide-react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { 
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { 
+  Select, 
+  SelectContent, 
+  SelectItem, 
+  SelectTrigger, 
+  SelectValue 
+} from "@/components/ui/select";
+import { 
+  Star, 
+  Calendar, 
+  Trophy, 
+  Plus, 
+  Clock, 
+  Award, 
+  Check, 
+  Trash2,
+  BarChart
+} from "lucide-react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import { useForm } from "react-hook-form";
 import { format } from "date-fns";
+import { useToast } from "@/hooks/use-toast";
 
-// Types for accomplishments
-export interface Accomplishment {
+// Define the form schema
+const accomplishmentSchema = z.object({
+  title: z.string().min(2, { message: "Title should be at least 2 characters" }),
+  description: z.string().min(5, { message: "Please provide more details" }),
+  category: z.string(),
+  date: z.string(),
+  impact: z.string().optional(),
+});
+
+type AccomplishmentFormValues = z.infer<typeof accomplishmentSchema>;
+
+// Define the accomplishment type
+interface Accomplishment {
   id: string;
   title: string;
+  description: string;
   category: string;
-  date: Date;
-  completed: boolean;
-  points: number;
+  date: string;
+  impact?: string;
 }
 
-const CATEGORIES = [
-  "Networking",
-  "Skill Development",
-  "Personal Branding",
-  "Job Applications",
-  "Learning",
-  "Career Growth"
-];
-
 const AccomplishmentTracker: React.FC = () => {
-  const [date, setDate] = useState<Date>(new Date());
-  const [accomplishments, setAccomplishments] = useState<Accomplishment[]>([]);
-  const [newAccomplishment, setNewAccomplishment] = useState<string>("");
-  const [selectedCategory, setSelectedCategory] = useState<string>(CATEGORIES[0]);
-  const [selectedDates, setSelectedDates] = useState<Date[]>([]);
-  const { toast } = useToast();
-
-  // Load accomplishments from localStorage
-  useEffect(() => {
-    const savedAccomplishments = localStorage.getItem('careerAccomplishments');
-    if (savedAccomplishments) {
-      const parsed = JSON.parse(savedAccomplishments);
-      // Convert string dates back to Date objects
-      const withDates = parsed.map((a: any) => ({
-        ...a,
-        date: new Date(a.date)
-      }));
-      setAccomplishments(withDates);
-    } else {
-      // Sample data if no saved accomplishments
-      const sampleAccomplishments: Accomplishment[] = [
-        {
-          id: "1",
-          title: "Updated LinkedIn profile",
-          category: "Personal Branding",
-          date: new Date(new Date().setDate(new Date().getDate() - 2)),
-          completed: true,
-          points: 10
-        },
-        {
-          id: "2",
-          title: "Completed React course",
-          category: "Skill Development",
-          date: new Date(new Date().setDate(new Date().getDate() - 5)),
-          completed: true,
-          points: 20
-        },
-        {
-          id: "3",
-          title: "Connected with industry leader",
-          category: "Networking",
-          date: new Date(new Date().setDate(new Date().getDate() - 1)),
-          completed: true,
-          points: 15
-        }
-      ];
-      setAccomplishments(sampleAccomplishments);
-      localStorage.setItem('careerAccomplishments', JSON.stringify(sampleAccomplishments));
+  const [accomplishments, setAccomplishments] = useState<Accomplishment[]>([
+    {
+      id: "1",
+      title: "Completed Professional Development Course",
+      description: "Finished the 'Leadership in Tech' course with certification",
+      category: "learning",
+      date: "2023-08-15",
+      impact: "Enhanced leadership skills and added credential to LinkedIn"
+    },
+    {
+      id: "2",
+      title: "Led cross-functional team meeting",
+      description: "Organized and facilitated collaboration between engineering and design teams",
+      category: "leadership",
+      date: "2023-08-22",
+      impact: "Improved team communication and project alignment"
     }
-  }, []);
-
-  // Save accomplishments whenever they change
-  useEffect(() => {
-    if (accomplishments.length > 0) {
-      localStorage.setItem('careerAccomplishments', JSON.stringify(accomplishments));
-    }
-  }, [accomplishments]);
-
-  // Update the calendar with dates that have accomplishments
-  useEffect(() => {
-    const datesWithAccomplishments = accomplishments
-      .filter(a => a.completed)
-      .map(a => a.date);
-    setSelectedDates(datesWithAccomplishments);
-  }, [accomplishments]);
-
-  const handleAddAccomplishment = () => {
-    if (!newAccomplishment.trim()) {
-      toast({
-        title: "Error",
-        description: "Please enter an accomplishment",
-        variant: "destructive"
-      });
-      return;
-    }
-
-    const newItem: Accomplishment = {
-      id: Date.now().toString(),
-      title: newAccomplishment,
-      category: selectedCategory,
-      date: date,
-      completed: false,
-      points: Math.floor(Math.random() * 10) + 5 // Random points between 5-15
-    };
-
-    setAccomplishments([...accomplishments, newItem]);
-    setNewAccomplishment("");
-    
-    toast({
-      title: "Accomplishment Added",
-      description: "Your new career accomplishment has been added."
-    });
-  };
-
-  const toggleAccomplishment = (id: string) => {
-    const updated = accomplishments.map(item => 
-      item.id === id ? { ...item, completed: !item.completed } : item
-    );
-    setAccomplishments(updated);
-    
-    const accomplishment = accomplishments.find(a => a.id === id);
-    if (accomplishment) {
-      toast({
-        title: accomplishment.completed ? "Marked as incomplete" : "Completed!",
-        description: accomplishment.completed 
-          ? `"${accomplishment.title}" marked as incomplete.` 
-          : `Congratulations! You earned ${accomplishment.points} points for completing "${accomplishment.title}".`,
-        variant: accomplishment.completed ? "default" : "success"
-      });
-    }
-  };
-
-  const getAccomplishmentsForDate = (date: Date) => {
-    const formattedDate = format(date, 'yyyy-MM-dd');
-    return accomplishments.filter(a => 
-      format(a.date, 'yyyy-MM-dd') === formattedDate
-    );
-  };
-
-  const generateWeeklyReport = () => {
-    const today = new Date();
-    const oneWeekAgo = new Date(today);
-    oneWeekAgo.setDate(today.getDate() - 7);
-    
-    const weeklyAccomplishments = accomplishments.filter(a => 
-      a.completed && a.date >= oneWeekAgo && a.date <= today
-    );
-    
-    const totalPoints = weeklyAccomplishments.reduce((sum, a) => sum + a.points, 0);
-    const categoryCounts = weeklyAccomplishments.reduce((acc: Record<string, number>, curr) => {
-      acc[curr.category] = (acc[curr.category] || 0) + 1;
-      return acc;
-    }, {});
-    
-    const topCategory = Object.entries(categoryCounts)
-      .sort((a, b) => b[1] - a[1])
-      .map(([category]) => category)[0] || "None";
-    
-    if (weeklyAccomplishments.length === 0) {
-      toast({
-        title: "No accomplishments this week",
-        description: "Add some accomplishments to generate a weekly report.",
-        variant: "default"
-      });
-      return;
-    }
-    
-    toast({
-      title: "Weekly Accomplishment Report",
-      description: `You completed ${weeklyAccomplishments.length} tasks and earned ${totalPoints} points! Your top category was ${topCategory}.`,
-      variant: "success",
-      duration: 5000
-    });
-  };
-
-  const generateMonthlyReport = () => {
-    const today = new Date();
-    const oneMonthAgo = new Date(today);
-    oneMonthAgo.setMonth(today.getMonth() - 1);
-    
-    const monthlyAccomplishments = accomplishments.filter(a => 
-      a.completed && a.date >= oneMonthAgo && a.date <= today
-    );
-    
-    const totalPoints = monthlyAccomplishments.reduce((sum, a) => sum + a.points, 0);
-    
-    if (monthlyAccomplishments.length === 0) {
-      toast({
-        title: "No monthly accomplishments",
-        description: "Complete some tasks to see your monthly report.",
-        variant: "default"
-      });
-      return;
-    }
-    
-    // Simulate sending an email report
-    toast({
-      title: "Monthly Report Generated",
-      description: `Your monthly report with ${monthlyAccomplishments.length} accomplishments has been prepared. You earned a total of ${totalPoints} points this month!`,
-      variant: "success",
-      duration: 5000
-    });
-  };
-
-  const currentDateAccomplishments = getAccomplishmentsForDate(date);
-  const totalPointsEarned = accomplishments
-    .filter(a => a.completed)
-    .reduce((sum, a) => sum + a.points, 0);
+  ]);
   
-  const completionRate = accomplishments.length > 0 
-    ? Math.round((accomplishments.filter(a => a.completed).length / accomplishments.length) * 100) 
-    : 0;
-
+  const { toast } = useToast();
+  
+  // Initialize form
+  const form = useForm<AccomplishmentFormValues>({
+    resolver: zodResolver(accomplishmentSchema),
+    defaultValues: {
+      title: "",
+      description: "",
+      category: "achievement",
+      date: format(new Date(), "yyyy-MM-dd"),
+      impact: "",
+    },
+  });
+  
+  // Submit handler
+  const onSubmit = (values: AccomplishmentFormValues) => {
+    const newAccomplishment: Accomplishment = {
+      id: Math.random().toString(36).substring(2, 9),
+      ...values,
+    };
+    
+    setAccomplishments([newAccomplishment, ...accomplishments]);
+    
+    toast({
+      title: "Accomplishment tracked!",
+      description: "Your achievement has been added to your career journal",
+      variant: "default"
+    });
+    
+    form.reset({
+      title: "",
+      description: "",
+      category: "achievement",
+      date: format(new Date(), "yyyy-MM-dd"),
+      impact: "",
+    });
+  };
+  
+  // Delete accomplishment
+  const deleteAccomplishment = (id: string) => {
+    setAccomplishments(accomplishments.filter(item => item.id !== id));
+    
+    toast({
+      title: "Item removed",
+      description: "The accomplishment has been deleted from your records",
+      variant: "default"
+    });
+  };
+  
+  // Generate weekly report
+  const generateWeeklyReport = () => {
+    // In a real app, this would generate and send a report
+    toast({
+      title: "Weekly report generated",
+      description: "Your accomplishment summary has been sent to your email",
+      variant: "default"
+    });
+  };
+  
+  // Get category icon
+  const getCategoryIcon = (category: string) => {
+    switch (category) {
+      case "achievement":
+        return <Trophy className="h-4 w-4 text-yellow-500" />;
+      case "learning":
+        return <Star className="h-4 w-4 text-purple-500" />;
+      case "leadership":
+        return <Award className="h-4 w-4 text-blue-500" />;
+      case "milestone":
+        return <Check className="h-4 w-4 text-green-500" />;
+      default:
+        return <Trophy className="h-4 w-4 text-yellow-500" />;
+    }
+  };
+  
   return (
-    <Card className="w-full">
-      <CardHeader>
-        <CardTitle className="flex justify-between items-center">
-          <span>Career Accomplishment Tracker</span>
-          <div className="flex space-x-2">
-            <Button variant="outline" size="sm" onClick={generateWeeklyReport}>
-              <BarChart className="w-4 h-4 mr-1" />
-              Weekly Report
-            </Button>
-            <Button variant="outline" size="sm" onClick={generateMonthlyReport}>
-              <Award className="w-4 h-4 mr-1" />
-              Monthly Report
-            </Button>
-          </div>
-        </CardTitle>
-        <CardDescription>
-          Track your career growth achievements and earn points
-        </CardDescription>
-      </CardHeader>
-      
-      <CardContent>
-        <Tabs defaultValue="calendar" className="w-full">
-          <TabsList className="mb-4">
-            <TabsTrigger value="calendar">Calendar View</TabsTrigger>
-            <TabsTrigger value="list">List View</TabsTrigger>
-            <TabsTrigger value="stats">Statistics</TabsTrigger>
-          </TabsList>
-          
-          <TabsContent value="calendar">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <div className="mb-4">
-                  <h3 className="text-sm font-medium mb-2">Select a date to view or add accomplishments</h3>
-                  <Calendar
-                    mode="single"
-                    selected={date}
-                    onSelect={(date) => date && setDate(date)}
-                    className="border rounded-md p-3"
-                    modifiers={{
-                      highlight: selectedDates
-                    }}
-                    modifiersClassNames={{
-                      highlight: "bg-primary/20 text-primary font-bold"
-                    }}
+    <div className="space-y-6">
+      <Card>
+        <CardHeader className="bg-muted/30">
+          <CardTitle className="flex items-center gap-2">
+            <BarChart className="h-5 w-5" />
+            Track Your Accomplishments
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="pt-6">
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <div className="grid sm:grid-cols-3 gap-4">
+                <div className="sm:col-span-2">
+                  <FormField
+                    control={form.control}
+                    name="title"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Accomplishment Title</FormLabel>
+                        <FormControl>
+                          <Input placeholder="What did you accomplish?" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
                 </div>
                 
-                <div className="mb-4 space-y-3">
-                  <h3 className="text-sm font-medium">Add New Accomplishment</h3>
-                  <div className="flex gap-2">
-                    <select
-                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                      value={selectedCategory}
-                      onChange={(e) => setSelectedCategory(e.target.value)}
-                    >
-                      {CATEGORIES.map(cat => (
-                        <option key={cat} value={cat}>{cat}</option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="flex gap-2">
-                    <input
-                      type="text"
-                      value={newAccomplishment}
-                      onChange={(e) => setNewAccomplishment(e.target.value)}
-                      placeholder="What did you accomplish?"
-                      className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                    />
-                    <Button onClick={handleAddAccomplishment}>Add</Button>
-                  </div>
-                </div>
-              </div>
-              
-              <div>
-                <div className="border rounded-md p-4">
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="font-medium">
-                      {format(date, 'MMMM d, yyyy')}
-                    </h3>
-                    <Badge variant="outline" className="flex items-center">
-                      <CalendarIcon className="w-3 h-3 mr-1" />
-                      {currentDateAccomplishments.length} items
-                    </Badge>
-                  </div>
-                  
-                  {currentDateAccomplishments.length === 0 ? (
-                    <div className="text-center py-4 text-muted-foreground">
-                      No accomplishments for this date.
-                    </div>
-                  ) : (
-                    <ul className="space-y-2">
-                      {currentDateAccomplishments.map(item => (
-                        <li key={item.id} className="flex items-start gap-2 p-2 border rounded-md">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className={`rounded-full w-6 h-6 p-0 ${
-                              item.completed 
-                                ? "bg-green-500/20 text-green-600 hover:bg-green-500/30 hover:text-green-700" 
-                                : "hover:bg-muted"
-                            }`}
-                            onClick={() => toggleAccomplishment(item.id)}
-                          >
-                            <CheckSquare className="h-4 w-4" />
-                          </Button>
-                          <div className="flex-1">
-                            <p className={`text-sm ${item.completed ? "line-through text-muted-foreground" : ""}`}>
-                              {item.title}
-                            </p>
-                            <div className="flex items-center mt-1">
-                              <Badge variant="secondary" className="text-xs">
-                                {item.category}
-                              </Badge>
-                              <span className="ml-auto text-xs font-medium">
-                                {item.points} pts
-                              </span>
-                            </div>
-                          </div>
-                        </li>
-                      ))}
-                    </ul>
+                <FormField
+                  control={form.control}
+                  name="date"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Date</FormLabel>
+                      <FormControl>
+                        <Input type="date" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
                   )}
-                </div>
-              </div>
-            </div>
-          </TabsContent>
-          
-          <TabsContent value="list">
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <h3 className="font-medium">All Accomplishments</h3>
-                <Badge variant="outline">
-                  {accomplishments.length} total
-                </Badge>
+                />
               </div>
               
-              <div className="border rounded-md divide-y">
-                {accomplishments.length === 0 ? (
-                  <div className="text-center py-6 text-muted-foreground">
-                    No accomplishments added yet.
-                  </div>
-                ) : (
-                  accomplishments
-                    .sort((a, b) => b.date.getTime() - a.date.getTime())
-                    .map(item => (
-                      <div key={item.id} className="p-3 flex items-start gap-3">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className={`rounded-full w-6 h-6 p-0 ${
-                            item.completed 
-                              ? "bg-green-500/20 text-green-600 hover:bg-green-500/30 hover:text-green-700" 
-                              : "hover:bg-muted"
-                          }`}
-                          onClick={() => toggleAccomplishment(item.id)}
+              <div className="grid sm:grid-cols-3 gap-4">
+                <div className="sm:col-span-2">
+                  <FormField
+                    control={form.control}
+                    name="description"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Description</FormLabel>
+                        <FormControl>
+                          <Textarea 
+                            placeholder="Describe what you did and how you did it..." 
+                            {...field} 
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                
+                <div>
+                  <FormField
+                    control={form.control}
+                    name="category"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Category</FormLabel>
+                        <Select 
+                          onValueChange={field.onChange} 
+                          defaultValue={field.value}
                         >
-                          <CheckSquare className="h-4 w-4" />
-                        </Button>
-                        <div className="flex-1">
-                          <div className="flex justify-between">
-                            <p className={`text-sm font-medium ${item.completed ? "line-through text-muted-foreground" : ""}`}>
-                              {item.title}
-                            </p>
-                            <span className="text-xs text-muted-foreground">
-                              {format(item.date, 'MMM d, yyyy')}
-                            </span>
-                          </div>
-                          <div className="flex items-center mt-1">
-                            <Badge variant="secondary" className="text-xs">
-                              {item.category}
-                            </Badge>
-                            <span className="ml-auto text-xs font-medium">
-                              {item.points} pts
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    ))
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select a category" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="achievement">Achievement</SelectItem>
+                            <SelectItem value="learning">Learning</SelectItem>
+                            <SelectItem value="leadership">Leadership</SelectItem>
+                            <SelectItem value="milestone">Milestone</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
+              
+              <FormField
+                control={form.control}
+                name="impact"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Impact or Result</FormLabel>
+                    <FormControl>
+                      <Input 
+                        placeholder="How did this accomplishment make a difference?" 
+                        {...field} 
+                        value={field.value || ""}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              
+              <div className="flex justify-end pt-2">
+                <Button type="submit">
+                  <Plus className="mr-2 h-4 w-4" />
+                  Add Accomplishment
+                </Button>
+              </div>
+            </form>
+          </Form>
+          
+          <div className="flex justify-between items-center pt-6 pb-4">
+            <h3 className="font-medium">Recent Accomplishments</h3>
+            <Button variant="outline" size="sm" onClick={generateWeeklyReport}>
+              <Calendar className="mr-2 h-4 w-4" />
+              Generate Report
+            </Button>
+          </div>
+          
+          <div className="space-y-4">
+            {accomplishments.map((item) => (
+              <div 
+                key={item.id} 
+                className="border rounded-md p-4 hover:bg-muted/30 transition-colors"
+              >
+                <div className="flex justify-between">
+                  <div className="flex items-center gap-2">
+                    {getCategoryIcon(item.category)}
+                    <h4 className="font-medium">{item.title}</h4>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <div className="flex items-center text-sm text-muted-foreground">
+                      <Clock className="h-3.5 w-3.5 mr-1" />
+                      <span>{format(new Date(item.date), "MMM d, yyyy")}</span>
+                    </div>
+                    <Button 
+                      size="icon" 
+                      variant="ghost" 
+                      onClick={() => deleteAccomplishment(item.id)}
+                      className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+                </div>
+                <p className="text-sm text-muted-foreground mt-1">{item.description}</p>
+                {item.impact && (
+                  <div className="mt-2 text-sm">
+                    <span className="font-medium">Impact:</span> {item.impact}
+                  </div>
                 )}
               </div>
-            </div>
-          </TabsContent>
-          
-          <TabsContent value="stats">
-            <div className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="border rounded-md p-4 text-center">
-                  <h4 className="text-muted-foreground text-sm mb-1">Total Points</h4>
-                  <p className="text-3xl font-bold text-primary">{totalPointsEarned}</p>
-                </div>
-                <div className="border rounded-md p-4 text-center">
-                  <h4 className="text-muted-foreground text-sm mb-1">Completed</h4>
-                  <p className="text-3xl font-bold text-primary">
-                    {accomplishments.filter(a => a.completed).length}
-                  </p>
-                </div>
-                <div className="border rounded-md p-4 text-center">
-                  <h4 className="text-muted-foreground text-sm mb-1">Completion Rate</h4>
-                  <p className="text-3xl font-bold text-primary">{completionRate}%</p>
-                </div>
+            ))}
+            
+            {accomplishments.length === 0 && (
+              <div className="text-center py-8 text-muted-foreground">
+                <Trophy className="h-12 w-12 mx-auto mb-3 opacity-20" />
+                <p>No accomplishments tracked yet. Add your first one!</p>
               </div>
-              
-              <div className="border rounded-md p-4">
-                <h4 className="font-medium mb-3">Accomplishments by Category</h4>
-                {CATEGORIES.map(category => {
-                  const categoryItems = accomplishments.filter(a => a.category === category);
-                  const completedCount = categoryItems.filter(a => a.completed).length;
-                  const percentage = categoryItems.length > 0 
-                    ? Math.round((completedCount / categoryItems.length) * 100) 
-                    : 0;
-                  
-                  return (
-                    <div key={category} className="mb-3">
-                      <div className="flex justify-between items-center mb-1">
-                        <span className="text-sm font-medium">{category}</span>
-                        <span className="text-xs text-muted-foreground">
-                          {completedCount}/{categoryItems.length}
-                        </span>
-                      </div>
-                      <Progress value={percentage} className="h-2" />
-                    </div>
-                  );
-                })}
-              </div>
-              
-              <div className="border rounded-md p-4">
-                <h4 className="font-medium mb-2">Reports & Exports</h4>
-                <div className="grid grid-cols-2 gap-2">
-                  <Button variant="outline" className="w-full" onClick={generateWeeklyReport}>
-                    <BarChart className="w-4 h-4 mr-2" />
-                    Generate Weekly Report
-                  </Button>
-                  <Button variant="outline" className="w-full" onClick={generateMonthlyReport}>
-                    <CalendarIcon2 className="w-4 h-4 mr-2" />
-                    Generate Monthly Report
-                  </Button>
-                  <Button variant="outline" className="w-full">
-                    <Share2 className="w-4 h-4 mr-2" />
-                    Share Progress
-                  </Button>
-                  <Button variant="outline" className="w-full">
-                    <Award className="w-4 h-4 mr-2" />
-                    View Achievements
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </TabsContent>
-        </Tabs>
-      </CardContent>
-      
-      <CardFooter className="flex justify-between border-t pt-4">
-        <p className="text-sm text-muted-foreground">
-          Tracking your progress since {format(new Date(), 'MMMM yyyy')}
-        </p>
-        <Button variant="outline" size="sm">
-          Settings
-        </Button>
-      </CardFooter>
-    </Card>
+            )}
+          </div>
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 

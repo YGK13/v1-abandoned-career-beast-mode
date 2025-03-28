@@ -1,3 +1,4 @@
+
 import React from "react";
 import Layout from "@/components/Layout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -35,7 +36,7 @@ const MonetizeExpertise = () => {
               
               <TabsContent value="platforms" className="space-y-4">
                 <div className="grid sm:grid-cols-2 gap-4">
-                  {expertPlatforms.map((platform) => (
+                  {expertPlatforms.map((platform: any) => (
                     <ExpertPlatformCard key={platform.id} platform={platform} />
                   ))}
                 </div>
