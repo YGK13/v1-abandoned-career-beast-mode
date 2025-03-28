@@ -13,7 +13,7 @@ const SatisfactionGuarantee: React.FC = () => {
         </div>
         
         <div className="flex-1">
-          <h3 className="text-xl font-semibold mb-2">100% Satisfaction Guarantee</h3>
+          <h3 className="text-xl font-semibold mb-2">7-Day Satisfaction Guarantee</h3>
           <p className="text-muted-foreground">
             If you're not satisfied with our service, we offer a 7-day money-back guarantee on all subscriptions.
           </p>

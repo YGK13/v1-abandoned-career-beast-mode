@@ -22,6 +22,14 @@ import {
   Camera,
   Briefcase,
   CreditCard,
+  CheckCircle,
+  Calendar,
+  Clock,
+  Shield,
+  AlertTriangle,
+  Activity,
+  Heart,
+  Zap
 } from "lucide-react";
 
 const HelpContent = () => {
@@ -62,6 +70,7 @@ const HelpContent = () => {
           <TabsTrigger value="getting-started">Getting Started</TabsTrigger>
           <TabsTrigger value="features">Features</TabsTrigger>
           <TabsTrigger value="account">Account & Billing</TabsTrigger>
+          <TabsTrigger value="troubleshooting">Troubleshooting</TabsTrigger>
           <TabsTrigger value="contact">Contact Support</TabsTrigger>
         </TabsList>
 
@@ -154,6 +163,42 @@ const HelpContent = () => {
                     <li>Save your preferences</li>
                   </ol>
                 </div>
+                
+                <div className="border rounded-md p-4 bg-background text-left">
+                  <h3 className="font-medium flex items-center gap-2">
+                    <Calendar size={18} />
+                    15-Day Onboarding Process
+                  </h3>
+                  <p className="text-sm text-muted-foreground mt-2">
+                    All new users receive our comprehensive 15-day onboarding sequence:
+                  </p>
+                  <ol className="list-decimal pl-5 text-sm space-y-1 mt-2">
+                    <li><strong>Day 1-3:</strong> Platform orientation and setup</li>
+                    <li><strong>Day 4-6:</strong> Document uploads and LinkedIn connection</li>
+                    <li><strong>Day 7-9:</strong> Career health assessment and goal setting</li>
+                    <li><strong>Day 10-12:</strong> Job search optimization and networking setup</li>
+                    <li><strong>Day 13-15:</strong> Skills tracking and personal branding strategy</li>
+                  </ol>
+                  <p className="text-sm text-muted-foreground mt-2">
+                    Each day, you'll receive an email with instructions and links to guide you through the process.
+                  </p>
+                </div>
+
+                <div className="border rounded-md p-4 bg-background text-left">
+                  <h3 className="font-medium flex items-center gap-2">
+                    <Shield size={18} />
+                    Our 7-Day Satisfaction Guarantee
+                  </h3>
+                  <p className="text-sm text-muted-foreground mt-2">
+                    We're confident you'll love Career BEAST MODE. If you're not satisfied within your first 7 days, we offer a full refund. Here's how it works:
+                  </p>
+                  <ul className="list-disc pl-5 text-sm space-y-1 mt-2">
+                    <li>Your 7-day guarantee period begins on the day you subscribe</li>
+                    <li>To request a refund, contact our support team within the 7-day window</li>
+                    <li>We'll process your refund and cancel your subscription with no questions asked</li>
+                    <li>After the 7-day period, subscriptions cannot be refunded for the current billing period</li>
+                  </ul>
+                </div>
               </CardContent>
             </Card>
 
@@ -199,6 +244,79 @@ const HelpContent = () => {
                   </p>
                   <Button variant="outline" className="w-full">Watch Video</Button>
                 </div>
+                
+                <div className="border rounded-md p-4 bg-background text-left">
+                  <h3 className="font-medium mb-2">Skills Development & Tracking (8:32)</h3>
+                  <p className="text-sm text-muted-foreground mb-3">
+                    Learn how to identify skill gaps, track your progress, and use our development resources.
+                  </p>
+                  <Button variant="outline" className="w-full">Watch Video</Button>
+                </div>
+                
+                <div className="border rounded-md p-4 bg-background text-left">
+                  <h3 className="font-medium mb-2">Personal Branding Masterclass (9:15)</h3>
+                  <p className="text-sm text-muted-foreground mb-3">
+                    Complete guide to building your personal brand using our tools and templates.
+                  </p>
+                  <Button variant="outline" className="w-full">Watch Video</Button>
+                </div>
+              </CardContent>
+            </Card>
+            
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-left">
+                  <Clock className="h-5 w-5 text-primary" />
+                  First 30 Days Roadmap
+                </CardTitle>
+                <CardDescription className="text-left">
+                  Follow this step-by-step guide to maximize your results in the first month
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="border rounded-md p-4 bg-background text-left">
+                  <h3 className="font-medium mb-2">Week 1: Foundation</h3>
+                  <ul className="list-disc pl-5 text-sm space-y-1">
+                    <li>Complete your profile and career assessment</li>
+                    <li>Upload your resume and connect LinkedIn</li>
+                    <li>Review your career health dashboard</li>
+                    <li>Set up your primary career goals</li>
+                    <li>Explore the platform features</li>
+                  </ul>
+                </div>
+
+                <div className="border rounded-md p-4 bg-background text-left">
+                  <h3 className="font-medium mb-2">Week 2: Optimization</h3>
+                  <ul className="list-disc pl-5 text-sm space-y-1">
+                    <li>Implement suggested improvements to your career documents</li>
+                    <li>Optimize your LinkedIn profile using our recommendations</li>
+                    <li>Set up job search criteria and alerts</li>
+                    <li>Begin tracking your applications</li>
+                    <li>Start building your networking strategy</li>
+                  </ul>
+                </div>
+
+                <div className="border rounded-md p-4 bg-background text-left">
+                  <h3 className="font-medium mb-2">Week 3: Action</h3>
+                  <ul className="list-disc pl-5 text-sm space-y-1">
+                    <li>Apply to at least 5 recommended jobs</li>
+                    <li>Make 3-5 new strategic connections</li>
+                    <li>Schedule time to work on identified skill gaps</li>
+                    <li>Create your first piece of personal brand content</li>
+                    <li>Set up your salary negotiation plan</li>
+                  </ul>
+                </div>
+
+                <div className="border rounded-md p-4 bg-background text-left">
+                  <h3 className="font-medium mb-2">Week 4: Evaluation & Adjustment</h3>
+                  <ul className="list-disc pl-5 text-sm space-y-1">
+                    <li>Review your progress metrics</li>
+                    <li>Adjust strategies based on results</li>
+                    <li>Schedule recurring time for career development</li>
+                    <li>Set up long-term goals and milestones</li>
+                    <li>Book a coaching session if needed</li>
+                  </ul>
+                </div>
               </CardContent>
             </Card>
           </div>
@@ -236,10 +354,22 @@ const HelpContent = () => {
                       Keep track of all your job applications, interviews, and follow-ups in one organized dashboard.
                     </p>
                   </div>
-                  <div>
+                  <div className="border-b pb-2">
                     <h3 className="font-medium">Off-Market Jobs</h3>
                     <p className="text-sm text-muted-foreground">
                       Access our database of unadvertised job opportunities through our network of partner companies.
+                    </p>
+                  </div>
+                  <div className="border-b pb-2">
+                    <h3 className="font-medium">Auto-Apply Technology</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Our system can automatically apply to jobs that match your criteria, saving you time and increasing your application volume.
+                    </p>
+                  </div>
+                  <div>
+                    <h3 className="font-medium">Interview Preparation</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Access company-specific interview questions, preparation guides, and AI-powered mock interview tools.
                     </p>
                   </div>
                 </div>
@@ -276,10 +406,22 @@ const HelpContent = () => {
                       Access professional templates for resumes, cover letters, thank-you notes, and other career documents.
                     </p>
                   </div>
-                  <div>
+                  <div className="border-b pb-2">
                     <h3 className="font-medium">Document Storage</h3>
                     <p className="text-sm text-muted-foreground">
                       Securely store and organize all your career documents in one centralized location.
+                    </p>
+                  </div>
+                  <div className="border-b pb-2">
+                    <h3 className="font-medium">LinkedIn Post Generator</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Create engaging LinkedIn posts that showcase your expertise and attract the right audience.
+                    </p>
+                  </div>
+                  <div>
+                    <h3 className="font-medium">Bio Generator</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Quickly create professional bios for different purposes and platforms, tailored to your experience.
                     </p>
                   </div>
                 </div>
@@ -316,10 +458,22 @@ const HelpContent = () => {
                       Discover professional groups, communities, and events relevant to your industry and interests.
                     </p>
                   </div>
-                  <div>
+                  <div className="border-b pb-2">
                     <h3 className="font-medium">Relationship Tracker</h3>
                     <p className="text-sm text-muted-foreground">
                       Keep track of your networking activities and follow up at the right times to maintain connections.
+                    </p>
+                  </div>
+                  <div className="border-b pb-2">
+                    <h3 className="font-medium">Industry Mapping</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Visualize key companies and people in your target industry to strategically plan your networking.
+                    </p>
+                  </div>
+                  <div>
+                    <h3 className="font-medium">LinkedIn Referral Finder</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Find connections who can refer you to specific companies or roles you're targeting.
                     </p>
                   </div>
                 </div>
@@ -356,10 +510,126 @@ const HelpContent = () => {
                       Identify your strengths and skill gaps with our comprehensive assessment tools.
                     </p>
                   </div>
-                  <div>
+                  <div className="border-b pb-2">
                     <h3 className="font-medium">Expert Sessions</h3>
                     <p className="text-sm text-muted-foreground">
                       Book one-on-one sessions with career coaches, industry experts, and hiring managers (Premium feature).
+                    </p>
+                  </div>
+                  <div className="border-b pb-2">
+                    <h3 className="font-medium">Daily Career Tips</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Receive daily micro-learning content to continuously improve your career knowledge.
+                    </p>
+                  </div>
+                  <div>
+                    <h3 className="font-medium">Salary Negotiation Support</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Get data-driven advice and scripts for negotiating your compensation package effectively.
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-2 text-left">
+                  <Activity className="h-5 w-5 text-primary" />
+                  Skill Development
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground mb-4 text-left">
+                  Tools to help you identify, develop, and showcase your professional skills.
+                </p>
+                <div className="space-y-3 text-left">
+                  <div className="border-b pb-2">
+                    <h3 className="font-medium">Skill Gap Analysis</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Compare your current skills with those required for your target roles to identify development areas.
+                    </p>
+                  </div>
+                  <div className="border-b pb-2">
+                    <h3 className="font-medium">Learning Resources</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Access curated courses, articles, books, and videos to develop specific skills.
+                    </p>
+                  </div>
+                  <div className="border-b pb-2">
+                    <h3 className="font-medium">Progress Tracking</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Track your skill development progress over time with visual charts and milestone tracking.
+                    </p>
+                  </div>
+                  <div className="border-b pb-2">
+                    <h3 className="font-medium">Skill Endorsements</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Get guidance on building credible skill endorsements on LinkedIn and other platforms.
+                    </p>
+                  </div>
+                  <div className="border-b pb-2">
+                    <h3 className="font-medium">Certification Guidance</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Recommendations for certifications that will boost your credibility in specific skill areas.
+                    </p>
+                  </div>
+                  <div>
+                    <h3 className="font-medium">Project Ideas</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Suggestions for projects you can create to demonstrate your skills to potential employers.
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center gap-2 text-left">
+                  <Zap className="h-5 w-5 text-primary" />
+                  Personal Branding
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground mb-4 text-left">
+                  Build a compelling professional brand that attracts opportunities.
+                </p>
+                <div className="space-y-3 text-left">
+                  <div className="border-b pb-2">
+                    <h3 className="font-medium">Brand Assessment</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Analyze your current personal brand and identify opportunities for improvement.
+                    </p>
+                  </div>
+                  <div className="border-b pb-2">
+                    <h3 className="font-medium">Content Calendar</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Plan and schedule your professional content across platforms with our content calendar tool.
+                    </p>
+                  </div>
+                  <div className="border-b pb-2">
+                    <h3 className="font-medium">Content Generation</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Get AI-powered suggestions for articles, posts, and comments that enhance your professional brand.
+                    </p>
+                  </div>
+                  <div className="border-b pb-2">
+                    <h3 className="font-medium">Engagement Tracking</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Monitor the performance of your content and optimize your strategy based on data.
+                    </p>
+                  </div>
+                  <div className="border-b pb-2">
+                    <h3 className="font-medium">Media Opportunities</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Find opportunities to showcase your expertise through podcasts, guest posts, and speaking engagements.
+                    </p>
+                  </div>
+                  <div>
+                    <h3 className="font-medium">Brand Consistency Check</h3>
+                    <p className="text-sm text-muted-foreground">
+                      Ensure consistent messaging across all your professional platforms and materials.
                     </p>
                   </div>
                 </div>
@@ -408,10 +678,10 @@ const HelpContent = () => {
               </div>
               
               <div className="border-b pb-4">
-                <h3 className="font-medium mb-2">Can I get a refund?</h3>
+                <h3 className="font-medium mb-2">What is your refund policy?</h3>
                 <p className="text-sm text-muted-foreground">
-                  We offer a 30-day money-back guarantee for new subscribers. If you're not satisfied with Career BEAST MODE 
-                  within the first 30 days, contact our support team for a full refund. After 30 days, we generally don't 
+                  We offer a 7-day satisfaction guarantee for new subscribers. If you're not satisfied with Career BEAST MODE 
+                  within the first 7 days, contact our support team for a full refund. After the 7-day period, we generally don't 
                   provide refunds for unused subscription time, but we may make exceptions in certain circumstances.
                 </p>
               </div>
@@ -425,12 +695,258 @@ const HelpContent = () => {
                 </p>
               </div>
               
-              <div>
+              <div className="border-b pb-4">
                 <h3 className="font-medium mb-2">Is my payment information secure?</h3>
                 <p className="text-sm text-muted-foreground">
                   Yes. We use Stripe, a PCI-compliant payment processor, to handle all financial transactions. 
                   Your payment details are never stored on our servers. All payment information is encrypted 
                   and securely transmitted using industry-standard SSL technology.
+                </p>
+              </div>
+              
+              <div className="border-b pb-4">
+                <h3 className="font-medium mb-2">Do you offer corporate or team plans?</h3>
+                <p className="text-sm text-muted-foreground">
+                  Yes, we offer special pricing for teams of 5 or more users. Corporate plans include additional features like 
+                  consolidated billing, usage reporting, and team management capabilities. Contact our sales team at 
+                  sales@careerbeastmode.com to discuss corporate pricing options.
+                </p>
+              </div>
+              
+              <div className="border-b pb-4">
+                <h3 className="font-medium mb-2">Can I upgrade mid-billing cycle?</h3>
+                <p className="text-sm text-muted-foreground">
+                  Yes, you can upgrade your subscription at any time. When you upgrade, you'll be charged the prorated difference 
+                  between your current plan and the new plan for the remainder of your billing cycle. The upgrade takes effect immediately, 
+                  giving you instant access to all features of your new plan.
+                </p>
+              </div>
+              
+              <div>
+                <h3 className="font-medium mb-2">What happens to my data if I cancel?</h3>
+                <p className="text-sm text-muted-foreground">
+                  If you cancel your subscription, your account will remain active until the end of your current billing period. 
+                  After that, your account will be downgraded to our free tier with limited features. Your data will be retained 
+                  for 90 days, after which it may be permanently deleted. You can export your data at any time from 
+                  Settings &gt; Account &gt; Export Data.
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        
+        <TabsContent value="troubleshooting">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-left">
+                <AlertTriangle className="h-5 w-5 text-primary" />
+                Common Issues & Solutions
+              </CardTitle>
+              <CardDescription className="text-left">
+                Quick fixes for common problems you might encounter
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4 text-left">
+              <div className="border-b pb-4">
+                <h3 className="font-medium mb-2">I can't log in to my account</h3>
+                <p className="text-sm text-muted-foreground mb-2">
+                  If you're having trouble logging in, try these steps:
+                </p>
+                <ol className="list-decimal pl-5 text-sm space-y-1">
+                  <li>Double-check that you're using the correct email address</li>
+                  <li>Try resetting your password by clicking "Forgot Password"</li>
+                  <li>Clear your browser cache and cookies, then try again</li>
+                  <li>Try using a different browser or device</li>
+                  <li>Check if you're using any browser extensions that might block cookies</li>
+                  <li>If you use SSO (LinkedIn or Google), try logging in directly through those platforms first</li>
+                </ol>
+              </div>
+              
+              <div className="border-b pb-4">
+                <h3 className="font-medium mb-2">LinkedIn connection isn't working</h3>
+                <p className="text-sm text-muted-foreground mb-2">
+                  If you're having trouble connecting your LinkedIn account:
+                </p>
+                <ol className="list-decimal pl-5 text-sm space-y-1">
+                  <li>Make sure you're logged into LinkedIn in another browser tab</li>
+                  <li>Check if your LinkedIn privacy settings allow third-party connections</li>
+                  <li>Try disconnecting and reconnecting your LinkedIn account</li>
+                  <li>Clear your browser cookies specifically for LinkedIn domains</li>
+                  <li>If using a VPN, try disabling it temporarily</li>
+                  <li>Try connecting during non-peak hours as LinkedIn sometimes limits API access</li>
+                </ol>
+              </div>
+              
+              <div className="border-b pb-4">
+                <h3 className="font-medium mb-2">Resume analysis is taking too long</h3>
+                <p className="text-sm text-muted-foreground mb-2">
+                  If your resume analysis seems stuck:
+                </p>
+                <ol className="list-decimal pl-5 text-sm space-y-1">
+                  <li>Refresh the page to see if the analysis has completed</li>
+                  <li>Check that your resume file is in a supported format (PDF, DOCX, TXT)</li>
+                  <li>Ensure your resume is not password-protected or encrypted</li>
+                  <li>Try uploading a version with fewer images or complex formatting</li>
+                  <li>If it's a large file, try reducing the file size</li>
+                  <li>Try uploading during non-peak hours when our system is less busy</li>
+                </ol>
+              </div>
+              
+              <div className="border-b pb-4">
+                <h3 className="font-medium mb-2">Job recommendations don't match my profile</h3>
+                <p className="text-sm text-muted-foreground mb-2">
+                  To improve your job recommendations:
+                </p>
+                <ol className="list-decimal pl-5 text-sm space-y-1">
+                  <li>Make sure your career profile is complete with detailed skills information</li>
+                  <li>Update your job preferences with specific roles, industries, and locations</li>
+                  <li>Upload an updated resume with your current skills and experience</li>
+                  <li>Try adjusting the match threshold in your job search settings</li>
+                  <li>Complete the skill assessment to better identify your professional strengths</li>
+                  <li>Check that your experience level is correctly set in your profile</li>
+                </ol>
+              </div>
+              
+              <div className="border-b pb-4">
+                <h3 className="font-medium mb-2">The website is loading slowly</h3>
+                <p className="text-sm text-muted-foreground mb-2">
+                  If you're experiencing slow performance:
+                </p>
+                <ol className="list-decimal pl-5 text-sm space-y-1">
+                  <li>Try refreshing the page or closing and reopening your browser</li>
+                  <li>Clear your browser cache and cookies</li>
+                  <li>Check your internet connection speed</li>
+                  <li>Try using a different browser or device</li>
+                  <li>Disable browser extensions that might be slowing down performance</li>
+                  <li>If on mobile, try switching to WiFi or a stronger cell signal</li>
+                </ol>
+              </div>
+              
+              <div>
+                <h3 className="font-medium mb-2">I'm not receiving email notifications</h3>
+                <p className="text-sm text-muted-foreground mb-2">
+                  If you're not getting emails from us:
+                </p>
+                <ol className="list-decimal pl-5 text-sm space-y-1">
+                  <li>Check your spam or junk folder</li>
+                  <li>Add support@careerbeastmode.com to your contacts or safe senders list</li>
+                  <li>Check your notification settings in Settings > Notifications</li>
+                  <li>Verify that your email address is correct in your account profile</li>
+                  <li>Check if your email provider is blocking emails from our domain</li>
+                  <li>Try changing your email address in your profile settings</li>
+                </ol>
+              </div>
+            </CardContent>
+          </Card>
+          
+          <div className="mt-6 grid gap-6 md:grid-cols-2">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-left">
+                  <Shield className="h-5 w-5 text-primary" />
+                  Security Issues
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="text-left">
+                <div className="space-y-4">
+                  <div className="border-b pb-3">
+                    <h3 className="font-medium mb-1">Suspicious Activity on My Account</h3>
+                    <p className="text-sm text-muted-foreground">
+                      If you notice any suspicious activity, immediately change your password and contact our support team. 
+                      Review recent account activity in Settings > Security > Activity Log.
+                    </p>
+                  </div>
+                  
+                  <div className="border-b pb-3">
+                    <h3 className="font-medium mb-1">Two-Factor Authentication Issues</h3>
+                    <p className="text-sm text-muted-foreground">
+                      If you're having trouble with 2FA, make sure your device's time is correctly synchronized. 
+                      If you've lost access to your authentication device, use one of your backup codes or contact support.
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <h3 className="font-medium mb-1">Data Privacy Concerns</h3>
+                    <p className="text-sm text-muted-foreground">
+                      All your data is encrypted and stored securely. You can review our privacy practices and manage your 
+                      data sharing preferences in Settings > Privacy. You can request a full data export or deletion at any time.
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+            
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-left">
+                  <FileText className="h-5 w-5 text-primary" />
+                  Document Issues
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="text-left">
+                <div className="space-y-4">
+                  <div className="border-b pb-3">
+                    <h3 className="font-medium mb-1">Supported File Formats</h3>
+                    <p className="text-sm text-muted-foreground">
+                      We support the following file formats: PDF, DOCX, DOC, RTF, TXT, JPG, PNG. For best results with resume 
+                      analysis, use PDF or DOCX formats. Maximum file size is 10MB.
+                    </p>
+                  </div>
+                  
+                  <div className="border-b pb-3">
+                    <h3 className="font-medium mb-1">Document Upload Failures</h3>
+                    <p className="text-sm text-muted-foreground">
+                      If your document fails to upload, check the file format and size. Make sure it's not corrupted or 
+                      password-protected. Try saving it in a different format or reducing file size if needed.
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <h3 className="font-medium mb-1">Missing Uploaded Documents</h3>
+                    <p className="text-sm text-muted-foreground">
+                      If you can't find a document you've uploaded, check all folders in the Career Assets section. Use the search 
+                      function to locate it by name. If truly missing, check your upload history in Settings > Activity Log.
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+          
+          <Card className="mt-6">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-left">
+                <Heart className="h-5 w-5 text-primary" />
+                System Status & Maintenance
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="text-left">
+              <p className="text-sm text-muted-foreground mb-4">
+                Check our current system status and planned maintenance windows.
+              </p>
+              
+              <div className="rounded-md bg-muted p-4 mb-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                  <span className="font-medium">All Systems Operational</span>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Our platform is currently running normally with no reported issues.
+                </p>
+              </div>
+              
+              <div className="border-t pt-4">
+                <h3 className="font-medium mb-2">Upcoming Scheduled Maintenance</h3>
+                <p className="text-sm text-muted-foreground">
+                  We occasionally perform maintenance to improve our platform. During these periods, some features may be 
+                  temporarily unavailable. We always schedule maintenance during low-usage hours and provide advance notice.
+                </p>
+                <ul className="list-disc pl-5 text-sm space-y-1 mt-2">
+                  <li><strong>No scheduled maintenance at this time.</strong></li>
+                </ul>
+                <p className="text-sm text-muted-foreground mt-3">
+                  For real-time updates on system status, follow us on Twitter or check our status page at 
+                  <a href="https://status.careerbeastmode.com" className="text-primary hover:underline ml-1">status.careerbeastmode.com</a>
                 </p>
               </div>
             </CardContent>
@@ -474,6 +990,26 @@ const HelpContent = () => {
                   </p>
                   <Button variant="outline" className="w-full">Start Live Chat</Button>
                 </div>
+                
+                <div className="border rounded-md p-4">
+                  <h3 className="font-medium mb-2">Phone Support</h3>
+                  <p className="text-sm text-muted-foreground mb-3">
+                    Professional plan members can schedule a phone callback from our support team.
+                  </p>
+                  <Button variant="outline" className="w-full">Request Callback</Button>
+                </div>
+                
+                <div className="border rounded-md p-4">
+                  <h3 className="font-medium mb-2">Priority Support</h3>
+                  <p className="text-sm text-muted-foreground mb-3">
+                    Professional plan members receive priority response times across all support channels.
+                  </p>
+                  <div className="bg-muted/50 rounded p-2 text-sm">
+                    <p><strong>Basic Plan:</strong> 24-hour response time</p>
+                    <p><strong>Premium Plan:</strong> 12-hour response time</p>
+                    <p><strong>Professional Plan:</strong> 4-hour response time</p>
+                  </div>
+                </div>
               </CardContent>
             </Card>
             
@@ -497,6 +1033,14 @@ const HelpContent = () => {
                 </div>
                 
                 <div className="border rounded-md p-4">
+                  <h3 className="font-medium mb-2">Video Tutorials</h3>
+                  <p className="text-sm text-muted-foreground mb-3">
+                    Watch step-by-step demonstrations of all our platform features.
+                  </p>
+                  <Button variant="outline" className="w-full">View Video Library</Button>
+                </div>
+                
+                <div className="border rounded-md p-4">
                   <h3 className="font-medium mb-2">Community Forum</h3>
                   <p className="text-sm text-muted-foreground mb-3">
                     Connect with other users, share tips, and get answers from the community.
@@ -513,15 +1057,90 @@ const HelpContent = () => {
                 </div>
                 
                 <div className="border rounded-md p-4">
-                  <h3 className="font-medium mb-2">Request a Feature</h3>
+                  <h3 className="font-medium mb-2">Feature Requests</h3>
                   <p className="text-sm text-muted-foreground mb-3">
                     Have an idea for improving Career BEAST MODE? Let us know!
                   </p>
                   <Button variant="outline" className="w-full">Submit Feature Request</Button>
                 </div>
+                
+                <div className="border rounded-md p-4">
+                  <h3 className="font-medium mb-2">Release Notes</h3>
+                  <p className="text-sm text-muted-foreground mb-3">
+                    Stay updated on the latest features, improvements, and bug fixes.
+                  </p>
+                  <Button variant="outline" className="w-full">View Release Notes</Button>
+                </div>
               </CardContent>
             </Card>
           </div>
+          
+          <Card className="mt-6">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-left">
+                <CheckCircle className="h-5 w-5 text-primary" />
+                Get the Most from Your Subscription
+              </CardTitle>
+              <CardDescription className="text-left">
+                Schedule a free onboarding session to ensure you're maximizing all available features
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="text-left">
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <h3 className="font-medium mb-3">One-on-One Onboarding</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Meet with a Career BEAST MODE specialist for a personalized walkthrough of the platform tailored to your 
+                    specific goals. We'll help you set up your account, configure your preferences, and create a customized 
+                    strategy for your career development.
+                  </p>
+                  <div className="space-y-2">
+                    <div className="flex items-start gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-500 mt-0.5" />
+                      <span className="text-sm">Available for all subscription plans</span>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-500 mt-0.5" />
+                      <span className="text-sm">30-minute personalized session</span>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-500 mt-0.5" />
+                      <span className="text-sm">Focus on your specific career goals</span>
+                    </div>
+                    <div className="flex items-start gap-2">
+                      <CheckCircle className="h-4 w-4 text-green-500 mt-0.5" />
+                      <span className="text-sm">Get personalized recommendations</span>
+                    </div>
+                  </div>
+                  <Button className="mt-4">Schedule Onboarding</Button>
+                </div>
+                
+                <div>
+                  <h3 className="font-medium mb-3">Group Workshops</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Join our live workshops covering different aspects of the platform. Each session focuses on a specific 
+                    feature set and includes Q&A time with our experts. Perfect for learning alongside other users and 
+                    sharing strategies.
+                  </p>
+                  <div className="space-y-3">
+                    <div className="border-b pb-2">
+                      <p className="font-medium text-sm">Job Search Mastery</p>
+                      <p className="text-xs text-muted-foreground">Next session: Thursday, 2pm ET</p>
+                    </div>
+                    <div className="border-b pb-2">
+                      <p className="font-medium text-sm">LinkedIn Optimization</p>
+                      <p className="text-xs text-muted-foreground">Next session: Monday, 11am ET</p>
+                    </div>
+                    <div>
+                      <p className="font-medium text-sm">Networking Strategy</p>
+                      <p className="text-xs text-muted-foreground">Next session: Tuesday, 1pm ET</p>
+                    </div>
+                  </div>
+                  <Button variant="outline" className="mt-4">View All Workshops</Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
     </div>
