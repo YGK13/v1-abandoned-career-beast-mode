@@ -12,7 +12,8 @@ import {
   HelpCircle,
   LifeBuoy,
   Building,
-  BookOpen
+  BookOpen,
+  BarChart3
 } from "lucide-react";
 
 const NavLinks: React.FC = () => {
@@ -30,6 +31,7 @@ const NavLinks: React.FC = () => {
       <NavLink to="/life-design" icon={LifeBuoy} label="Life Design" />
       <NavLink to="/business" icon={Building} label="Business" />
       <NavLink to="/monetize" icon={DollarSign} label="Monetize" />
+      <NavLink to="/career-tracking" icon={BarChart3} label="Track Progress" />
       <NavLink to="/help" icon={HelpCircle} label="Help" />
       <NavLink to="/faq" icon={HelpCircle} label="FAQ & Setup" />
     </div>

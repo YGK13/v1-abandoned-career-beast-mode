@@ -8,15 +8,17 @@ export interface NavItem {
   label: string;
   icon: LucideIcon;
   children?: NavItem[];
+  locked?: boolean;
 }
 
 interface NavLinkProps {
   to: string;
   label: string;
   icon: LucideIcon;
+  locked?: boolean;
 }
 
-const NavLink: React.FC<NavLinkProps> = ({ to, label, icon: Icon }) => {
+const NavLink: React.FC<NavLinkProps> = ({ to, label, icon: Icon, locked }) => {
   const location = useLocation();
   const isActive = location.pathname === to;
 
@@ -27,10 +29,13 @@ const NavLink: React.FC<NavLinkProps> = ({ to, label, icon: Icon }) => {
         isActive
           ? "bg-primary/10 text-primary"
           : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
-      }`}
+      } ${locked ? "opacity-50 pointer-events-none" : ""}`}
     >
       <Icon size={18} />
       <span>{label}</span>
+      {locked && (
+        <span className="ml-auto text-xs bg-muted px-1.5 py-0.5 rounded">PRO</span>
+      )}
     </Link>
   );
 };

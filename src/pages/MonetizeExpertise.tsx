@@ -1,117 +1,103 @@
-
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React from "react";
 import Layout from "@/components/Layout";
-import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ChevronRight, CheckCircle, RefreshCw } from "lucide-react";
 import ExpertPlatformCard from "@/components/monetize/ExpertPlatformCard";
 import DailyPlatformTip from "@/components/monetize/DailyPlatformTip";
-import { 
-  getRandomPlatform, 
-  getInitialPlatforms, 
-  getAllPlatforms, 
-  getRecentlyVerifiedPlatforms 
-} from "@/data/expertPlatformsData";
-import { Badge } from "@/components/ui/badge";
+import { expertPlatforms } from "@/data/expertPlatformsData";
+import { Platform } from "@/components/monetize/DailyPlatformTip";
 
 const MonetizeExpertise = () => {
-  const [date] = useState(() => new Date().toLocaleDateString());
-  const [dailyPlatform] = useState(() => getRandomPlatform());
-  const [initialPlatforms] = useState(() => getInitialPlatforms());
-  const [allPlatforms] = useState(() => getAllPlatforms());
-  const [recentlyVerifiedPlatforms, setRecentlyVerifiedPlatforms] = useState(() => getRecentlyVerifiedPlatforms());
-  const [lastVerified] = useState(() => new Date().toLocaleDateString());
+  // Convert the first expertPlatform to a Platform type
+  const platformTip: Platform = {
+    id: expertPlatforms[0]?.id || "daily-tip",
+    name: expertPlatforms[0]?.name || "Expert Platform",
+    description: expertPlatforms[0]?.description || "Tips to grow your online presence",
+    url: expertPlatforms[0]?.url || "#",
+    logo: expertPlatforms[0]?.logo || "/placeholder.svg"
+  };
 
   return (
     <Layout>
       <div className="container mx-auto px-4 py-8">
-        <div className="max-w-6xl mx-auto">
-          <header className="mb-8">
-            <h1 className="text-4xl font-bold mb-2">Monetize Your Expertise</h1>
-            <p className="text-muted-foreground">
-              Discover platforms where you can leverage your professional expertise for consulting opportunities
-            </p>
-            <div className="flex items-center mt-3">
-              <Badge variant="outline" className="flex items-center gap-1 px-2 py-1">
-                <CheckCircle className="h-3 w-3 text-green-500" />
-                <span className="text-xs">All platforms verified active as of {lastVerified}</span>
-              </Badge>
-              <Button variant="ghost" size="sm" className="text-xs ml-2 h-7">
-                <RefreshCw className="h-3 w-3 mr-1" /> Refresh Verification
-              </Button>
-            </div>
-          </header>
+        <h1 className="text-4xl font-bold mb-2">Monetize Your Expertise</h1>
+        <p className="text-muted-foreground mb-8">
+          Platforms and strategies to turn your knowledge into income streams
+        </p>
 
-          <DailyPlatformTip platform={dailyPlatform} date={date} />
-
-          <Tabs defaultValue="featured" className="mb-8">
-            <TabsList className="grid grid-cols-3 mb-8">
-              <TabsTrigger value="featured">Featured Platforms</TabsTrigger>
-              <TabsTrigger value="recently-verified">Recently Verified</TabsTrigger>
-              <TabsTrigger value="all">All Platforms</TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="featured">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-                {initialPlatforms.map((platform) => (
-                  <ExpertPlatformCard 
-                    key={platform.id} 
-                    platform={platform} 
-                    featured={platform.id === initialPlatforms[0].id}
-                  />
-                ))}
-              </div>
+        <div className="grid md:grid-cols-3 gap-6 mb-8">
+          <div className="md:col-span-2">
+            <Tabs defaultValue="platforms" className="w-full">
+              <TabsList className="mb-4">
+                <TabsTrigger value="platforms">Expert Platforms</TabsTrigger>
+                <TabsTrigger value="courses">Create Courses</TabsTrigger>
+                <TabsTrigger value="consulting">Consulting</TabsTrigger>
+              </TabsList>
               
-              <div className="flex justify-center mt-8">
-                <Button variant="outline" asChild>
-                  <Link to="#" className="flex items-center gap-1" onClick={(e) => {
-                    e.preventDefault();
-                    const tabElement = document.querySelector('[data-value="all"]');
-                    if (tabElement instanceof HTMLElement) {
-                      tabElement.click();
-                    }
-                  }}>
-                    View all platforms <ChevronRight className="h-4 w-4" />
-                  </Link>
-                </Button>
-              </div>
-            </TabsContent>
-            
-            <TabsContent value="recently-verified">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {recentlyVerifiedPlatforms.map((platform) => (
-                  <ExpertPlatformCard 
-                    key={platform.id} 
-                    platform={platform} 
-                    featured={platform.id === dailyPlatform.id}
-                  />
-                ))}
-              </div>
-            </TabsContent>
-
-            <TabsContent value="all">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {allPlatforms.map((platform) => (
-                  <ExpertPlatformCard 
-                    key={platform.id} 
-                    platform={platform} 
-                    featured={platform.id === dailyPlatform.id}
-                  />
-                ))}
-              </div>
-            </TabsContent>
-          </Tabs>
+              <TabsContent value="platforms" className="space-y-4">
+                <div className="grid sm:grid-cols-2 gap-4">
+                  {expertPlatforms.map((platform) => (
+                    <ExpertPlatformCard key={platform.id} platform={platform} />
+                  ))}
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="courses">
+                <div className="bg-muted/30 border rounded-lg p-6">
+                  <h3 className="text-xl font-semibold mb-3">Course Creation Guide</h3>
+                  <p className="mb-4">
+                    Creating and selling online courses is one of the most scalable ways to monetize your expertise.
+                  </p>
+                  
+                  {/* Placeholder for course creation content */}
+                  <div className="space-y-4">
+                    <div className="border rounded-md p-4 bg-background">
+                      <h4 className="font-medium">1. Choose Your Course Topic</h4>
+                      <p className="text-sm text-muted-foreground">Select a topic you're knowledgeable about and that has market demand.</p>
+                    </div>
+                    <div className="border rounded-md p-4 bg-background">
+                      <h4 className="font-medium">2. Plan Your Curriculum</h4>
+                      <p className="text-sm text-muted-foreground">Structure your knowledge into modules and lessons that follow a logical progression.</p>
+                    </div>
+                    <div className="border rounded-md p-4 bg-background">
+                      <h4 className="font-medium">3. Create Engaging Content</h4>
+                      <p className="text-sm text-muted-foreground">Develop videos, slides, worksheets, and other materials to engage different learning styles.</p>
+                    </div>
+                  </div>
+                </div>
+              </TabsContent>
+              
+              <TabsContent value="consulting">
+                <div className="bg-muted/30 border rounded-lg p-6">
+                  <h3 className="text-xl font-semibold mb-3">Consulting Services Blueprint</h3>
+                  <p className="mb-4">
+                    Offer your expertise directly to clients through consulting services.
+                  </p>
+                  
+                  {/* Placeholder for consulting content */}
+                  <div className="space-y-4">
+                    <div className="border rounded-md p-4 bg-background">
+                      <h4 className="font-medium">1. Define Your Consulting Offering</h4>
+                      <p className="text-sm text-muted-foreground">Clearly articulate what problems you solve and the value you provide to clients.</p>
+                    </div>
+                    <div className="border rounded-md p-4 bg-background">
+                      <h4 className="font-medium">2. Set Your Pricing Strategy</h4>
+                      <p className="text-sm text-muted-foreground">Determine hourly rates, package pricing, or retainer models that reflect your value.</p>
+                    </div>
+                    <div className="border rounded-md p-4 bg-background">
+                      <h4 className="font-medium">3. Create Client Acquisition Systems</h4>
+                      <p className="text-sm text-muted-foreground">Develop a repeatable process for finding and converting prospects into clients.</p>
+                    </div>
+                  </div>
+                </div>
+              </TabsContent>
+            </Tabs>
+          </div>
           
-          <div className="bg-muted/30 p-6 rounded-lg border mt-12">
-            <h2 className="text-xl font-semibold mb-3">How to Maximize Your Expert Consulting Opportunities</h2>
-            <ul className="space-y-2 ml-6 list-disc">
-              <li>Create a compelling profile that highlights specific accomplishments and expertise</li>
-              <li>Develop a clear rate structure based on industry standards and your experience level</li>
-              <li>Prepare concise talking points on your areas of specialization</li>
-              <li>Be responsive to consultation requests to build your reputation</li>
-              <li>Start with 2-3 platforms and expand once you've established a track record</li>
-            </ul>
+          <div>
+            <DailyPlatformTip 
+              platform={platformTip}
+              date={new Date().toISOString()}
+            />
           </div>
         </div>
       </div>
