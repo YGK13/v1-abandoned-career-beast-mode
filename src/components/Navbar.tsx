@@ -71,8 +71,27 @@ const Navbar: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    // Close mobile menu on route change
     setIsMobileMenuOpen(false);
   }, [location.pathname]);
+
+  // Close mobile menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (isMobileMenuOpen) {
+        const target = event.target as HTMLElement;
+        // Check if the click is outside the mobile menu and not on the menu toggle button
+        if (!target.closest('.mobile-menu') && !target.closest('.menu-toggle')) {
+          setIsMobileMenuOpen(false);
+        }
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isMobileMenuOpen]);
 
   const navLinks: NavItem[] = [
     { path: "/", label: "Home", icon: Home },
@@ -123,20 +142,24 @@ const Navbar: React.FC = () => {
 
   return (
     <header 
-      className={`sticky top-0 z-40 w-full transition-all duration-300 ${
+      className={`sticky top-0 z-50 w-full transition-all duration-300 ${
         isScrolled ? "bg-background/80 backdrop-blur-lg shadow-sm" : "bg-transparent"
       }`}
     >
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         <Logo />
-        <NavLinks />
+        <div className="hidden md:flex">
+          <NavLinks />
+        </div>
         <UserMenu 
           isMobileMenuOpen={isMobileMenuOpen} 
           toggleMobileMenu={toggleMobileMenu} 
         />
       </div>
       
-      <MobileMenu isOpen={isMobileMenuOpen} navLinks={navLinks} />
+      <div className="mobile-menu">
+        <MobileMenu isOpen={isMobileMenuOpen} navLinks={navLinks} />
+      </div>
     </header>
   );
 };

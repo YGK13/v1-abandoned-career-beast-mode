@@ -28,8 +28,8 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, navLinks }) => {
   };
   
   return (
-    <div className="md:hidden fixed top-16 left-0 right-0 bottom-0 bg-background/95 backdrop-blur-lg border-b border-border z-50 animate-fade-in overflow-auto">
-      <nav className="container mx-auto px-4 py-4 flex flex-col space-y-1 pb-24">
+    <div className="md:hidden fixed top-16 left-0 right-0 z-50 bg-background/95 backdrop-blur-lg border-b border-border animate-fade-in overflow-auto max-h-[calc(100vh-4rem)]">
+      <nav className="container mx-auto px-4 py-4 flex flex-col space-y-1 pb-16">
         {navLinks.map((link) => {
           // If this link has children
           if (link.children && link.children.length > 0) {
