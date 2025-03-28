@@ -19,6 +19,7 @@ interface PricingPlanProps {
   hasTrial?: boolean;
   onClick: () => void;
   disabled?: boolean;
+  billingLabel?: string;
 }
 
 const PricingPlan: React.FC<PricingPlanProps> = ({
@@ -32,6 +33,7 @@ const PricingPlan: React.FC<PricingPlanProps> = ({
   hasTrial = true,
   onClick,
   disabled = false,
+  billingLabel = "/month",
 }) => {
   return (
     <DashboardCard className={`flex flex-col border-2 h-full ${isPopular ? 'border-primary' : ''} relative`}>
@@ -49,7 +51,7 @@ const PricingPlan: React.FC<PricingPlanProps> = ({
         <h2 className="font-bold text-2xl mb-2">{title}</h2>
         <div className="mb-4">
           <span className="text-3xl font-bold">{price}</span>
-          <span className="text-muted-foreground">/month</span>
+          <span className="text-muted-foreground">{billingLabel}</span>
         </div>
         
         <p className="text-muted-foreground mb-6">

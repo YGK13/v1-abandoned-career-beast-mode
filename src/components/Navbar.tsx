@@ -170,7 +170,7 @@ const Navbar: React.FC = () => {
                         <link.icon className="h-4 w-4" />
                         {link.label}
                       </NavigationMenuTrigger>
-                      <NavigationMenuContent>
+                      <NavigationMenuContent className="bg-background border border-border rounded-md shadow-md">
                         <ul className="grid w-[250px] gap-1 p-2">
                           {link.children.map((child) => (
                             <li key={child.path}>
@@ -178,7 +178,7 @@ const Navbar: React.FC = () => {
                                 <a
                                   href={child.path}
                                   className={cn(
-                                    "flex items-center gap-2 select-none space-y-1 rounded-md p-3 text-sm leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+                                    "flex items-center gap-2 select-none rounded-md p-3 text-sm leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
                                     location.pathname === child.path && "bg-accent text-accent-foreground"
                                   )}
                                 >
