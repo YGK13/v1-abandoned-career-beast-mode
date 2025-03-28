@@ -7,6 +7,13 @@ export interface TipCategory {
   name: string;
   description: string;
   enabled: boolean;
+  sampleTip?: SampleTip;
+}
+
+export interface SampleTip {
+  title: string;
+  content: string;
+  icon: string;
 }
 
 export type TimePreference = "morning" | "afternoon" | "evening";
