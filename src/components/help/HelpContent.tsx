@@ -25,155 +25,32 @@ import {
 } from "lucide-react";
 
 const HelpContent = () => {
-  // Function to handle downloading the admin guide
+  // Function to handle downloading the admin guide as PDF
   const handleDownloadAdminGuide = () => {
-    // Create a blob with the content
-    const adminGuideContent = `
-# Career BEAST MODE Admin Guide
-
-## Platform Selection for Backend Management
-
-### 1. Supabase for Database & Backend
-Supabase provides a complete solution for your backend needs including database, authentication, storage, and serverless functions.
-- Visit https://supabase.com to create an account
-- Create a new project (free tier available)
-- Use the UI to create tables for users, content, and other data
-- Connect to your app using the provided connection strings
-- Makes backend management possible without coding
-
-### 2. Stripe for Payments
-Stripe handles all your payment processing, subscription management, and invoicing.
-- Sign up at https://stripe.com
-- Set up your account with business details
-- Create products and pricing plans in the Stripe dashboard
-- Connect Stripe to Supabase using webhook functions
-- Test payments using Stripe's test mode before going live
-
-### 3. Zapier for Integrations & Automation
-Zapier connects your app with 5,000+ other services without requiring any code.
-- Create an account at https://zapier.com
-- Connect your email service (Gmail, Outlook, etc.)
-- Set up "Zaps" to automate workflows
-- Send welcome emails when users sign up
-- Add subscribers to your email marketing list
-- Notify your team of new sales
-
-### 4. Vercel/Netlify for Hosting & Deployment
-These platforms provide easy deployment, hosting, and domain management.
-- Create an account at https://vercel.com or https://netlify.com
-- Connect to your code repository (GitHub, GitLab, etc.)
-- Configure your domain and SSL certificate
-- Set up environment variables for API keys
-- Enjoy automatic deployments when you update your code
-
-## Launch Preparation Checklist
-
-### Branding & Design
-- Finalize logo and brand colors
-- Prepare brand assets (icons, images, illustrations)
-- Create style guide for consistent visual identity
-- Design marketing materials (social graphics, banners)
-- Optimize all images for web performance
-
-### Content & Copywriting
-- Write compelling headlines and page copy
-- Develop clear value propositions
-- Create FAQs and help documentation
-- Prepare email templates (welcome, confirmation, etc.)
-- Draft privacy policy and terms of service
-
-### Technical Setup
-- Set up domain name and SSL certificate
-- Configure Supabase database and authentication
-- Integrate Stripe payment processing
-- Set up analytics (Google Analytics, Plausible, etc.)
-- Configure proper redirects and error pages
-- Implement basic SEO (meta tags, sitemaps)
-
-### Testing & Quality Assurance
-- Test all forms and user flows
-- Verify payment processing works (test transactions)
-- Check responsiveness on mobile devices
-- Test load times and performance
-- Conduct user testing with your target audience
-- Check for broken links and accessibility issues
-
-### Launch & Marketing
-- Prepare launch announcement emails
-- Set up social media campaigns
-- Create content calendar for post-launch
-- Configure email marketing automation
-- Prepare press releases or media outreach
-- Set up referral or affiliate programs
-
-## Recommended API Integration Approach
-
-### LinkedIn API Integration
-LinkedIn has strict API access requirements for marketing and data access.
-1. Apply for LinkedIn Developer Program at developer.linkedin.com
-2. Create a LinkedIn app in their developer portal
-3. Request specific permissions (r_liteprofile, r_emailaddress)
-4. Implement OAuth flow using Supabase Edge Functions
-5. Store tokens securely in Supabase
-
-Non-coder alternative: Use Zapier's LinkedIn integrations to connect with LinkedIn without direct API access
-
-### File Upload Functionality
-Implement file uploads using Supabase Storage.
-1. Create a Supabase Storage bucket for user uploads
-2. Set appropriate permissions (authenticated users can upload)
-3. Use the provided UI components to create upload forms
-4. Configure file type restrictions and size limits
-5. Set up proper error handling and progress indicators
-
-### Email Integration
-Set up reliable email delivery for notifications and marketing.
-1. Create an account with an email service provider like:
-   - Resend - Developer-friendly email API
-   - Mailchimp - Full email marketing platform
-2. Integrate with your app via Supabase Edge Functions
-3. Create email templates for various notifications
-4. Set up automated emails for user onboarding and engagement
-
-### Waitlist Management
-Implement a waitlist system for early access.
-1. Use Supabase to store waitlist sign-ups
-2. Create a simple form to collect email and name
-3. Set up automated confirmation emails
-4. Implement a mechanism to track referrals
-5. Create a dashboard to manage and invite users
-`;
-
-    const blob = new Blob([adminGuideContent], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    
-    // Create a temporary link and trigger download
+    // Create a link to download the PDF file
     const a = document.createElement('a');
-    a.href = url;
-    a.download = 'BEAST_MODE_Admin_Guide.md';
+    a.href = '/BEAST_MODE_Admin_Guide.pdf';
+    a.download = 'BEAST_MODE_Admin_Guide.pdf';
     document.body.appendChild(a);
     a.click();
-    
-    // Clean up
     document.body.removeChild(a);
-    URL.revokeObjectURL(url);
   };
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-4xl font-bold mb-2">Help Center</h1>
-      <p className="text-muted-foreground mb-8">
+      <h1 className="text-4xl font-bold mb-2 text-left">Help Center</h1>
+      <p className="text-muted-foreground mb-8 text-left">
         Find answers to common questions and learn how to make the most of Career BEAST MODE
       </p>
 
-      <div className="mb-8">
+      <div className="mb-8 text-left">
         <Button 
           variant="outline" 
           className="flex items-center gap-2" 
           onClick={handleDownloadAdminGuide}
         >
           <Download size={16} />
-          <span>Download Platform Admin Guide</span>
+          <span>Download Platform Admin Guide (PDF)</span>
         </Button>
         <p className="text-sm text-muted-foreground mt-2">
           Setup instructions for developers and backend administrators
@@ -192,16 +69,16 @@ Implement a waitlist system for early access.
           <div className="space-y-6">
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2 text-left">
                   <Info className="h-5 w-5 text-primary" />
                   New User Guide
                 </CardTitle>
-                <CardDescription>
+                <CardDescription className="text-left">
                   Everything you need to know to get started with Career BEAST MODE
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="border rounded-md p-4 bg-background">
+                <div className="border rounded-md p-4 bg-background text-left">
                   <h3 className="font-medium flex items-center gap-2">
                     <HelpCircle size={18} />
                     What is Career BEAST MODE?
@@ -213,7 +90,7 @@ Implement a waitlist system for early access.
                   </p>
                 </div>
 
-                <div className="border rounded-md p-4 bg-background">
+                <div className="border rounded-md p-4 bg-background text-left">
                   <h3 className="font-medium flex items-center gap-2">
                     <Users size={18} />
                     Creating Your Account
@@ -227,7 +104,7 @@ Implement a waitlist system for early access.
                   </ol>
                 </div>
 
-                <div className="border rounded-md p-4 bg-background">
+                <div className="border rounded-md p-4 bg-background text-left">
                   <h3 className="font-medium flex items-center gap-2">
                     <Book size={18} />
                     Taking the Career Assessment
@@ -245,7 +122,7 @@ Implement a waitlist system for early access.
                   </ul>
                 </div>
 
-                <div className="border rounded-md p-4 bg-background">
+                <div className="border rounded-md p-4 bg-background text-left">
                   <h3 className="font-medium flex items-center gap-2">
                     <Briefcase size={18} />
                     Uploading Your Career Documents
@@ -261,7 +138,7 @@ Implement a waitlist system for early access.
                   </ol>
                 </div>
 
-                <div className="border rounded-md p-4 bg-background">
+                <div className="border rounded-md p-4 bg-background text-left">
                   <h3 className="font-medium flex items-center gap-2">
                     <Settings size={18} />
                     Personalizing Your Dashboard
@@ -282,16 +159,16 @@ Implement a waitlist system for early access.
 
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2 text-left">
                   <Camera className="h-5 w-5 text-primary" />
                   Video Tutorials
                 </CardTitle>
-                <CardDescription>
+                <CardDescription className="text-left">
                   Watch these tutorial videos to quickly learn how to use the platform
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="border rounded-md p-4 bg-background">
+                <div className="border rounded-md p-4 bg-background text-left">
                   <h3 className="font-medium mb-2">Platform Overview (5:23)</h3>
                   <p className="text-sm text-muted-foreground mb-3">
                     A comprehensive walkthrough of all the features available in Career BEAST MODE.
@@ -299,7 +176,7 @@ Implement a waitlist system for early access.
                   <Button variant="outline" className="w-full">Watch Video</Button>
                 </div>
 
-                <div className="border rounded-md p-4 bg-background">
+                <div className="border rounded-md p-4 bg-background text-left">
                   <h3 className="font-medium mb-2">Job Search Mastery (7:12)</h3>
                   <p className="text-sm text-muted-foreground mb-3">
                     Learn how to use our job search tools, including AI matching and application tracking.
@@ -307,7 +184,7 @@ Implement a waitlist system for early access.
                   <Button variant="outline" className="w-full">Watch Video</Button>
                 </div>
 
-                <div className="border rounded-md p-4 bg-background">
+                <div className="border rounded-md p-4 bg-background text-left">
                   <h3 className="font-medium mb-2">Career Document Optimization (6:45)</h3>
                   <p className="text-sm text-muted-foreground mb-3">
                     See how to upload, analyze, and optimize your resume and LinkedIn profile.
@@ -315,7 +192,7 @@ Implement a waitlist system for early access.
                   <Button variant="outline" className="w-full">Watch Video</Button>
                 </div>
 
-                <div className="border rounded-md p-4 bg-background">
+                <div className="border rounded-md p-4 bg-background text-left">
                   <h3 className="font-medium mb-2">Networking Tools (4:58)</h3>
                   <p className="text-sm text-muted-foreground mb-3">
                     Discover how to expand your professional network using our intelligent networking tools.
@@ -331,16 +208,16 @@ Implement a waitlist system for early access.
           <div className="grid gap-6 md:grid-cols-2">
             <Card>
               <CardHeader className="pb-3">
-                <CardTitle className="flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2 text-left">
                   <Briefcase className="h-5 w-5 text-primary" />
                   Job Search Features
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-muted-foreground mb-4">
+                <p className="text-sm text-muted-foreground mb-4 text-left">
                   Our career tools help you find and land your dream job.
                 </p>
-                <div className="space-y-3">
+                <div className="space-y-3 text-left">
                   <div className="border-b pb-2">
                     <h3 className="font-medium">AI Job Matching</h3>
                     <p className="text-sm text-muted-foreground">
@@ -371,16 +248,16 @@ Implement a waitlist system for early access.
 
             <Card>
               <CardHeader className="pb-3">
-                <CardTitle className="flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2 text-left">
                   <FileText className="h-5 w-5 text-primary" />
                   Career Assets
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-muted-foreground mb-4">
+                <p className="text-sm text-muted-foreground mb-4 text-left">
                   Tools to optimize your professional documents and online presence.
                 </p>
-                <div className="space-y-3">
+                <div className="space-y-3 text-left">
                   <div className="border-b pb-2">
                     <h3 className="font-medium">Document Analysis</h3>
                     <p className="text-sm text-muted-foreground">
@@ -411,16 +288,16 @@ Implement a waitlist system for early access.
 
             <Card>
               <CardHeader className="pb-3">
-                <CardTitle className="flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2 text-left">
                   <Users className="h-5 w-5 text-primary" />
                   Networking Tools
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-muted-foreground mb-4">
+                <p className="text-sm text-muted-foreground mb-4 text-left">
                   Expand your professional network strategically.
                 </p>
-                <div className="space-y-3">
+                <div className="space-y-3 text-left">
                   <div className="border-b pb-2">
                     <h3 className="font-medium">Connection Suggestions</h3>
                     <p className="text-sm text-muted-foreground">
@@ -451,16 +328,16 @@ Implement a waitlist system for early access.
 
             <Card>
               <CardHeader className="pb-3">
-                <CardTitle className="flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2 text-left">
                   <MessageSquare className="h-5 w-5 text-primary" />
                   Coaching & Guidance
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p className="text-sm text-muted-foreground mb-4">
+                <p className="text-sm text-muted-foreground mb-4 text-left">
                   Get expert advice and personalized career guidance.
                 </p>
-                <div className="space-y-3">
+                <div className="space-y-3 text-left">
                   <div className="border-b pb-2">
                     <h3 className="font-medium">AI Career Coach</h3>
                     <p className="text-sm text-muted-foreground">
@@ -494,15 +371,15 @@ Implement a waitlist system for early access.
         <TabsContent value="account">
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
+              <CardTitle className="flex items-center gap-2 text-left">
                 <CreditCard className="h-5 w-5 text-primary" />
                 Account & Billing
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="text-left">
                 Manage your subscription, payment methods, and account settings
               </CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
+            <CardContent className="space-y-4 text-left">
               <div className="border-b pb-4">
                 <h3 className="font-medium mb-2">How do I change my subscription plan?</h3>
                 <p className="text-sm text-muted-foreground">
@@ -564,15 +441,15 @@ Implement a waitlist system for early access.
           <div className="grid gap-6 md:grid-cols-2">
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2 text-left">
                   <MessageSquare className="h-5 w-5 text-primary" />
                   Contact Support
                 </CardTitle>
-                <CardDescription>
+                <CardDescription className="text-left">
                   Get help from our customer support team
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-4 text-left">
                 <div className="bg-muted/50 p-4 rounded-md">
                   <h3 className="font-medium mb-2">Customer Support Hours</h3>
                   <p className="text-sm text-muted-foreground mb-3">
@@ -602,15 +479,15 @@ Implement a waitlist system for early access.
             
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
+                <CardTitle className="flex items-center gap-2 text-left">
                   <Link className="h-5 w-5 text-primary" />
                   Additional Resources
                 </CardTitle>
-                <CardDescription>
+                <CardDescription className="text-left">
                   Find more help with these resources
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-4 text-left">
                 <div className="border rounded-md p-4">
                   <h3 className="font-medium mb-2">Knowledge Base</h3>
                   <p className="text-sm text-muted-foreground mb-3">

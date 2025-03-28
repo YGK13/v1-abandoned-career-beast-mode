@@ -1,0 +1,189 @@
+
+%PDF-1.4
+1 0 obj
+<</Type /Catalog /Pages 2 0 R>>
+endobj
+2 0 obj
+<</Type /Pages /Kids [3 0 R] /Count 1>>
+endobj
+3 0 obj
+<</Type /Page /Parent 2 0 R /Resources 4 0 R /MediaBox [0 0 612 792] /Contents 6 0 R>>
+endobj
+4 0 obj
+<</Font <</F1 5 0 R>>>>
+endobj
+5 0 obj
+<</Type /Font /Subtype /Type1 /BaseFont /Helvetica>>
+endobj
+6 0 obj
+<</Length 4881>>
+stream
+BT
+/F1 14 Tf
+36 700 Td
+(Career BEAST MODE Admin Guide) Tj
+/F1 12 Tf
+0 -30 Td
+(Platform Selection for Backend Management) Tj
+/F1 11 Tf
+0 -20 Td
+(1. Supabase for Database & Backend) Tj
+/F1 10 Tf
+10 -15 Td
+(Supabase provides a complete solution for your backend needs including database,) Tj
+0 -12 Td
+(authentication, storage, and serverless functions.) Tj
+0 -12 Td
+(- Visit https://supabase.com to create an account) Tj
+0 -12 Td
+(- Create a new project (free tier available)) Tj
+0 -12 Td
+(- Use the UI to create tables for users, content, and other data) Tj
+0 -12 Td
+(- Connect to your app using the provided connection strings) Tj
+0 -12 Td
+(- Makes backend management possible without coding) Tj
+
+/F1 11 Tf
+-10 -25 Td
+(2. Stripe for Payments) Tj
+/F1 10 Tf
+10 -15 Td
+(Stripe handles all your payment processing, subscription management, and invoicing.) Tj
+0 -12 Td
+(- Sign up at https://stripe.com) Tj
+0 -12 Td
+(- Set up your account with business details) Tj
+0 -12 Td
+(- Create products and pricing plans in the Stripe dashboard) Tj
+0 -12 Td
+(- Connect Stripe to Supabase using webhook functions) Tj
+0 -12 Td
+(- Test payments using Stripe's test mode before going live) Tj
+
+/F1 11 Tf
+-10 -25 Td
+(3. Zapier for Integrations & Automation) Tj
+/F1 10 Tf
+10 -15 Td
+(Zapier connects your app with 5,000+ other services without requiring any code.) Tj
+0 -12 Td
+(- Create an account at https://zapier.com) Tj
+0 -12 Td
+(- Connect your email service (Gmail, Outlook, etc.)) Tj
+0 -12 Td
+(- Set up "Zaps" to automate workflows) Tj
+0 -12 Td
+(- Send welcome emails when users sign up) Tj
+0 -12 Td
+(- Add subscribers to your email marketing list) Tj
+0 -12 Td
+(- Notify your team of new sales) Tj
+
+/F1 11 Tf
+-10 -25 Td
+(4. Vercel/Netlify for Hosting & Deployment) Tj
+/F1 10 Tf
+10 -15 Td
+(These platforms provide easy deployment, hosting, and domain management.) Tj
+0 -12 Td
+(- Create an account at https://vercel.com or https://netlify.com) Tj
+0 -12 Td
+(- Connect to your code repository (GitHub, GitLab, etc.)) Tj
+0 -12 Td
+(- Configure your domain and SSL certificate) Tj
+0 -12 Td
+(- Set up environment variables for API keys) Tj
+0 -12 Td
+(- Enjoy automatic deployments when you update your code) Tj
+
+/F1 12 Tf
+-10 -30 Td
+(Launch Preparation Checklist) Tj
+
+/F1 11 Tf
+0 -20 Td
+(Branding & Design) Tj
+/F1 10 Tf
+10 -15 Td
+(- Finalize logo and brand colors) Tj
+0 -12 Td
+(- Prepare brand assets (icons, images, illustrations)) Tj
+0 -12 Td
+(- Create style guide for consistent visual identity) Tj
+0 -12 Td
+(- Design marketing materials (social graphics, banners)) Tj
+0 -12 Td
+(- Optimize all images for web performance) Tj
+
+/F1 11 Tf
+-10 -25 Td
+(Content & Copywriting) Tj
+/F1 10 Tf
+10 -15 Td
+(- Write compelling headlines and page copy) Tj
+0 -12 Td
+(- Develop clear value propositions) Tj
+0 -12 Td
+(- Create FAQs and help documentation) Tj
+0 -12 Td
+(- Prepare email templates (welcome, confirmation, etc.)) Tj
+0 -12 Td
+(- Draft privacy policy and terms of service) Tj
+
+/F1 12 Tf
+-10 -30 Td
+(Recommended API Integration Approach) Tj
+
+/F1 11 Tf
+0 -20 Td
+(LinkedIn API Integration) Tj
+/F1 10 Tf
+10 -15 Td
+(LinkedIn has strict API access requirements for marketing and data access.) Tj
+0 -12 Td
+(1. Apply for LinkedIn Developer Program at developer.linkedin.com) Tj
+0 -12 Td
+(2. Create a LinkedIn app in their developer portal) Tj
+0 -12 Td
+(3. Request specific permissions (r_liteprofile, r_emailaddress)) Tj
+0 -12 Td
+(4. Implement OAuth flow using Supabase Edge Functions) Tj
+0 -12 Td
+(5. Store tokens securely in Supabase) Tj
+0 -12 Td
+(Non-coder alternative: Use Zapier's LinkedIn integrations to connect with LinkedIn without direct API access) Tj
+
+/F1 11 Tf
+-10 -25 Td
+(File Upload Functionality) Tj
+/F1 10 Tf
+10 -15 Td
+(Implement file uploads using Supabase Storage.) Tj
+0 -12 Td
+(1. Create a Supabase Storage bucket for user uploads) Tj
+0 -12 Td
+(2. Set appropriate permissions (authenticated users can upload)) Tj
+0 -12 Td
+(3. Use the provided UI components to create upload forms) Tj
+0 -12 Td
+(4. Configure file type restrictions and size limits) Tj
+0 -12 Td
+(5. Set up proper error handling and progress indicators) Tj
+ET
+endstream
+endobj
+xref
+0 7
+0000000000 65535 f
+0000000009 00000 n
+0000000056 00000 n
+0000000111 00000 n
+0000000210 00000 n
+0000000251 00000 n
+0000000317 00000 n
+trailer
+<</Size 7/Root 1 0 R>>
+startxref
+5249
+%%EOF

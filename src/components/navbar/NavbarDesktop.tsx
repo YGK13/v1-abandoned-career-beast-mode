@@ -25,7 +25,7 @@ const NavbarDesktop: React.FC<NavbarDesktopProps> = ({ navLinks }) => {
   const inactiveStyles = "text-muted-foreground hover:text-foreground";
 
   return (
-    <div className="hidden md:flex md:flex-1 justify-center">
+    <div className="hidden md:flex md:flex-1 justify-start">
       <NavigationMenu>
         <NavigationMenuList>
           {navLinks.map((link) => {
