@@ -30,6 +30,16 @@ import NavLinks from "./navbar/NavLinks";
 import MobileMenu from "./navbar/MobileMenu";
 import UserMenu from "./navbar/UserMenu";
 import { NavItem } from "./navbar/NavLink";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  navigationMenuTriggerStyle,
+} from "@/components/ui/navigation-menu";
+import { cn } from "@/lib/utils";
 
 // Create a custom GrowthChartIcon component with the hockey stick growth shape that's compatible with Lucide format
 const GrowthChartIcon = forwardRef<SVGSVGElement, LucideProps>((props, ref) => (
@@ -148,19 +158,60 @@ const Navbar: React.FC = () => {
     >
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         <Logo />
-        <div className="hidden md:flex items-center space-x-4">
-          <nav className="flex items-center space-x-1">
-            {navLinks.map((link) => (
-              <React.Fragment key={link.path}>
-                <a 
-                  href={link.path} 
-                  className="px-3 py-2 text-sm font-medium rounded-md hover:bg-muted/50 hover:text-foreground transition-colors"
-                >
-                  {link.label}
-                </a>
-              </React.Fragment>
-            ))}
-          </nav>
+        <div className="hidden md:flex items-center">
+          <NavigationMenu>
+            <NavigationMenuList>
+              {navLinks.map((link) => {
+                // If link has children, create a dropdown
+                if (link.children && link.children.length > 0) {
+                  return (
+                    <NavigationMenuItem key={link.path}>
+                      <NavigationMenuTrigger className="flex items-center gap-2">
+                        <link.icon className="h-4 w-4" />
+                        {link.label}
+                      </NavigationMenuTrigger>
+                      <NavigationMenuContent>
+                        <ul className="grid w-[250px] gap-1 p-2">
+                          {link.children.map((child) => (
+                            <li key={child.path}>
+                              <NavigationMenuLink asChild>
+                                <a
+                                  href={child.path}
+                                  className={cn(
+                                    "flex items-center gap-2 select-none space-y-1 rounded-md p-3 text-sm leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+                                    location.pathname === child.path && "bg-accent text-accent-foreground"
+                                  )}
+                                >
+                                  <child.icon className="h-4 w-4" />
+                                  <span>{child.label}</span>
+                                </a>
+                              </NavigationMenuLink>
+                            </li>
+                          ))}
+                        </ul>
+                      </NavigationMenuContent>
+                    </NavigationMenuItem>
+                  )
+                }
+                // Regular link without dropdown
+                return (
+                  <NavigationMenuItem key={link.path}>
+                    <a
+                      href={link.path}
+                      className={cn(
+                        navigationMenuTriggerStyle(),
+                        "flex items-center gap-2",
+                        location.pathname === link.path && "bg-accent text-accent-foreground"
+                      )}
+                    >
+                      <link.icon className="h-4 w-4" />
+                      {link.label}
+                    </a>
+                  </NavigationMenuItem>
+                )
+              })}
+            </NavigationMenuList>
+          </NavigationMenu>
         </div>
         <div className="menu-toggle">
           <UserMenu 
