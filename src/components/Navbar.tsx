@@ -148,8 +148,19 @@ const Navbar: React.FC = () => {
     >
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         <Logo />
-        <div className="hidden md:flex">
-          <NavLinks />
+        <div className="hidden md:flex items-center space-x-4">
+          <nav className="flex items-center space-x-1">
+            {navLinks.map((link) => (
+              <React.Fragment key={link.path}>
+                <a 
+                  href={link.path} 
+                  className="px-3 py-2 text-sm font-medium rounded-md hover:bg-muted/50 hover:text-foreground transition-colors"
+                >
+                  {link.label}
+                </a>
+              </React.Fragment>
+            ))}
+          </nav>
         </div>
         <div className="menu-toggle">
           <UserMenu 
