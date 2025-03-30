@@ -4,11 +4,14 @@ import { BrowserRouter } from 'react-router-dom'
 import App from './App.tsx'
 import './index.css'
 import { SubscriptionProvider } from './context/SubscriptionContext'
+import { AuthProvider } from './context/AuthContext'
 
 createRoot(document.getElementById("root")!).render(
   <BrowserRouter>
-    <SubscriptionProvider>
-      <App />
-    </SubscriptionProvider>
+    <AuthProvider>
+      <SubscriptionProvider>
+        <App />
+      </SubscriptionProvider>
+    </AuthProvider>
   </BrowserRouter>
 );
