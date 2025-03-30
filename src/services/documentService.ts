@@ -25,8 +25,8 @@ const STORAGE_BUCKET = "documents";
 // Upload document to storage and save metadata in the database
 export const uploadDocument = async (documentData: DocumentUpload): Promise<{ data: Document | null; error: Error | null }> => {
   try {
-    const user = supabase.auth.getUser();
-    if (!user) {
+    const user = await supabase.auth.getUser();
+    if (!user.data.user) {
       return { data: null, error: new Error("User not authenticated") };
     }
     
@@ -53,6 +53,7 @@ export const uploadDocument = async (documentData: DocumentUpload): Promise<{ da
         description: documentData.description || null,
         doc_type: documentData.doc_type,
         file_path: fullPath,
+        user_id: user.data.user.id // Add the user ID here
       })
       .select()
       .single();
