@@ -73,7 +73,6 @@ const SSOButton: React.FC<SSOButtonProps> = ({
       });
       
       // Convert provider name to the format expected by Supabase
-      // and handle the type conversion properly
       const getSupabaseProvider = (): Provider => {
         switch(provider) {
           case 'linkedin':
