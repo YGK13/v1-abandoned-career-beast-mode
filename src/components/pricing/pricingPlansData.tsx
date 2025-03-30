@@ -1,6 +1,6 @@
 
 import React from "react";
-import { BadgeDollarSign, Briefcase, Award, Calendar } from "lucide-react";
+import { BadgeDollarSign, Briefcase, Award } from "lucide-react";
 
 export interface PricingPlanData {
   id: string;

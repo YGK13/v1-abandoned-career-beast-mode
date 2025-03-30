@@ -15,10 +15,11 @@ const BillingToggle: React.FC<BillingToggleProps> = ({
   return (
     <div className="flex justify-center mb-6">
       <Tabs 
-        defaultValue={billingPeriod} 
+        value={billingPeriod} 
         onValueChange={(value) => onBillingPeriodChange(value as "monthly" | "annual")}
+        className="w-full max-w-md"
       >
-        <TabsList className="grid w-full max-w-md grid-cols-2">
+        <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="monthly" className="flex items-center gap-2">
             <Clock className="h-4 w-4" />
             <span>Monthly</span>
