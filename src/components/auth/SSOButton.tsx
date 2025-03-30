@@ -91,18 +91,18 @@ const SSOButton: React.FC<SSOButtonProps> = ({
         }
       };
       
-      // Don't specify redirectTo - let Supabase handle the redirect based on its configuration
-      const { error } = await supabase.auth.signInWithOAuth({
+      console.log(`Starting OAuth flow for provider: ${provider} (Supabase provider: ${getSupabaseProvider()})`);
+      
+      const { data, error } = await supabase.auth.signInWithOAuth({
         provider: getSupabaseProvider(),
-        options: {
-          // Remove the redirectTo option to let Supabase use its configured callback URL
-        }
       });
       
       if (error) {
+        console.error(`OAuth error:`, error);
         throw error;
       }
       
+      console.log(`OAuth response:`, data);
       // Note: We don't call onSuccess here because the page will redirect
     } catch (error: any) {
       console.error(`${config.label} sign in error:`, error);

@@ -20,6 +20,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     // First set up the auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, currentSession) => {
+        console.log("Auth state changed:", event, currentSession?.user?.id);
         setSession(currentSession);
         setUser(currentSession?.user ?? null);
 
@@ -43,15 +44,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     // Then check for existing session
     const initializeAuth = async () => {
       setIsLoading(true);
-      const { data: { session: initialSession } } = await supabase.auth.getSession();
-      setSession(initialSession);
-      setUser(initialSession?.user ?? null);
+      try {
+        console.log("Checking for existing session...");
+        const { data: { session: initialSession } } = await supabase.auth.getSession();
+        console.log("Initial session:", initialSession?.user?.id);
+        
+        setSession(initialSession);
+        setUser(initialSession?.user ?? null);
 
-      if (initialSession?.user) {
-        const profileData = await fetchProfile(initialSession.user.id);
-        setProfile(profileData);
+        if (initialSession?.user) {
+          const profileData = await fetchProfile(initialSession.user.id);
+          setProfile(profileData);
+        }
+      } catch (error) {
+        console.error("Error initializing auth:", error);
+      } finally {
+        setIsLoading(false);
       }
-      setIsLoading(false);
     };
 
     initializeAuth();
