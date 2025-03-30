@@ -56,7 +56,7 @@ const SSOButton: React.FC<SSOButtonProps> = ({
       default:
         return {
           icon: null,
-          label: provider.charAt(0).toUpperCase() + provider.slice(1),
+          label: String(provider).charAt(0).toUpperCase() + String(provider).slice(1),
           className: "bg-primary hover:bg-primary/90 text-white"
         };
     }
@@ -71,8 +71,30 @@ const SSOButton: React.FC<SSOButtonProps> = ({
         description: "You will be redirected to sign in.",
       });
       
+      // Convert provider name to the format expected by Supabase
+      let supabaseProvider: string;
+      switch(provider) {
+        case 'linkedin':
+          supabaseProvider = 'linkedin_oidc';
+          break;
+        case 'microsoft':
+          supabaseProvider = 'azure';
+          break;
+        case 'apple':
+          supabaseProvider = 'apple';
+          break;
+        case 'github':
+          supabaseProvider = 'github';
+          break;
+        case 'google':
+          supabaseProvider = 'google';
+          break;
+        default:
+          supabaseProvider = String(provider);
+      }
+      
       const { error } = await supabase.auth.signInWithOAuth({
-        provider: provider === 'linkedin' ? 'linkedin_oidc' : provider,
+        provider: supabaseProvider as any, // Using type assertion for now
         options: {
           redirectTo: `${window.location.origin}/auth`
         }

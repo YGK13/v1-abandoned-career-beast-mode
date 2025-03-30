@@ -35,8 +35,8 @@ export const simulateImportProcess = (
   }, 700);
 };
 
-// New auth-related utilities
-export type SSOProvider = "linkedin" | "google" | "microsoft" | "apple" | "github";
+// Updated auth-related utilities with proper typing
+export type SSOProvider = "linkedin" | "google" | "microsoft" | "apple" | "github" | string;
 
 export interface SSOConfig {
   id: SSOProvider;
