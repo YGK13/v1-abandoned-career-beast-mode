@@ -17,14 +17,24 @@ export const generateLinkedInAuthUrl = () => {
 
 export const handleLinkedInCallback = async (code: string): Promise<any> => {
   try {
+    console.log("Calling Supabase function with code:", code.substring(0, 10) + "...");
+    
     // Exchange the authorization code for an access token using our Supabase edge function
     const { data, error } = await supabase.functions.invoke('linkedin-auth', {
       body: { code, action: "exchange_token" }
     });
 
-    if (error) throw new Error(error.message || "Error connecting with LinkedIn");
+    console.log("Supabase function response:", data, error);
+
+    if (error) {
+      console.error("Supabase function error:", error);
+      throw new Error(error.message || "Error connecting with LinkedIn");
+    }
     
-    if (!data.success) throw new Error(data.error || "Failed to authenticate with LinkedIn");
+    if (!data || !data.success) {
+      console.error("LinkedIn auth failed:", data?.error || "Unknown error");
+      throw new Error(data?.error || "Failed to authenticate with LinkedIn");
+    }
     
     return data.profile;
   } catch (err) {
@@ -47,6 +57,8 @@ export const processLinkedInProfile = (profile: any) => {
 
 export const saveLinkedInDataToSupabase = async (linkedInData: any, userId: string) => {
   try {
+    console.log("Saving LinkedIn data to user_linkedin_profiles table for user:", userId);
+    
     // Save the processed LinkedIn data to Supabase
     const { data, error } = await supabase.from('user_linkedin_profiles')
       .upsert({
@@ -60,7 +72,12 @@ export const saveLinkedInDataToSupabase = async (linkedInData: any, userId: stri
       })
       .select();
 
-    if (error) throw error;
+    if (error) {
+      console.error("Error saving LinkedIn data:", error);
+      throw error;
+    }
+    
+    console.log("LinkedIn data saved successfully:", data);
     return data;
   } catch (err) {
     console.error("Error saving LinkedIn data:", err);

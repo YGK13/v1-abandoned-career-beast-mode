@@ -24,12 +24,13 @@ serve(async (req) => {
     const { code, action } = await req.json();
 
     console.log("LinkedIn Auth Function called with action:", action);
+    console.log("Environment variables loaded:");
+    console.log("- LINKEDIN_CLIENT_ID:", LINKEDIN_CLIENT_ID ? "Present (length: " + LINKEDIN_CLIENT_ID.length + ")" : "Missing");
+    console.log("- LINKEDIN_CLIENT_SECRET:", LINKEDIN_CLIENT_SECRET ? "Present (length: " + LINKEDIN_CLIENT_SECRET.length + ")" : "Missing");
+    console.log("- REDIRECT_URL:", REDIRECT_URL);
 
     if (action === "exchange_token" && code) {
       console.log("Exchanging authorization code for access token");
-      console.log("Using LINKEDIN_CLIENT_ID:", LINKEDIN_CLIENT_ID ? "Present" : "Missing");
-      console.log("Using LINKEDIN_CLIENT_SECRET:", LINKEDIN_CLIENT_SECRET ? "Present" : "Missing");
-      console.log("Using REDIRECT_URL:", REDIRECT_URL);
       
       // Exchange authorization code for access token
       const tokenResponse = await fetch('https://www.linkedin.com/oauth/v2/accessToken', {
