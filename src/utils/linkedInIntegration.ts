@@ -15,6 +15,7 @@ export const generateLinkedInAuthUrl = () => {
   console.log("Creating LinkedIn auth URL with client ID:", LINKEDIN_CLIENT_ID);
   console.log("Redirect URI:", REDIRECT_URI);
   
+  // Direct LinkedIn OAuth URL with all necessary parameters
   const authUrl = `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=${LINKEDIN_CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&state=${state}&scope=${scope}`;
   
   console.log("Generated LinkedIn auth URL:", authUrl);
@@ -28,7 +29,7 @@ export const handleLinkedInCallback = async (code: string): Promise<any> => {
     
     // Exchange the authorization code for an access token using our Supabase edge function
     const { data, error } = await supabase.functions.invoke('linkedin-auth', {
-      body: { code, action: "exchange_token" }
+      body: { code, action: "exchange_token", redirectUri: REDIRECT_URI }
     });
 
     console.log("Supabase function response:", data, error);
@@ -59,6 +60,7 @@ export const processLinkedInProfile = (profile: any) => {
     lastName: profile.lastName,
     email: profile.email,
     profileUrl: profile.profileUrl,
+    accessToken: profile.accessToken,
   };
 };
 

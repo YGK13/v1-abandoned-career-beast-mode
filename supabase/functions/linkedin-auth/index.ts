@@ -11,7 +11,6 @@ const SUPABASE_URL = Deno.env.get('SUPABASE_URL') ?? '';
 const SUPABASE_ANON_KEY = Deno.env.get('SUPABASE_ANON_KEY') ?? '';
 const LINKEDIN_CLIENT_ID = Deno.env.get('LINKEDIN_CLIENT_ID') ?? '';
 const LINKEDIN_CLIENT_SECRET = Deno.env.get('LINKEDIN_CLIENT_SECRET') ?? '';
-const REDIRECT_URL = Deno.env.get('LINKEDIN_REDIRECT_URL') ?? '';
 
 serve(async (req) => {
   // Handle CORS preflight requests
@@ -22,7 +21,6 @@ serve(async (req) => {
   try {
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     
-    // Log request body
     let body;
     try {
       body = await req.json();
@@ -38,13 +36,13 @@ serve(async (req) => {
       });
     }
     
-    const { code, action } = body;
+    const { code, action, redirectUri = 'https://wcxdaenhwiiowmoecpli.lovableproject.com/linkedin/callback' } = body;
 
     console.log("LinkedIn Auth Function called with action:", action);
     console.log("Environment variables loaded:");
     console.log("- LINKEDIN_CLIENT_ID:", LINKEDIN_CLIENT_ID ? "Present (length: " + LINKEDIN_CLIENT_ID.length + ")" : "Missing");
     console.log("- LINKEDIN_CLIENT_SECRET:", LINKEDIN_CLIENT_SECRET ? "Present (length: " + LINKEDIN_CLIENT_SECRET.length + ")" : "Missing");
-    console.log("- REDIRECT_URL:", REDIRECT_URL);
+    console.log("- Redirect URI:", redirectUri);
 
     if (action === "exchange_token" && code) {
       console.log("Exchanging authorization code for access token");
@@ -54,10 +52,17 @@ serve(async (req) => {
         code,
         client_id: LINKEDIN_CLIENT_ID,
         client_secret: LINKEDIN_CLIENT_SECRET,
-        redirect_uri: REDIRECT_URL,
+        redirect_uri: redirectUri,
       });
       
-      console.log("Token request params:", tokenParams.toString());
+      console.log("Token request params (without client_secret):", 
+        new URLSearchParams({
+          grant_type: 'authorization_code',
+          code,
+          client_id: LINKEDIN_CLIENT_ID,
+          redirect_uri: redirectUri,
+        }).toString()
+      );
       
       // Exchange authorization code for access token
       const tokenResponse = await fetch('https://www.linkedin.com/oauth/v2/accessToken', {
@@ -69,6 +74,7 @@ serve(async (req) => {
       });
 
       const tokenResponseText = await tokenResponse.text();
+      console.log("Raw token response status:", tokenResponse.status);
       console.log("Raw token response:", tokenResponseText);
       
       let tokenData;
@@ -108,6 +114,7 @@ serve(async (req) => {
       });
 
       const profileResponseText = await profileResponse.text();
+      console.log("Raw profile response status:", profileResponse.status);
       console.log("Raw profile response:", profileResponseText);
       
       let profileData;
@@ -168,7 +175,7 @@ serve(async (req) => {
         tokenType: tokenData.token_type,
       };
 
-      console.log("Successfully retrieved LinkedIn profile data:", JSON.stringify(linkedInProfile));
+      console.log("Successfully retrieved LinkedIn profile data");
 
       return new Response(JSON.stringify({ 
         success: true, 

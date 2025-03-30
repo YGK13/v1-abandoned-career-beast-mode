@@ -2,8 +2,7 @@
 import React from "react";
 import { Linkedin, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import SSOOptions from "../auth/SSOOptions";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { generateLinkedInAuthUrl } from "@/utils/linkedInIntegration";
 
 interface LinkedInConnectButtonProps {
@@ -12,17 +11,16 @@ interface LinkedInConnectButtonProps {
 
 const LinkedInConnectButton: React.FC<LinkedInConnectButtonProps> = ({ onClick }) => {
   const [showLoginOptions, setShowLoginOptions] = React.useState(false);
-  
-  const handleSSOSuccess = () => {
-    setShowLoginOptions(false);
-    onClick();
-  };
 
   const handleConnectLinkedIn = () => {
     // Generate and redirect to LinkedIn OAuth URL
-    const authUrl = generateLinkedInAuthUrl();
-    console.log("Redirecting to LinkedIn OAuth URL:", authUrl);
-    window.location.href = authUrl;
+    try {
+      const authUrl = generateLinkedInAuthUrl();
+      console.log("Redirecting to LinkedIn OAuth URL:", authUrl);
+      window.location.href = authUrl;
+    } catch (error) {
+      console.error("Error generating LinkedIn auth URL:", error);
+    }
   };
 
   return (
@@ -51,10 +49,7 @@ const LinkedInConnectButton: React.FC<LinkedInConnectButtonProps> = ({ onClick }
                 </DialogDescription>
               </DialogHeader>
               <div className="py-4">
-                <SSOOptions 
-                  providers={["linkedin", "google", "microsoft", "github"]} 
-                  onSuccess={handleSSOSuccess}
-                />
+                <p className="text-center">Please use the direct LinkedIn connection option.</p>
               </div>
             </DialogContent>
           </Dialog>

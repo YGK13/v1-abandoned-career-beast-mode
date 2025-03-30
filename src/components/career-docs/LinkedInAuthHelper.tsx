@@ -23,7 +23,7 @@ const LinkedInAuthHelper: React.FC = () => {
     const processAuthCode = async () => {
       const code = searchParams.get("code");
       const state = searchParams.get("state");
-      const error = searchParams.get("error");
+      const errorParam = searchParams.get("error");
       const errorDescription = searchParams.get("error_description");
       
       const savedState = sessionStorage.getItem("linkedin_oauth_state");
@@ -32,12 +32,14 @@ const LinkedInAuthHelper: React.FC = () => {
       sessionStorage.removeItem("linkedin_oauth_state");
       
       // Check if there's an error from LinkedIn
-      if (error) {
-        setError(`LinkedIn Error: ${error} - ${errorDescription || 'No description provided'}`);
+      if (errorParam) {
+        console.error(`LinkedIn returned an error: ${errorParam} - ${errorDescription}`);
+        setError(`LinkedIn Error: ${errorParam} - ${errorDescription || 'No description provided'}`);
         return;
       }
       
       if (!code) {
+        console.error("No authorization code found in URL parameters");
         setError("No authorization code found in the URL");
         return;
       }
@@ -54,6 +56,10 @@ const LinkedInAuthHelper: React.FC = () => {
         console.log("Getting LinkedIn profile with code:", code);
         const linkedInProfile = await handleLinkedInCallback(code);
         console.log("Retrieved LinkedIn profile:", linkedInProfile);
+        
+        if (!linkedInProfile) {
+          throw new Error("Failed to retrieve LinkedIn profile data");
+        }
         
         // Process the profile data
         const processedProfile = processLinkedInProfile(linkedInProfile);
@@ -104,6 +110,8 @@ const LinkedInAuthHelper: React.FC = () => {
     
     if (searchParams.get("code") || searchParams.get("error")) {
       processAuthCode();
+    } else {
+      console.log("No code or error parameter found in URL");
     }
   }, [searchParams, navigate, toast, user]);
   
