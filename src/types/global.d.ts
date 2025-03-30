@@ -3,8 +3,8 @@ export {};
 
 declare global {
   interface Window {
-    hcaptcha: {
-      render: (container: string, options: any) => string;
+    turnstile: {
+      render: (container: string | HTMLElement, options: any) => string;
       reset: (widgetId?: string) => void;
       getResponse: (widgetId?: string) => string;
     };

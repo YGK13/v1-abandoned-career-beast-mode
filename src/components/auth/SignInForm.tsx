@@ -1,5 +1,4 @@
-
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -28,6 +27,34 @@ const SignInForm: React.FC<SignInFormProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
+  const turnstileWidgetId = useRef<string | null>(null);
+  const turnstileContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const renderTurnstile = () => {
+      if (window.turnstile && turnstileContainerRef.current) {
+        turnstileWidgetId.current = window.turnstile.render(turnstileContainerRef.current, {
+          sitekey: "0x4AAAAAAABI4S10D2f9gYqA",
+          callback: function(token: string) {
+            console.log("Turnstile token:", token);
+          }
+        });
+      }
+    };
+
+    if (window.turnstile) {
+      renderTurnstile();
+    } else {
+      const checkTurnstileLoaded = setInterval(() => {
+        if (window.turnstile) {
+          clearInterval(checkTurnstileLoaded);
+          renderTurnstile();
+        }
+      }, 100);
+      
+      return () => clearInterval(checkTurnstileLoaded);
+    }
+  }, []);
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,10 +69,9 @@ const SignInForm: React.FC<SignInFormProps> = ({
 
     setIsSubmitting(true);
     try {
-      // Get the captcha token if the hCaptcha object exists
       let captchaToken = null;
-      if (window.hcaptcha) {
-        captchaToken = window.hcaptcha.getResponse();
+      if (window.turnstile) {
+        captchaToken = window.turnstile.getResponse(turnstileWidgetId.current || undefined);
         if (!captchaToken) {
           toast({
             title: "Captcha verification required",
@@ -57,7 +83,6 @@ const SignInForm: React.FC<SignInFormProps> = ({
         }
       }
 
-      // Add captcha token to the sign in request
       const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -83,9 +108,8 @@ const SignInForm: React.FC<SignInFormProps> = ({
       });
     } finally {
       setIsSubmitting(false);
-      // Reset captcha
-      if (window.hcaptcha) {
-        window.hcaptcha.reset();
+      if (window.turnstile && turnstileWidgetId.current) {
+        window.turnstile.reset(turnstileWidgetId.current);
       }
     }
   };
@@ -130,7 +154,7 @@ const SignInForm: React.FC<SignInFormProps> = ({
               required
             />
           </div>
-          <div className="h-captcha" data-sitekey="84a9a43c-ea3a-4a2a-bc18-b6f5bfb13b1f"></div>
+          <div ref={turnstileContainerRef} className="flex justify-center"></div>
         </CardContent>
         <CardFooter className="flex flex-col space-y-4">
           <Button 

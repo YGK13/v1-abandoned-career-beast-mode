@@ -1,5 +1,4 @@
-
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -34,6 +33,34 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
+  const turnstileWidgetId = useRef<string | null>(null);
+  const turnstileContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const renderTurnstile = () => {
+      if (window.turnstile && turnstileContainerRef.current) {
+        turnstileWidgetId.current = window.turnstile.render(turnstileContainerRef.current, {
+          sitekey: "0x4AAAAAAABI4S10D2f9gYqA",
+          callback: function(token: string) {
+            console.log("Turnstile token:", token);
+          }
+        });
+      }
+    };
+
+    if (window.turnstile) {
+      renderTurnstile();
+    } else {
+      const checkTurnstileLoaded = setInterval(() => {
+        if (window.turnstile) {
+          clearInterval(checkTurnstileLoaded);
+          renderTurnstile();
+        }
+      }, 100);
+      
+      return () => clearInterval(checkTurnstileLoaded);
+    }
+  }, []);
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,10 +84,9 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
 
     setIsSubmitting(true);
     try {
-      // Get the captcha token if the hCaptcha object exists
       let captchaToken = null;
-      if (window.hcaptcha) {
-        captchaToken = window.hcaptcha.getResponse();
+      if (window.turnstile) {
+        captchaToken = window.turnstile.getResponse(turnstileWidgetId.current || undefined);
         if (!captchaToken) {
           toast({
             title: "Captcha verification required",
@@ -72,7 +98,6 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
         }
       }
 
-      // Add captcha token to the sign up request
       const { error } = await supabase.auth.signUp({
         email,
         password,
@@ -105,9 +130,8 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
       });
     } finally {
       setIsSubmitting(false);
-      // Reset captcha
-      if (window.hcaptcha) {
-        window.hcaptcha.reset();
+      if (window.turnstile && turnstileWidgetId.current) {
+        window.turnstile.reset(turnstileWidgetId.current);
       }
     }
   };
@@ -167,7 +191,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
               required
             />
           </div>
-          <div className="h-captcha" data-sitekey="84a9a43c-ea3a-4a2a-bc18-b6f5bfb13b1f"></div>
+          <div ref={turnstileContainerRef} className="flex justify-center"></div>
         </CardContent>
         <CardFooter className="flex flex-col space-y-4">
           <Button 
