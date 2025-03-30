@@ -36,22 +36,24 @@ const AiCareerCoach: React.FC = () => {
   };
 
   return (
-    <Card className="flex flex-col h-[600px]">
-      <CardHeader>
+    <Card className="flex flex-col h-[600px] border-2 border-primary/20 bg-soft-purple">
+      <CardHeader className="bg-primary/5 border-b border-primary/10">
         <div className="flex items-center gap-2">
-          <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
-            <Bot size={20} className="text-primary" />
+          <div className="w-10 h-10 rounded-full bg-vivid-purple/20 flex items-center justify-center">
+            <Bot size={20} className="text-vivid-purple" />
           </div>
           <div className="flex-1">
-            <CardTitle>AI Career Coach</CardTitle>
-            <CardDescription>Expert advice based on "Be Your Own Commander-in-Chief"</CardDescription>
+            <CardTitle className="text-vivid-purple">AI Career Coach</CardTitle>
+            <CardDescription className="text-secondary-purple">
+              Expert guidance based on "Be Your Own Commander-in-Chief"
+            </CardDescription>
           </div>
           <div className="flex gap-2">
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button variant="outline" size="icon" className="h-8 w-8">
-                    <Upload size={16} />
+                  <Button variant="outline" size="icon" className="h-8 w-8 border-vivid-purple/30 hover:bg-light-purple/20">
+                    <Upload size={16} className="text-vivid-purple" />
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
@@ -63,8 +65,8 @@ const AiCareerCoach: React.FC = () => {
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Button variant="outline" size="icon" className="h-8 w-8">
-                    <Linkedin size={16} />
+                  <Button variant="outline" size="icon" className="h-8 w-8 border-vivid-purple/30 hover:bg-light-purple/20">
+                    <Linkedin size={16} className="text-vivid-purple" />
                   </Button>
                 </TooltipTrigger>
                 <TooltipContent>
@@ -79,21 +81,21 @@ const AiCareerCoach: React.FC = () => {
         {(userDocuments.length > 0 || linkedInData) && (
           <div className="flex gap-2 mt-2">
             {userDocuments.length > 0 && (
-              <Badge variant="outline" className="flex items-center gap-1 text-xs">
-                <FileText size={12} />
+              <Badge variant="outline" className="flex items-center gap-1 text-xs bg-light-purple/20 text-secondary-purple border-secondary-purple/30">
+                <FileText size={12} className="text-vivid-purple" />
                 <span>{userDocuments.length} Documents</span>
               </Badge>
             )}
             {linkedInData && (
-              <Badge variant="outline" className="flex items-center gap-1 text-xs">
-                <Linkedin size={12} />
+              <Badge variant="outline" className="flex items-center gap-1 text-xs bg-light-purple/20 text-secondary-purple border-secondary-purple/30">
+                <Linkedin size={12} className="text-vivid-purple" />
                 <span>LinkedIn Connected</span>
               </Badge>
             )}
           </div>
         )}
       </CardHeader>
-      <CardContent className="flex-grow overflow-hidden p-0">
+      <CardContent className="flex-grow overflow-hidden p-0 bg-soft-purple/20">
         <ScrollArea className="h-[440px] p-4">
           <div className="space-y-4">
             {messages.map(message => (
@@ -104,7 +106,7 @@ const AiCareerCoach: React.FC = () => {
           </div>
         </ScrollArea>
       </CardContent>
-      <CardFooter className="pt-3 border-t">
+      <CardFooter className="pt-3 border-t border-primary/10 bg-primary/5">
         <div className="flex w-full items-center space-x-2">
           <Input
             type="text"
@@ -112,9 +114,14 @@ const AiCareerCoach: React.FC = () => {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyPress}
-            className="flex-1"
+            className="flex-1 focus:border-vivid-purple focus:ring-vivid-purple/30"
           />
-          <Button onClick={handleSendMessage} size="icon" disabled={isTyping || !input.trim()}>
+          <Button 
+            onClick={handleSendMessage} 
+            size="icon" 
+            disabled={isTyping || !input.trim()}
+            className="bg-vivid-purple hover:bg-secondary-purple"
+          >
             <Send size={16} />
           </Button>
         </div>
@@ -124,4 +131,3 @@ const AiCareerCoach: React.FC = () => {
 };
 
 export default AiCareerCoach;
-
