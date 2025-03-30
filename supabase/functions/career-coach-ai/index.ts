@@ -28,7 +28,20 @@ serve(async (req) => {
   }
 
   try {
+    // Check if API key is available
+    if (!OPENAI_API_KEY) {
+      console.error("Error: OPENAI_API_KEY is not configured");
+      throw new Error("OpenAI API key is not configured. Please add it to the edge function secrets.");
+    }
+
     const { userMessage, userDocuments, linkedInData, messageHistory } = await req.json();
+    
+    console.log("Request received with:", { 
+      messageLength: userMessage?.length || 0,
+      documentsCount: userDocuments?.length || 0,
+      hasLinkedInData: !!linkedInData,
+      messageHistoryCount: messageHistory?.length || 0
+    });
     
     // Format previous messages for context
     const formattedHistory = messageHistory.map(msg => ({
@@ -113,6 +126,7 @@ Focus on being both specific and practical in your guidance.`
     }
     
     const aiResponse = data.choices[0].message.content;
+    console.log("Received successful response from OpenAI");
     
     return new Response(JSON.stringify({ response: aiResponse }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
