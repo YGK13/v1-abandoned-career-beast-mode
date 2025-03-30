@@ -9,13 +9,160 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      CareerBeastMode: {
+        Row: {
+          created_at: string
+          id: number
+        }
+        Insert: {
+          created_at?: string
+          id?: number
+        }
+        Update: {
+          created_at?: string
+          id?: number
+        }
+        Relationships: []
+      }
+      documents: {
+        Row: {
+          created_at: string
+          description: string | null
+          doc_type: string | null
+          file_path: string | null
+          id: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          doc_type?: string | null
+          file_path?: string | null
+          id?: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          doc_type?: string | null
+          file_path?: string | null
+          id?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      job_applications: {
+        Row: {
+          applied_at: string
+          company: string
+          id: string
+          job_id: string
+          position: string
+          status: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          applied_at?: string
+          company: string
+          id?: string
+          job_id: string
+          position: string
+          status?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          applied_at?: string
+          company?: string
+          id?: string
+          job_id?: string
+          position?: string
+          status?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          full_name: string | null
+          id: string
+          updated_at: string
+          username: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          full_name?: string | null
+          id: string
+          updated_at?: string
+          username?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          updated_at?: string
+          username?: string | null
+        }
+        Relationships: []
+      }
+      "Table 1": {
+        Row: {
+          attrs: Json | null
+          business_type: string | null
+          country: string | null
+          created: string | null
+          email: string | null
+          id: string | null
+          type: string | null
+        }
+        Insert: {
+          attrs?: Json | null
+          business_type?: string | null
+          country?: string | null
+          created?: string | null
+          email?: string | null
+          id?: string | null
+          type?: string | null
+        }
+        Update: {
+          attrs?: Json | null
+          business_type?: string | null
+          country?: string | null
+          created?: string | null
+          email?: string | null
+          id?: string | null
+          type?: string | null
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_profile: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          avatar_url: string | null
+          created_at: string
+          full_name: string | null
+          id: string
+          updated_at: string
+          username: string | null
+        }
+      }
     }
     Enums: {
       [_ in never]: never

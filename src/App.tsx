@@ -3,6 +3,8 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import { SubscriptionProvider } from "./context/SubscriptionContext";
+import { AuthProvider } from "./context/AuthContext";
+import { Toaster } from "@/components/ui/toaster";
 
 // Pages
 import Index from "./pages/Index";
@@ -25,35 +27,40 @@ import CareerTracking from "./pages/CareerTracking";
 import Checkout from "./pages/Checkout";
 import MonetizeExpertise from "./pages/MonetizeExpertise";
 import OnboardingPage from "./pages/OnboardingPage";
+import Auth from "./pages/Auth";
 
 const App: React.FC = () => {
   return (
-    <SubscriptionProvider>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/help" element={<Help />} />
-          <Route path="/faq" element={<FAQ />} />
-          <Route path="/jobs" element={<Jobs />} />
-          <Route path="/documents" element={<Documents />} />
-          <Route path="/career-docs" element={<CareerDocs />} />
-          <Route path="/skills" element={<Skills />} />
-          <Route path="/networking" element={<Networking />} />
-          <Route path="/personal-brand" element={<PersonalBrand />} />
-          <Route path="/salary-title" element={<SalaryTitle />} />
-          <Route path="/coaching" element={<Coaching />} />
-          <Route path="/life-design" element={<LifeDesign />} />
-          <Route path="/business" element={<Business />} />
-          <Route path="/monetize" element={<Monetize />} />
-          <Route path="/monetize-expertise" element={<MonetizeExpertise />} />
-          <Route path="/scale-your-biz" element={<ScaleYourBiz />} />
-          <Route path="/pricing" element={<Pricing />} />
-          <Route path="/career-tracking" element={<CareerTracking />} />
-          <Route path="/checkout" element={<Checkout />} />
-          <Route path="/onboarding" element={<OnboardingPage />} />
-        </Routes>
-      </Router>
-    </SubscriptionProvider>
+    <AuthProvider>
+      <SubscriptionProvider>
+        <Router>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/help" element={<Help />} />
+            <Route path="/faq" element={<FAQ />} />
+            <Route path="/jobs" element={<Jobs />} />
+            <Route path="/documents" element={<Documents />} />
+            <Route path="/career-docs" element={<CareerDocs />} />
+            <Route path="/skills" element={<Skills />} />
+            <Route path="/networking" element={<Networking />} />
+            <Route path="/personal-brand" element={<PersonalBrand />} />
+            <Route path="/salary-title" element={<SalaryTitle />} />
+            <Route path="/coaching" element={<Coaching />} />
+            <Route path="/life-design" element={<LifeDesign />} />
+            <Route path="/business" element={<Business />} />
+            <Route path="/monetize" element={<Monetize />} />
+            <Route path="/monetize-expertise" element={<MonetizeExpertise />} />
+            <Route path="/scale-your-biz" element={<ScaleYourBiz />} />
+            <Route path="/pricing" element={<Pricing />} />
+            <Route path="/career-tracking" element={<CareerTracking />} />
+            <Route path="/checkout" element={<Checkout />} />
+            <Route path="/onboarding" element={<OnboardingPage />} />
+            <Route path="/auth" element={<Auth />} />
+          </Routes>
+          <Toaster />
+        </Router>
+      </SubscriptionProvider>
+    </AuthProvider>
   );
 };
 
