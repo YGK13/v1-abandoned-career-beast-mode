@@ -39,21 +39,9 @@ const Google: React.FC = () => {
     setError(null);
     
     try {
-      // Check if the table exists first
-      const { error: tableCheckError } = await supabase
-        .from('user_google_profiles')
-        .select('id', { count: 'exact', head: true });
-      
-      if (tableCheckError) {
-        // Table doesn't exist yet, just handle as not connected
-        setProfile(null);
-        setLoading(false);
-        return;
-      }
-      
-      // Query the user's Google profile
+      // Using any type to avoid TypeScript errors until types are updated
       const { data, error } = await supabase
-        .from('user_google_profiles')
+        .from('user_google_profiles' as any)
         .select('*')
         .eq('user_id', user.id)
         .maybeSingle();
@@ -80,7 +68,7 @@ const Google: React.FC = () => {
       setLoading(true);
       
       const { error } = await supabase
-        .from('user_google_profiles')
+        .from('user_google_profiles' as any)
         .delete()
         .eq('user_id', user.id);
       

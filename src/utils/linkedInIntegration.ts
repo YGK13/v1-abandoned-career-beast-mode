@@ -189,7 +189,7 @@ export const saveGoogleDataToSupabase = async (googleData: any, userId: string) 
   try {
     console.log("Saving Google data to user_google_profiles table for user:", userId);
     
-    // Check if table exists first
+    // Check if table exists first - this will no longer throw an error since we've created the table
     const { error: tableCheckError } = await supabase
       .from('user_google_profiles')
       .select('id', { count: 'exact', head: true });

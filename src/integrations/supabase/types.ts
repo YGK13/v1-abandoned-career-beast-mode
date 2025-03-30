@@ -147,6 +147,48 @@ export type Database = {
         }
         Relationships: []
       }
+      user_google_profiles: {
+        Row: {
+          access_token: string | null
+          created_at: string
+          data: Json | null
+          email: string | null
+          full_name: string | null
+          google_id: string
+          id: string
+          profile_url: string | null
+          refresh_token: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          access_token?: string | null
+          created_at?: string
+          data?: Json | null
+          email?: string | null
+          full_name?: string | null
+          google_id: string
+          id?: string
+          profile_url?: string | null
+          refresh_token?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          access_token?: string | null
+          created_at?: string
+          data?: Json | null
+          email?: string | null
+          full_name?: string | null
+          google_id?: string
+          id?: string
+          profile_url?: string | null
+          refresh_token?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_linkedin_profiles: {
         Row: {
           created_at: string
