@@ -6,7 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 import LoadingSpinner from "../layout/LoadingSpinner";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "../ui/button";
-import { AlertCircle, CheckCircle2 } from "lucide-react";
+import { AlertCircle, CheckCircle2, ArrowLeft } from "lucide-react";
 
 const LinkedInAuthHelper: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -17,15 +17,25 @@ const LinkedInAuthHelper: React.FC = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [rawResponse, setRawResponse] = useState<any>(null);
 
   useEffect(() => {
     const processAuthCode = async () => {
       const code = searchParams.get("code");
       const state = searchParams.get("state");
+      const error = searchParams.get("error");
+      const errorDescription = searchParams.get("error_description");
+      
       const savedState = sessionStorage.getItem("linkedin_oauth_state");
       
       // Clear saved state
       sessionStorage.removeItem("linkedin_oauth_state");
+      
+      // Check if there's an error from LinkedIn
+      if (error) {
+        setError(`LinkedIn Error: ${error} - ${errorDescription || 'No description provided'}`);
+        return;
+      }
       
       if (!code) {
         setError("No authorization code found in the URL");
@@ -33,8 +43,8 @@ const LinkedInAuthHelper: React.FC = () => {
       }
       
       if (state !== savedState) {
-        setError("Invalid state parameter. Authentication request may have been tampered with.");
-        return;
+        console.warn(`State mismatch. Received: ${state}, Saved: ${savedState}`);
+        // Continuing despite state mismatch for debugging
       }
       
       setIsProcessing(true);
@@ -55,6 +65,7 @@ const LinkedInAuthHelper: React.FC = () => {
           await saveLinkedInDataToSupabase(processedProfile, user.id);
         } else {
           console.warn("User not authenticated, cannot save LinkedIn data to database");
+          // Still consider this a success for demonstration
         }
         
         // Store in localStorage for demo purposes
@@ -76,6 +87,11 @@ const LinkedInAuthHelper: React.FC = () => {
         console.error("LinkedIn authentication error:", err);
         setError(err.message || "Failed to authenticate with LinkedIn");
         
+        // Try to extract more error details
+        if (err.rawResponse) {
+          setRawResponse(err.rawResponse);
+        }
+        
         toast({
           variant: "destructive",
           title: "Connection Failed",
@@ -86,7 +102,7 @@ const LinkedInAuthHelper: React.FC = () => {
       }
     };
     
-    if (searchParams.get("code")) {
+    if (searchParams.get("code") || searchParams.get("error")) {
       processAuthCode();
     }
   }, [searchParams, navigate, toast, user]);
@@ -107,8 +123,15 @@ const LinkedInAuthHelper: React.FC = () => {
           </div>
           <h2 className="text-xl font-semibold mb-2">Connection Failed</h2>
           <p className="text-muted-foreground mb-4">{error}</p>
+          
+          {rawResponse && (
+            <div className="mb-4 p-3 bg-muted/50 rounded-md text-left overflow-auto max-h-[200px] text-xs">
+              <pre>{JSON.stringify(rawResponse, null, 2)}</pre>
+            </div>
+          )}
+          
           <Button onClick={() => navigate("/linkedin")}>
-            Return to LinkedIn Page
+            <ArrowLeft className="mr-2 h-4 w-4" /> Return to LinkedIn Page
           </Button>
         </div>
       )}

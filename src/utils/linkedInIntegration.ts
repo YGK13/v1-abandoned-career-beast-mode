@@ -1,7 +1,8 @@
+
 import { supabase } from "@/integrations/supabase/client";
 
 // LinkedIn OAuth configuration
-const LINKEDIN_CLIENT_ID = import.meta.env.VITE_LINKEDIN_CLIENT_ID || "";
+const LINKEDIN_CLIENT_ID = import.meta.env.VITE_LINKEDIN_CLIENT_ID || "77cdibmhgr0f9n";
 const REDIRECT_URI = `${window.location.origin}/linkedin/callback`;
 
 export const generateLinkedInAuthUrl = () => {

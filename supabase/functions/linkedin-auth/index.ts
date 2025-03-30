@@ -21,7 +21,24 @@ serve(async (req) => {
 
   try {
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    const { code, action } = await req.json();
+    
+    // Log request body
+    let body;
+    try {
+      body = await req.json();
+      console.log("Request body:", JSON.stringify(body));
+    } catch (e) {
+      console.error("Error parsing request body:", e);
+      return new Response(JSON.stringify({ 
+        success: false, 
+        error: "Invalid request body" 
+      }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+    
+    const { code, action } = body;
 
     console.log("LinkedIn Auth Function called with action:", action);
     console.log("Environment variables loaded:");
@@ -32,26 +49,52 @@ serve(async (req) => {
     if (action === "exchange_token" && code) {
       console.log("Exchanging authorization code for access token");
       
+      const tokenParams = new URLSearchParams({
+        grant_type: 'authorization_code',
+        code,
+        client_id: LINKEDIN_CLIENT_ID,
+        client_secret: LINKEDIN_CLIENT_SECRET,
+        redirect_uri: REDIRECT_URL,
+      });
+      
+      console.log("Token request params:", tokenParams.toString());
+      
       // Exchange authorization code for access token
       const tokenResponse = await fetch('https://www.linkedin.com/oauth/v2/accessToken', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
-        body: new URLSearchParams({
-          grant_type: 'authorization_code',
-          code,
-          client_id: LINKEDIN_CLIENT_ID,
-          client_secret: LINKEDIN_CLIENT_SECRET,
-          redirect_uri: REDIRECT_URL,
-        }),
+        body: tokenParams,
       });
 
-      const tokenData = await tokenResponse.json();
+      const tokenResponseText = await tokenResponse.text();
+      console.log("Raw token response:", tokenResponseText);
+      
+      let tokenData;
+      try {
+        tokenData = JSON.parse(tokenResponseText);
+      } catch (e) {
+        console.error("Error parsing token response:", e);
+        return new Response(JSON.stringify({ 
+          success: false, 
+          error: "Invalid response from LinkedIn token endpoint",
+          rawResponse: tokenResponseText
+        }), {
+          status: 500,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
       
       if (!tokenResponse.ok) {
         console.error("LinkedIn token exchange error:", tokenData);
-        throw new Error(`LinkedIn token exchange failed: ${JSON.stringify(tokenData)}`);
+        return new Response(JSON.stringify({ 
+          success: false, 
+          error: `LinkedIn token exchange failed: ${JSON.stringify(tokenData)}` 
+        }), {
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
       }
 
       console.log("Successfully obtained LinkedIn access token");
@@ -64,11 +107,33 @@ serve(async (req) => {
         },
       });
 
-      const profileData = await profileResponse.json();
+      const profileResponseText = await profileResponse.text();
+      console.log("Raw profile response:", profileResponseText);
+      
+      let profileData;
+      try {
+        profileData = JSON.parse(profileResponseText);
+      } catch (e) {
+        console.error("Error parsing profile response:", e);
+        return new Response(JSON.stringify({ 
+          success: false, 
+          error: "Invalid response from LinkedIn profile endpoint",
+          rawResponse: profileResponseText
+        }), {
+          status: 500,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
       
       if (!profileResponse.ok) {
         console.error("LinkedIn profile fetch error:", profileData);
-        throw new Error(`LinkedIn profile fetch failed: ${JSON.stringify(profileData)}`);
+        return new Response(JSON.stringify({ 
+          success: false, 
+          error: `LinkedIn profile fetch failed: ${JSON.stringify(profileData)}` 
+        }), {
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
       }
 
       // Get email address if available with the granted permissions
@@ -83,6 +148,9 @@ serve(async (req) => {
         
         if (emailResponse.ok) {
           emailData = await emailResponse.json();
+          console.log("Email data:", JSON.stringify(emailData));
+        } else {
+          console.warn("Could not fetch email, response:", await emailResponse.text());
         }
       } catch (error) {
         console.warn("Could not fetch LinkedIn email, might be missing permission:", error);
@@ -100,7 +168,7 @@ serve(async (req) => {
         tokenType: tokenData.token_type,
       };
 
-      console.log("Successfully retrieved LinkedIn profile data");
+      console.log("Successfully retrieved LinkedIn profile data:", JSON.stringify(linkedInProfile));
 
       return new Response(JSON.stringify({ 
         success: true, 
