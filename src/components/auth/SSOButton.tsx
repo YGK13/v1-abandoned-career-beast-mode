@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { SSOProvider } from "@/utils/linkedInUtils";
@@ -76,6 +77,12 @@ const SSOButton: React.FC<SSOButtonProps> = ({
         switch(provider) {
           case 'linkedin':
             return 'linkedin_oidc';
+          case 'microsoft':
+            return 'azure';
+          case 'apple':
+            return 'apple';
+          case 'github':
+            return 'github';
           case 'google':
             return 'google';
           default:
