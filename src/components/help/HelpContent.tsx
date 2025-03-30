@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { 
@@ -13,7 +14,7 @@ import {
   FileText, 
   HelpCircle,
   Info,
-  Link, 
+  Link as LinkIcon, 
   MessageSquare, 
   Settings,
   Users,
@@ -748,4 +749,194 @@ const HelpContent = () => {
             <CardContent className="space-y-4 text-left">
               <div className="border-b pb-4">
                 <h3 className="font-medium mb-2">I can't log in to my account</h3>
-                <p className="text-sm text-muted
+                <p className="text-sm text-muted-foreground">
+                  If you're having trouble logging in, try these steps:
+                </p>
+                <ol className="list-decimal pl-5 text-sm space-y-1 mt-2">
+                  <li>Double-check that you're using the correct email address and password</li>
+                  <li>Clear your browser cookies and cache, then try again</li>
+                  <li>Use the "Forgot Password" link to reset your password</li>
+                  <li>Try logging in from a different browser or device</li>
+                  <li>If you're still having issues, contact support with your account email</li>
+                </ol>
+              </div>
+
+              <div className="border-b pb-4">
+                <h3 className="font-medium mb-2">I'm experiencing slow performance</h3>
+                <p className="text-sm text-muted-foreground">
+                  If the platform is running slowly, try these fixes:
+                </p>
+                <ul className="list-disc pl-5 text-sm space-y-1 mt-2">
+                  <li>Check your internet connection speed</li>
+                  <li>Close other apps or browser tabs that might be using bandwidth</li>
+                  <li>Clear your browser cache and cookies</li>
+                  <li>Try using a different browser</li>
+                  <li>Disable browser extensions that might be interfering</li>
+                </ul>
+              </div>
+
+              <div className="border-b pb-4">
+                <h3 className="font-medium mb-2">My documents won't upload</h3>
+                <p className="text-sm text-muted-foreground">
+                  If you're having trouble uploading documents, check the following:
+                </p>
+                <ul className="list-disc pl-5 text-sm space-y-1 mt-2">
+                  <li>Ensure your document is in an accepted format (.pdf, .doc, .docx)</li>
+                  <li>Check that the file size is under 10MB</li>
+                  <li>Make sure your document isn't password protected</li>
+                  <li>Try uploading the document in a different browser</li>
+                  <li>If the document contains special formatting, try saving it as a PDF first</li>
+                </ul>
+              </div>
+
+              <div className="border-b pb-4">
+                <h3 className="font-medium mb-2">The LinkedIn connection isn't working</h3>
+                <p className="text-sm text-muted-foreground">
+                  Issues connecting your LinkedIn profile can be resolved by:
+                </p>
+                <ol className="list-decimal pl-5 text-sm space-y-1 mt-2">
+                  <li>Logging out of LinkedIn, then logging back in before trying to connect</li>
+                  <li>Ensuring you're using the same email address for both accounts</li>
+                  <li>Checking that you've granted the necessary permissions</li>
+                  <li>Removing any existing connection and trying again</li>
+                  <li>Updating your LinkedIn privacy settings to allow connections</li>
+                </ol>
+              </div>
+
+              <div className="border-b pb-4">
+                <h3 className="font-medium mb-2">Job application tracking issues</h3>
+                <p className="text-sm text-muted-foreground">
+                  If your job applications aren't being tracked properly:
+                </p>
+                <ul className="list-disc pl-5 text-sm space-y-1 mt-2">
+                  <li>Ensure you're using the "Apply" button in our platform</li>
+                  <li>Check that your browser allows cookies from our site</li>
+                  <li>Verify that your application was completed (not just started)</li>
+                  <li>Try manually adding the application in your dashboard</li>
+                  <li>Make sure your account has job application tracking enabled</li>
+                </ul>
+              </div>
+
+              <div className="border-b pb-4">
+                <h3 className="font-medium mb-2">My resume tailoring isn't working</h3>
+                <p className="text-sm text-muted-foreground">
+                  If the resume tailoring feature isn't working as expected:
+                </p>
+                <ul className="list-disc pl-5 text-sm space-y-1 mt-2">
+                  <li>Ensure your base resume is properly uploaded and parsed</li>
+                  <li>Check that the job description contains enough information</li>
+                  <li>Try refreshing the page and attempting the tailoring again</li>
+                  <li>If using custom sections, ensure they're properly formatted</li>
+                  <li>Try using a simpler resume format if you have complex formatting</li>
+                </ul>
+              </div>
+
+              <div className="border-b pb-4">
+                <h3 className="font-medium mb-2">I'm not receiving email notifications</h3>
+                <p className="text-sm text-muted-foreground">
+                  If you're not receiving email notifications:
+                </p>
+                <ol className="list-decimal pl-5 text-sm space-y-1 mt-2">
+                  <li>Check your spam/junk folder</li>
+                  <li>Add our email domain to your safe senders list</li>
+                  <li>Verify your email address is correct in your profile settings</li>
+                  <li>Ensure you haven't disabled notifications in your account settings</li>
+                  <li>Check if your email provider is blocking our emails</li>
+                </ol>
+              </div>
+
+              <div>
+                <h3 className="font-medium mb-2">I need additional technical support</h3>
+                <p className="text-sm text-muted-foreground">
+                  For any technical issues not covered here:
+                </p>
+                <ul className="list-disc pl-5 text-sm space-y-1 mt-2">
+                  <li>Contact our support team at support@careerbeastmode.com</li>
+                  <li>Use the live chat feature on our website during business hours</li>
+                  <li>Check our status page at status.careerbeastmode.com for system outages</li>
+                  <li>Include screenshots of any error messages when contacting support</li>
+                  <li>Provide details about your device, browser, and operating system</li>
+                </ul>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="contact">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-left">
+                <MessageSquare className="h-5 w-5 text-primary" />
+                Contact Support
+              </CardTitle>
+              <CardDescription className="text-left">
+                Reach out to our support team for personalized assistance
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="grid gap-6 md:grid-cols-2">
+                <div className="border rounded-md p-5 text-left">
+                  <h3 className="text-lg font-medium mb-3">Email Support</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Our support team typically responds within 24 hours on business days.
+                  </p>
+                  <Button className="w-full flex items-center gap-2">
+                    <LinkIcon size={16} />
+                    <span>support@careerbeastmode.com</span>
+                  </Button>
+                </div>
+
+                <div className="border rounded-md p-5 text-left">
+                  <h3 className="text-lg font-medium mb-3">Live Chat</h3>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Available Monday through Friday, 9am to 5pm Eastern Time.
+                  </p>
+                  <Button className="w-full">Start Live Chat</Button>
+                </div>
+              </div>
+
+              <div className="border rounded-md p-5 text-left">
+                <h3 className="text-lg font-medium mb-3">Frequently Asked Questions</h3>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Before contacting support, you might find your answer in our comprehensive FAQ section.
+                </p>
+                <Button variant="outline" className="w-full">View All FAQs</Button>
+              </div>
+
+              <div className="border rounded-md p-5 text-left">
+                <h3 className="text-lg font-medium mb-3">Submit a Support Ticket</h3>
+                <p className="text-sm text-muted-foreground mb-4">
+                  For complex issues or if you need to attach screenshots or files, submit a detailed support ticket.
+                </p>
+                <Button variant="outline" className="w-full">Open Support Ticket</Button>
+              </div>
+              
+              <div className="border rounded-md p-5 text-left">
+                <h3 className="text-lg font-medium mb-3">Community Forums</h3>
+                <p className="text-sm text-muted-foreground mb-4">
+                  Connect with other Career BEAST MODE users to discuss strategies, share tips, and get community support.
+                </p>
+                <Button variant="outline" className="w-full">Visit Community Forums</Button>
+              </div>
+              
+              <div className="border rounded-md p-5 bg-muted text-left">
+                <h3 className="text-lg font-medium mb-3">Enterprise Support</h3>
+                <p className="text-sm text-muted-foreground mb-4">
+                  For corporate accounts with 10+ users, we offer dedicated support with priority response times.
+                </p>
+                <p className="text-sm font-medium mb-2">Contact our enterprise team:</p>
+                <ul className="text-sm space-y-2">
+                  <li>Email: enterprise@careerbeastmode.com</li>
+                  <li>Phone: (800) 555-BEAST</li>
+                  <li>Response time: Within 4 business hours</li>
+                </ul>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
+};
+
+export default HelpContent;
