@@ -4,6 +4,7 @@ import { Linkedin, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SSOOptions from "../auth/SSOOptions";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogTrigger } from "@/components/ui/dialog";
+import { generateLinkedInAuthUrl } from "@/utils/linkedInIntegration";
 
 interface LinkedInConnectButtonProps {
   onClick: () => void;
@@ -15,6 +16,12 @@ const LinkedInConnectButton: React.FC<LinkedInConnectButtonProps> = ({ onClick }
   const handleSSOSuccess = () => {
     setShowLoginOptions(false);
     onClick();
+  };
+
+  const handleConnectLinkedIn = () => {
+    // Generate and redirect to LinkedIn OAuth URL
+    const authUrl = generateLinkedInAuthUrl();
+    window.location.href = authUrl;
   };
 
   return (
@@ -29,7 +36,7 @@ const LinkedInConnectButton: React.FC<LinkedInConnectButtonProps> = ({ onClick }
           <Button 
             variant="default" 
             className="bg-[#0a66c2] hover:bg-[#0a66c2]/90"
-            onClick={() => setShowLoginOptions(true)}
+            onClick={handleConnectLinkedIn}
           >
             <Linkedin className="mr-2 h-4 w-4" /> Connect with LinkedIn
           </Button>

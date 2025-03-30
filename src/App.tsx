@@ -1,67 +1,78 @@
 
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import "./App.css";
-import { SubscriptionProvider } from "./context/SubscriptionContext";
-import { AuthProvider } from "./context/AuthContext";
-import { Toaster } from "@/components/ui/toaster";
-
-// Pages
 import Index from "./pages/Index";
-import Help from "./pages/Help";
-import FAQ from "./pages/FAQ";
-import Jobs from "./pages/Jobs";
+import Auth from "./pages/Auth";
+import Coaching from "./pages/Coaching";
 import Documents from "./pages/Documents";
 import CareerDocs from "./pages/CareerDocs";
+import Jobs from "./pages/Jobs";
 import Skills from "./pages/Skills";
-import Networking from "./pages/Networking";
-import PersonalBrand from "./pages/PersonalBrand";
+import SkillDetails from "./pages/SkillDetails";
 import SalaryTitle from "./pages/SalaryTitle";
-import Coaching from "./pages/Coaching";
-import LifeDesign from "./pages/LifeDesign";
 import Business from "./pages/Business";
-import Monetize from "./pages/Monetize";
+import BuildBusiness from "./pages/BuildBusiness";
 import ScaleYourBiz from "./pages/ScaleYourBiz";
-import Pricing from "./pages/Pricing";
+import MentalModels from "./pages/MentalModels";
+import LifeDesign from "./pages/LifeDesign";
+import LifeSkills from "./pages/LifeSkills";
 import CareerTracking from "./pages/CareerTracking";
-import Checkout from "./pages/Checkout";
+import Networking from "./pages/Networking";
 import MonetizeExpertise from "./pages/MonetizeExpertise";
+import MonetizePlatformDetails from "./pages/MonetizePlatformDetails";
+import Monetize from "./pages/Monetize";
+import BioGenerator from "./pages/BioGenerator";
+import PersonalBrand from "./pages/PersonalBrand";
+import ManageEverything from "./pages/ManageEverything";
 import OnboardingPage from "./pages/OnboardingPage";
-import Auth from "./pages/Auth";
+import CoachingOneOnOne from "./pages/CoachingOneOnOne";
+import Pricing from "./pages/Pricing";
+import Checkout from "./pages/Checkout";
+import FAQ from "./pages/FAQ";
+import Help from "./pages/Help";
+import NotFound from "./pages/NotFound";
+import { BioGeneratorProvider } from "./components/monetize/BioGeneratorContext";
+import LinkedIn from "./pages/LinkedIn"; // Import the LinkedIn page
 
-const App: React.FC = () => {
+function App() {
   return (
-    <AuthProvider>
-      <SubscriptionProvider>
-        <Router>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/help" element={<Help />} />
-            <Route path="/faq" element={<FAQ />} />
-            <Route path="/jobs" element={<Jobs />} />
-            <Route path="/documents" element={<Documents />} />
-            <Route path="/career-docs" element={<CareerDocs />} />
-            <Route path="/skills" element={<Skills />} />
-            <Route path="/networking" element={<Networking />} />
-            <Route path="/personal-brand" element={<PersonalBrand />} />
-            <Route path="/salary-title" element={<SalaryTitle />} />
-            <Route path="/coaching" element={<Coaching />} />
-            <Route path="/life-design" element={<LifeDesign />} />
-            <Route path="/business" element={<Business />} />
-            <Route path="/monetize" element={<Monetize />} />
-            <Route path="/monetize-expertise" element={<MonetizeExpertise />} />
-            <Route path="/scale-your-biz" element={<ScaleYourBiz />} />
-            <Route path="/pricing" element={<Pricing />} />
-            <Route path="/career-tracking" element={<CareerTracking />} />
-            <Route path="/checkout" element={<Checkout />} />
-            <Route path="/onboarding" element={<OnboardingPage />} />
-            <Route path="/auth" element={<Auth />} />
-          </Routes>
-          <Toaster />
-        </Router>
-      </SubscriptionProvider>
-    </AuthProvider>
+    <div className="App flex flex-col min-h-screen bg-background">
+      <Routes>
+        <Route path="/" element={<Index />} />
+        <Route path="/auth" element={<Auth />} />
+        <Route path="/coaching" element={<Coaching />} />
+        <Route path="/documents" element={<Documents />} />
+        <Route path="/career-docs" element={<CareerDocs />} />
+        <Route path="/jobs" element={<Jobs />} />
+        <Route path="/skills" element={<Skills />} />
+        <Route path="/skills/:skillId" element={<SkillDetails />} />
+        <Route path="/salary-title" element={<SalaryTitle />} />
+        <Route path="/business" element={<Business />} />
+        <Route path="/build-business" element={<BuildBusiness />} />
+        <Route path="/scale-business" element={<ScaleYourBiz />} />
+        <Route path="/mental-models" element={<MentalModels />} />
+        <Route path="/life-design" element={<LifeDesign />} />
+        <Route path="/life-skills" element={<LifeSkills />} />
+        <Route path="/career-tracking" element={<CareerTracking />} />
+        <Route path="/networking" element={<Networking />} />
+        <Route path="/monetize-expertise" element={<MonetizeExpertise />} />
+        <Route path="/monetize/:platformId" element={<MonetizePlatformDetails />} />
+        <Route path="/monetize" element={<Monetize />} />
+        <Route path="/bio-generator" element={<BioGeneratorProvider><BioGenerator /></BioGeneratorProvider>} />
+        <Route path="/personal-brand" element={<PersonalBrand />} />
+        <Route path="/manage-everything" element={<ManageEverything />} />
+        <Route path="/onboarding" element={<OnboardingPage />} />
+        <Route path="/coaching-one-on-one" element={<CoachingOneOnOne />} />
+        <Route path="/pricing" element={<Pricing />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/faq" element={<FAQ />} />
+        <Route path="/help" element={<Help />} />
+        <Route path="/linkedin" element={<LinkedIn />} /> {/* Add the LinkedIn route */}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </div>
   );
-};
+}
 
 export default App;
