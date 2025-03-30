@@ -39,12 +39,12 @@ const Google: React.FC = () => {
     setError(null);
     
     try {
-      // Using any type to avoid TypeScript errors until types are updated
-      const { data, error } = await supabase
+      // Using type assertion to work around the TypeScript error
+      const { data, error } = await (supabase
         .from('user_google_profiles' as any)
         .select('*')
         .eq('user_id', user.id)
-        .maybeSingle();
+        .maybeSingle() as any);
       
       if (error) {
         console.error("Error fetching Google profile:", error);
@@ -67,10 +67,10 @@ const Google: React.FC = () => {
     try {
       setLoading(true);
       
-      const { error } = await supabase
+      const { error } = await (supabase
         .from('user_google_profiles' as any)
         .delete()
-        .eq('user_id', user.id);
+        .eq('user_id', user.id) as any);
       
       if (error) {
         throw new Error("Failed to disconnect Google account: " + error.message);

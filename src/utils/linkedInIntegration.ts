@@ -1,4 +1,3 @@
-
 import { supabase } from "@/integrations/supabase/client";
 
 // LinkedIn OAuth configuration
@@ -190,9 +189,9 @@ export const saveGoogleDataToSupabase = async (googleData: any, userId: string) 
     console.log("Saving Google data to user_google_profiles table for user:", userId);
     
     // Check if table exists first - this will no longer throw an error since we've created the table
-    const { error: tableCheckError } = await supabase
-      .from('user_google_profiles')
-      .select('id', { count: 'exact', head: true });
+    const { error: tableCheckError } = await (supabase
+      .from('user_google_profiles' as any)
+      .select('id', { count: 'exact', head: true }) as any);
     
     if (tableCheckError) {
       // Table might not exist
@@ -201,7 +200,7 @@ export const saveGoogleDataToSupabase = async (googleData: any, userId: string) 
     }
     
     // Save the processed Google data to Supabase
-    const { data, error } = await supabase.from('user_google_profiles')
+    const { data, error } = await (supabase.from('user_google_profiles' as any)
       .upsert({
         user_id: userId,
         google_id: googleData.id,
@@ -213,7 +212,7 @@ export const saveGoogleDataToSupabase = async (googleData: any, userId: string) 
         refresh_token: googleData.refreshToken,
         updated_at: new Date().toISOString(),
       })
-      .select();
+      .select() as any);
 
     if (error) {
       console.error("Error saving Google data:", error);
