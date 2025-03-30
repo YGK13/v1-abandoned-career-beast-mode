@@ -1,7 +1,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import { handleGoogleCallback, processGoogleProfile, saveGoogleDataToSupabase } from "@/utils/linkedInIntegration";
+import { handleGoogleCallback, processGoogleProfile, saveGoogleDataToSupabase } from "@/utils/googleIntegration";
 import { useToast } from "@/hooks/use-toast";
 import LoadingSpinner from "../layout/LoadingSpinner";
 import { useAuth } from "@/context/AuthContext";

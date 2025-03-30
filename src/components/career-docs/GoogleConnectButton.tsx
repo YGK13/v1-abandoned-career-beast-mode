@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from "@/components/ui/button";
-import { generateGoogleAuthUrl } from "@/utils/linkedInIntegration";
+import { generateGoogleAuthUrl } from "@/utils/googleIntegration";
 
 interface GoogleConnectButtonProps {
   className?: string;
