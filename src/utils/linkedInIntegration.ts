@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 const LINKEDIN_CLIENT_ID = import.meta.env.VITE_LINKEDIN_CLIENT_ID || "77cdibmhgr0f9n";
 // Get the current origin dynamically to handle different environments
 const CURRENT_ORIGIN = window.location.origin;
-const REDIRECT_URI = `${CURRENT_ORIGIN}/linkedin/callback`;
+const REDIRECT_URI = `${CURRENT_ORIGIN}/linkedin`;
 
 export const generateLinkedInAuthUrl = () => {
   // Generate a random state value for security
