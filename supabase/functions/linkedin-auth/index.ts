@@ -114,16 +114,9 @@ async function exchangeCodeForToken(code, redirectUri) {
   });
   
   // Log parameters (excluding secret)
-  console.log("Token request params (without client_secret):", 
-    new URLSearchParams({
-      grant_type: 'authorization_code',
-      code,
-      client_id: LINKEDIN_CLIENT_ID,
-      redirect_uri: redirectUri,
-    }).toString()
-  );
+  logTokenRequestParams(code, redirectUri);
   
-  const tokenResponse = await fetchWithErrorHandling(
+  return await fetchWithErrorHandling(
     'https://www.linkedin.com/oauth/v2/accessToken',
     {
       method: 'POST',
@@ -133,8 +126,20 @@ async function exchangeCodeForToken(code, redirectUri) {
       body: tokenParams,
     }
   );
-  
-  return tokenResponse;
+}
+
+/**
+ * Log token request parameters (excluding sensitive data)
+ */
+function logTokenRequestParams(code, redirectUri) {
+  console.log("Token request params (without client_secret):", 
+    new URLSearchParams({
+      grant_type: 'authorization_code',
+      code,
+      client_id: LINKEDIN_CLIENT_ID,
+      redirect_uri: redirectUri,
+    }).toString()
+  );
 }
 
 /**
