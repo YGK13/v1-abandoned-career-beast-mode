@@ -1,4 +1,3 @@
-
 import { supabase } from "@/integrations/supabase/client";
 
 // LinkedIn OAuth configuration
@@ -12,7 +11,14 @@ export const generateLinkedInAuthUrl = () => {
   
   const scope = encodeURIComponent("r_liteprofile r_emailaddress");
   
-  return `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=${LINKEDIN_CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&state=${state}&scope=${scope}`;
+  console.log("Creating LinkedIn auth URL with client ID:", LINKEDIN_CLIENT_ID);
+  console.log("Redirect URI:", REDIRECT_URI);
+  
+  const authUrl = `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=${LINKEDIN_CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&state=${state}&scope=${scope}`;
+  
+  console.log("Generated LinkedIn auth URL:", authUrl);
+  
+  return authUrl;
 };
 
 export const handleLinkedInCallback = async (code: string): Promise<any> => {
