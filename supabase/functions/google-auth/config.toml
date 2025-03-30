@@ -1,0 +1,6 @@
+
+project_id = "wcxdaenhwiiowmoecpli"
+
+[functions.google-auth.deploy.env]
+GOOGLE_CLIENT_ID = ""
+GOOGLE_CLIENT_SECRET = ""

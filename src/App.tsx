@@ -34,6 +34,7 @@ import Help from "./pages/Help";
 import NotFound from "./pages/NotFound";
 import { BioGeneratorProvider } from "./components/monetize/BioGeneratorContext";
 import LinkedIn from "./pages/LinkedIn"; // Import the LinkedIn page
+import Google from "./pages/Google"; // Import the Google page
 import { Toaster } from "./components/ui/toaster";
 
 function App() {
@@ -71,6 +72,8 @@ function App() {
         <Route path="/help" element={<Help />} />
         <Route path="/linkedin" element={<LinkedIn />} />
         <Route path="/linkedin/callback" element={<LinkedIn />} />
+        <Route path="/google" element={<Google />} />
+        <Route path="/google/callback" element={<Google />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Toaster />
