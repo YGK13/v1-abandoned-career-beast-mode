@@ -2,21 +2,23 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { useSyncState } from "@/hooks/use-sync-state";
 
 export const useAuthPage = () => {
   const navigate = useNavigate();
   const { session, isLoading } = useAuth();
-  const [tab, setTab] = useState("signin");
+  const [tab, setTab] = useSyncState("auth_current_tab", "signin");
   
-  // Form state
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [fullName, setFullName] = useState("");
+  // Form state - using sync state to ensure it persists across views
+  const [email, setEmail] = useSyncState("auth_email", "");
+  const [password, setPassword] = useSyncState("auth_password", "");
+  const [confirmPassword, setConfirmPassword] = useSyncState("auth_confirm_password", "");
+  const [fullName, setFullName] = useSyncState("auth_full_name", "");
 
   useEffect(() => {
     // Redirect if already logged in
     if (session) {
+      console.log("User already logged in, redirecting to home");
       navigate("/");
     }
 

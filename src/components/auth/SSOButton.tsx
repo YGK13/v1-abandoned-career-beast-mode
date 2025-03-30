@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { SSOProvider } from "@/utils/linkedInUtils";
@@ -72,7 +71,6 @@ const SSOButton: React.FC<SSOButtonProps> = ({
         description: "You will be redirected to sign in.",
       });
       
-      // Convert provider name to the format expected by Supabase
       const getSupabaseProvider = (): Provider => {
         switch(provider) {
           case 'linkedin':
@@ -86,7 +84,6 @@ const SSOButton: React.FC<SSOButtonProps> = ({
           case 'google':
             return 'google';
           default:
-            // This is a type assertion to handle custom providers
             return provider as Provider;
         }
       };
@@ -103,7 +100,6 @@ const SSOButton: React.FC<SSOButtonProps> = ({
       }
       
       console.log(`OAuth response:`, data);
-      // Note: We don't call onSuccess here because the page will redirect
     } catch (error: any) {
       console.error(`${config.label} sign in error:`, error);
       toast({

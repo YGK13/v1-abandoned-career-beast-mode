@@ -72,35 +72,32 @@ const SignInForm: React.FC<SignInFormProps> = ({
       let captchaToken = null;
       if (window.turnstile) {
         captchaToken = window.turnstile.getResponse(turnstileWidgetId.current || undefined);
-        if (!captchaToken) {
-          toast({
-            title: "Captcha verification required",
-            description: "Please complete the captcha verification",
-            variant: "destructive",
-          });
-          setIsSubmitting(false);
-          return;
-        }
       }
 
-      const { error } = await supabase.auth.signInWithPassword({
+      console.log("Attempting sign in with email:", email);
+      const { error, data } = await supabase.auth.signInWithPassword({
         email,
         password,
-        options: {
-          captchaToken
-        }
+        options: captchaToken ? { captchaToken } : undefined
       });
 
       if (error) {
+        console.error("Sign-in error:", error);
         toast({
           title: "Sign in failed",
           description: error.message,
           variant: "destructive",
         });
       } else {
-        navigate("/");
+        console.log("Sign-in successful, user:", data?.user?.id);
+        localStorage.setItem('auth_session_token', data?.session?.access_token || '');
+        
+        setTimeout(() => {
+          navigate("/");
+        }, 300);
       }
     } catch (error: any) {
+      console.error("Unexpected sign-in error:", error);
       toast({
         title: "Error",
         description: error.message || "An unexpected error occurred",
