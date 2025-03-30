@@ -39,7 +39,8 @@ const DocumentTabsList: React.FC<DocumentTabsListProps> = ({
     if (searchQuery) {
       filtered = filtered.filter(doc => 
         doc.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        (doc.doc_type && doc.doc_type.toLowerCase().includes(searchQuery.toLowerCase()))
+        (doc.doc_type && doc.doc_type.toLowerCase().includes(searchQuery.toLowerCase())) ||
+        (doc.description && doc.description.toLowerCase().includes(searchQuery.toLowerCase()))
       );
     }
     
@@ -96,15 +97,14 @@ const DocumentTabsList: React.FC<DocumentTabsListProps> = ({
                 {filteredDocuments(type.id).map((doc) => (
                   <DocumentCard
                     key={doc.id}
+                    id={doc.id}
                     title={doc.title}
                     type={doc.doc_type || "Other"}
-                    date={new Date(doc.created_at).toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "short",
-                      day: "numeric",
-                    })}
+                    date={doc.created_at}
                     fileSize="N/A"
                     thumbnailUrl={docTypeToThumbnail(doc.doc_type)}
+                    description={doc.description}
+                    filePath={doc.file_path}
                     onClick={() => {}}
                   />
                 ))}
