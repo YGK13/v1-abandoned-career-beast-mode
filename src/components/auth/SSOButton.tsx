@@ -5,6 +5,7 @@ import { SSOProvider } from "@/utils/linkedInUtils";
 import { Linkedin, Github } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { Provider } from "@supabase/supabase-js";
 
 interface SSOButtonProps {
   provider: SSOProvider;
@@ -72,29 +73,27 @@ const SSOButton: React.FC<SSOButtonProps> = ({
       });
       
       // Convert provider name to the format expected by Supabase
-      let supabaseProvider: string;
-      switch(provider) {
-        case 'linkedin':
-          supabaseProvider = 'linkedin_oidc';
-          break;
-        case 'microsoft':
-          supabaseProvider = 'azure';
-          break;
-        case 'apple':
-          supabaseProvider = 'apple';
-          break;
-        case 'github':
-          supabaseProvider = 'github';
-          break;
-        case 'google':
-          supabaseProvider = 'google';
-          break;
-        default:
-          supabaseProvider = String(provider);
-      }
+      // and handle the type conversion properly
+      const getSupabaseProvider = (): Provider => {
+        switch(provider) {
+          case 'linkedin':
+            return 'linkedin_oidc';
+          case 'microsoft':
+            return 'azure';
+          case 'apple':
+            return 'apple';
+          case 'github':
+            return 'github';
+          case 'google':
+            return 'google';
+          default:
+            // This is a type assertion to handle custom providers
+            return provider as Provider;
+        }
+      };
       
       const { error } = await supabase.auth.signInWithOAuth({
-        provider: supabaseProvider as any, // Using type assertion for now
+        provider: getSupabaseProvider(),
         options: {
           redirectTo: `${window.location.origin}/auth`
         }
