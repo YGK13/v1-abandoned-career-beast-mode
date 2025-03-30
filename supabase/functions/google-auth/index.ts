@@ -86,13 +86,7 @@ async function handleExchangeToken(code, redirectUri) {
     const profileData = await fetchGoogleProfile(tokenData.access_token);
     
     // Process and combine profile data
-    const googleProfile = {
-      ...profileData,
-      accessToken: tokenData.access_token,
-      refreshToken: tokenData.refresh_token || null,
-      expiresIn: tokenData.expires_in,
-      tokenType: tokenData.token_type,
-    };
+    const googleProfile = createGoogleProfile(profileData, tokenData);
     
     console.log("Successfully retrieved Google profile data");
     
@@ -104,26 +98,26 @@ async function handleExchangeToken(code, redirectUri) {
 }
 
 /**
+ * Create a standardized Google profile object from API responses
+ */
+function createGoogleProfile(profileData, tokenData) {
+  return {
+    ...profileData,
+    accessToken: tokenData.access_token,
+    refreshToken: tokenData.refresh_token || null,
+    expiresIn: tokenData.expires_in,
+    tokenType: tokenData.token_type,
+  };
+}
+
+/**
  * Exchange the authorization code for an access token
  */
 async function exchangeCodeForToken(code, redirectUri) {
-  const tokenParams = new URLSearchParams({
-    grant_type: 'authorization_code',
-    code,
-    client_id: GOOGLE_CLIENT_ID,
-    client_secret: GOOGLE_CLIENT_SECRET,
-    redirect_uri: redirectUri,
-  });
+  const tokenParams = createTokenParams(code, redirectUri);
   
   // Log parameters (excluding secret)
-  console.log("Token request params (without client_secret):", 
-    new URLSearchParams({
-      grant_type: 'authorization_code',
-      code,
-      client_id: GOOGLE_CLIENT_ID,
-      redirect_uri: redirectUri,
-    }).toString()
-  );
+  logTokenRequestParams(code, redirectUri);
   
   return await fetchWithErrorHandling(
     'https://oauth2.googleapis.com/token',
@@ -134,6 +128,33 @@ async function exchangeCodeForToken(code, redirectUri) {
       },
       body: tokenParams,
     }
+  );
+}
+
+/**
+ * Create token request parameters
+ */
+function createTokenParams(code, redirectUri) {
+  return new URLSearchParams({
+    grant_type: 'authorization_code',
+    code,
+    client_id: GOOGLE_CLIENT_ID,
+    client_secret: GOOGLE_CLIENT_SECRET,
+    redirect_uri: redirectUri,
+  });
+}
+
+/**
+ * Log token request parameters (excluding secret)
+ */
+function logTokenRequestParams(code, redirectUri) {
+  console.log("Token request params (without client_secret):", 
+    new URLSearchParams({
+      grant_type: 'authorization_code',
+      code,
+      client_id: GOOGLE_CLIENT_ID,
+      redirect_uri: redirectUri,
+    }).toString()
   );
 }
 
@@ -160,20 +181,12 @@ async function fetchWithErrorHandling(url, options) {
     const response = await fetch(url, options);
     const responseText = await response.text();
     
-    console.log(`Response status from ${url}: ${response.status}`);
-    console.log(`Raw response: ${responseText.substring(0, 500)}${responseText.length > 500 ? '...' : ''}`);
+    logApiResponse(url, response.status, responseText);
     
-    let parsedResponse;
-    try {
-      parsedResponse = JSON.parse(responseText);
-    } catch (e) {
-      console.error(`Error parsing response from ${url}:`, e);
-      throw new Error(`Invalid response from ${url}: ${responseText}`);
-    }
+    const parsedResponse = parseResponseData(responseText, url);
     
     if (!response.ok) {
-      console.error(`API error from ${url}:`, parsedResponse);
-      throw new Error(`API request failed: ${JSON.stringify(parsedResponse)}`);
+      handleApiError(url, parsedResponse);
     }
     
     return parsedResponse;
@@ -181,6 +194,34 @@ async function fetchWithErrorHandling(url, options) {
     console.error(`Network error with ${url}:`, e);
     throw new Error(`Request to ${url} failed: ${e.message}`);
   }
+}
+
+/**
+ * Log API response for debugging
+ */
+function logApiResponse(url, status, responseText) {
+  console.log(`Response status from ${url}: ${status}`);
+  console.log(`Raw response: ${responseText.substring(0, 500)}${responseText.length > 500 ? '...' : ''}`);
+}
+
+/**
+ * Parse response text to JSON
+ */
+function parseResponseData(responseText, url) {
+  try {
+    return JSON.parse(responseText);
+  } catch (e) {
+    console.error(`Error parsing response from ${url}:`, e);
+    throw new Error(`Invalid response from ${url}: ${responseText}`);
+  }
+}
+
+/**
+ * Handle API error responses
+ */
+function handleApiError(url, parsedResponse) {
+  console.error(`API error from ${url}:`, parsedResponse);
+  throw new Error(`API request failed: ${JSON.stringify(parsedResponse)}`);
 }
 
 /**
