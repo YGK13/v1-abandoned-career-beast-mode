@@ -27,6 +27,12 @@ export const useAuthPage = () => {
     script.defer = true;
     document.head.appendChild(script);
 
+    // Cloudflare Turnstile configuration (replace with your actual site key)
+    window.turnstile?.render(document.querySelector('.cf-turnstile'), {
+      sitekey: 'YOUR_ACTUAL_CLOUDFLARE_TURNSTILE_SITE_KEY_HERE',
+      theme: 'light'
+    });
+
     return () => {
       // Clean up script when component unmounts
       if (document.head.contains(script)) {
