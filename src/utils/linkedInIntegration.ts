@@ -6,10 +6,13 @@ const LINKEDIN_CLIENT_ID = import.meta.env.VITE_LINKEDIN_CLIENT_ID || "77cdibmhg
 const REDIRECT_URI = `${window.location.origin}/linkedin/callback`;
 
 export const generateLinkedInAuthUrl = () => {
+  // Generate a random state value for security
   const state = Math.random().toString(36).substring(2, 15);
+  
   // Store state in sessionStorage for validation when the user returns
   sessionStorage.setItem("linkedin_oauth_state", state);
   
+  // Define the scopes we're requesting
   const scope = encodeURIComponent("r_liteprofile r_emailaddress");
   
   console.log("Creating LinkedIn auth URL with client ID:", LINKEDIN_CLIENT_ID);
@@ -29,7 +32,11 @@ export const handleLinkedInCallback = async (code: string): Promise<any> => {
     
     // Exchange the authorization code for an access token using our Supabase edge function
     const { data, error } = await supabase.functions.invoke('linkedin-auth', {
-      body: { code, action: "exchange_token", redirectUri: REDIRECT_URI }
+      body: { 
+        code, 
+        action: "exchange_token", 
+        redirectUri: REDIRECT_URI 
+      }
     });
 
     console.log("Supabase function response:", data, error);

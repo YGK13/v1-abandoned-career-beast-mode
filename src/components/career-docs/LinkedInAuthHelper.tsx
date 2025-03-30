@@ -26,6 +26,7 @@ const LinkedInAuthHelper: React.FC = () => {
       const errorParam = searchParams.get("error");
       const errorDescription = searchParams.get("error_description");
       
+      // Get the state we saved before redirecting to LinkedIn
       const savedState = sessionStorage.getItem("linkedin_oauth_state");
       
       // Clear saved state
@@ -46,7 +47,7 @@ const LinkedInAuthHelper: React.FC = () => {
       
       if (state !== savedState) {
         console.warn(`State mismatch. Received: ${state}, Saved: ${savedState}`);
-        // Continuing despite state mismatch for debugging
+        // Continue despite state mismatch for debugging
       }
       
       setIsProcessing(true);

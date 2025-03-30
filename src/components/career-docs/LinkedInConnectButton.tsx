@@ -13,8 +13,8 @@ const LinkedInConnectButton: React.FC<LinkedInConnectButtonProps> = ({ onClick }
   const [showLoginOptions, setShowLoginOptions] = React.useState(false);
 
   const handleConnectLinkedIn = () => {
-    // Generate and redirect to LinkedIn OAuth URL
     try {
+      // Generate and redirect to LinkedIn OAuth URL
       const authUrl = generateLinkedInAuthUrl();
       console.log("Redirecting to LinkedIn OAuth URL:", authUrl);
       window.location.href = authUrl;
