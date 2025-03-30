@@ -28,10 +28,14 @@ export const useAuthPage = () => {
     document.head.appendChild(script);
 
     // Cloudflare Turnstile configuration (replace with your actual site key)
-    window.turnstile?.render(document.querySelector('.cf-turnstile'), {
-      sitekey: 'YOUR_ACTUAL_CLOUDFLARE_TURNSTILE_SITE_KEY_HERE',
-      theme: 'light'
-    });
+    // Use type assertion (as HTMLElement) to fix the type mismatch
+    const turnstileContainer = document.querySelector('.cf-turnstile') as HTMLElement;
+    if (turnstileContainer && window.turnstile) {
+      window.turnstile.render(turnstileContainer, {
+        sitekey: '0x4AAAAAAABI4S10D2f9gYqA',
+        theme: 'light'
+      });
+    }
 
     return () => {
       // Clean up script when component unmounts
