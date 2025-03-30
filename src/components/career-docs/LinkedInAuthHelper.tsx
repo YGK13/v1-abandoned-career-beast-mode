@@ -70,25 +70,23 @@ const LinkedInAuthHelper: React.FC = () => {
         if (user) {
           console.log("Saving LinkedIn data for user:", user.id);
           await saveLinkedInDataToSupabase(processedProfile, user.id);
+          
+          // Show success message
+          setSuccess(true);
+          
+          toast({
+            title: "LinkedIn Connected",
+            description: "Your LinkedIn profile has been successfully connected.",
+          });
+          
+          // Wait 2 seconds before redirecting for better UX
+          setTimeout(() => {
+            navigate("/linkedin", { replace: true });
+          }, 2000);
         } else {
           console.warn("User not authenticated, cannot save LinkedIn data to database");
-          // Still consider this a success for demonstration
+          setError("You need to be logged in to connect your LinkedIn profile");
         }
-        
-        // Store in localStorage for demo purposes
-        localStorage.setItem("linkedInProfile", JSON.stringify(processedProfile));
-        
-        setSuccess(true);
-        
-        toast({
-          title: "LinkedIn Connected",
-          description: "Your LinkedIn profile has been successfully connected.",
-        });
-        
-        // Wait 2 seconds before redirecting for better UX
-        setTimeout(() => {
-          navigate("/linkedin", { replace: true });
-        }, 2000);
         
       } catch (err: any) {
         console.error("LinkedIn authentication error:", err);

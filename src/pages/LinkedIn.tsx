@@ -8,35 +8,58 @@ import LinkedInPostHistory from "@/components/career-docs/linkedin-posts/LinkedI
 import LinkedInNextSteps from "@/components/career-docs/LinkedInNextSteps";
 import LinkedInAuthHelper from "@/components/career-docs/LinkedInAuthHelper";
 import { useSearchParams } from "react-router-dom";
-import { hasLinkedInProfile } from "@/utils/linkedInProfile";
+import { getUserLinkedInProfile } from "@/utils/linkedInProfile";
 import { useAuth } from "@/context/AuthContext";
 import { Loader2 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 const LinkedIn: React.FC = () => {
   const [searchParams] = useSearchParams();
   const [isCallback, setIsCallback] = useState(false);
   const [isConnected, setIsConnected] = useState<boolean | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const { user } = useAuth();
+  const { toast } = useToast();
   
   useEffect(() => {
     // Check if this is a callback from LinkedIn OAuth
     if (searchParams.get("code")) {
       setIsCallback(true);
+      setIsLoading(false);
+      return;
     }
     
     // Check if the user has already connected their LinkedIn profile
     if (user) {
       const checkConnection = async () => {
-        const connected = await hasLinkedInProfile();
-        setIsConnected(connected);
+        try {
+          setIsLoading(true);
+          console.log("Checking LinkedIn connection for user:", user.id);
+          const profile = await getUserLinkedInProfile();
+          console.log("LinkedIn profile check result:", profile);
+          
+          setIsConnected(profile !== null);
+        } catch (error) {
+          console.error("Error checking LinkedIn connection:", error);
+          toast({
+            variant: "destructive",
+            title: "Connection Error",
+            description: "Failed to check LinkedIn connection status",
+          });
+        } finally {
+          setIsLoading(false);
+        }
       };
       
       checkConnection();
+    } else {
+      console.log("No user logged in, can't check LinkedIn connection");
+      setIsLoading(false);
     }
-  }, [searchParams, user]);
+  }, [searchParams, user, toast]);
   
   // Show loading state while checking connection status
-  if (isConnected === null && !isCallback) {
+  if (isLoading) {
     return (
       <Layout>
         <div className="flex items-center justify-center min-h-[300px]">

@@ -75,6 +75,17 @@ export const saveLinkedInDataToSupabase = async (linkedInData: any, userId: stri
   try {
     console.log("Saving LinkedIn data to user_linkedin_profiles table for user:", userId);
     
+    // Check if table exists first
+    const { error: tableCheckError } = await supabase
+      .from('user_linkedin_profiles')
+      .select('id', { count: 'exact', head: true });
+    
+    if (tableCheckError) {
+      // Table might not exist
+      console.error("Error checking user_linkedin_profiles table:", tableCheckError);
+      throw new Error("LinkedIn profiles table not available: " + tableCheckError.message);
+    }
+    
     // Save the processed LinkedIn data to Supabase
     const { data, error } = await supabase.from('user_linkedin_profiles')
       .upsert({

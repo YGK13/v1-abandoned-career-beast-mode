@@ -17,19 +17,29 @@ export interface LinkedInProfile {
 // Function to get the current user's LinkedIn profile
 export const getUserLinkedInProfile = async (): Promise<LinkedInProfile | null> => {
   try {
+    // First get the current user
+    const { data: { user } } = await supabase.auth.getUser();
+    
+    if (!user) {
+      console.log("No authenticated user found");
+      return null;
+    }
+    
+    console.log("Getting LinkedIn profile for user:", user.id);
+    
+    // Now query for the user's LinkedIn profile
     const { data, error } = await supabase
       .from('user_linkedin_profiles')
       .select('*')
-      .single();
+      .eq('user_id', user.id)
+      .maybeSingle();
     
     if (error) {
-      if (error.code === 'PGRST116') {
-        // No profile found
-        return null;
-      }
+      console.error("Supabase error fetching LinkedIn profile:", error);
       throw error;
     }
     
+    console.log("LinkedIn profile query result:", data);
     return data as LinkedInProfile;
   } catch (err) {
     console.error("Error fetching LinkedIn profile:", err);
