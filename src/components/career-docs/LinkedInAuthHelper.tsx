@@ -41,14 +41,20 @@ const LinkedInAuthHelper: React.FC = () => {
       
       try {
         // Get LinkedIn profile data
+        console.log("Getting LinkedIn profile with code:", code);
         const linkedInProfile = await handleLinkedInCallback(code);
+        console.log("Retrieved LinkedIn profile:", linkedInProfile);
         
         // Process the profile data
         const processedProfile = processLinkedInProfile(linkedInProfile);
+        console.log("Processed profile:", processedProfile);
         
         // If user is authenticated, save data to Supabase
         if (user) {
+          console.log("Saving LinkedIn data for user:", user.id);
           await saveLinkedInDataToSupabase(processedProfile, user.id);
+        } else {
+          console.warn("User not authenticated, cannot save LinkedIn data to database");
         }
         
         // Store in localStorage for demo purposes

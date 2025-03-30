@@ -3,7 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 // LinkedIn OAuth configuration
 const LINKEDIN_CLIENT_ID = import.meta.env.VITE_LINKEDIN_CLIENT_ID || "";
-const REDIRECT_URI = `${window.location.origin}/linkedin`;
+const REDIRECT_URI = `${window.location.origin}/linkedin/callback`;
 
 export const generateLinkedInAuthUrl = () => {
   const state = Math.random().toString(36).substring(2, 15);
@@ -47,9 +47,8 @@ export const processLinkedInProfile = (profile: any) => {
 
 export const saveLinkedInDataToSupabase = async (linkedInData: any, userId: string) => {
   try {
-    // Save the processed LinkedIn data to Supabase using the SQL connection
-    // instead of the from() method since the table is newly created
-    const { data, error } = await supabase.from('user_linkedin_profiles' as any)
+    // Save the processed LinkedIn data to Supabase
+    const { data, error } = await supabase.from('user_linkedin_profiles')
       .upsert({
         user_id: userId,
         linkedin_id: linkedInData.id,

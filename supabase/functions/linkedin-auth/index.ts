@@ -27,6 +27,9 @@ serve(async (req) => {
 
     if (action === "exchange_token" && code) {
       console.log("Exchanging authorization code for access token");
+      console.log("Using LINKEDIN_CLIENT_ID:", LINKEDIN_CLIENT_ID ? "Present" : "Missing");
+      console.log("Using LINKEDIN_CLIENT_SECRET:", LINKEDIN_CLIENT_SECRET ? "Present" : "Missing");
+      console.log("Using REDIRECT_URL:", REDIRECT_URL);
       
       // Exchange authorization code for access token
       const tokenResponse = await fetch('https://www.linkedin.com/oauth/v2/accessToken', {
