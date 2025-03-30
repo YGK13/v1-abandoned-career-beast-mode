@@ -59,16 +59,15 @@ const Navbar: React.FC = () => {
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         <Logo />
         <NavbarDesktop navLinks={navLinks} />
-        <div className="menu-toggle">
+        <div className="menu-toggle relative">
           <UserMenu 
             isMobileMenuOpen={isMobileMenuOpen} 
             toggleMobileMenu={toggleMobileMenu} 
           />
+          <div className="mobile-menu">
+            <MobileMenu isOpen={isMobileMenuOpen} navLinks={navLinks} />
+          </div>
         </div>
-      </div>
-      
-      <div className="mobile-menu absolute right-0 top-16 w-64 md:hidden">
-        <MobileMenu isOpen={isMobileMenuOpen} navLinks={navLinks} />
       </div>
     </header>
   );

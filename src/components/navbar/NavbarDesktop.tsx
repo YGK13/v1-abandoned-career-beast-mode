@@ -44,7 +44,7 @@ const NavbarDesktop: React.FC<NavbarDesktopProps> = ({ navLinks }) => {
                     <link.icon size={18} />
                     <span>{link.label}</span>
                   </NavigationMenuTrigger>
-                  <NavigationMenuContent>
+                  <NavigationMenuContent className="bg-popover border border-border shadow-md rounded-md">
                     <div className="w-[220px] p-2">
                       {link.children.map((child) => (
                         <Link

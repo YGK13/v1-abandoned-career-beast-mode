@@ -1,10 +1,8 @@
 
-import React, { useState } from "react";
+import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { ChevronDown, ChevronRight } from "lucide-react";
+import { useSubscription } from "@/context/SubscriptionContext";
 import { NavItem } from "./NavLink";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { cn } from "@/lib/utils";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -13,149 +11,64 @@ interface MobileMenuProps {
 
 const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, navLinks }) => {
   const location = useLocation();
-  const [expandedItems, setExpandedItems] = useState<Record<string, boolean>>({});
-  
+  const { hasJobsAccess } = useSubscription();
+
   if (!isOpen) return null;
-  
-  // Standardized font styling for mobile menu
-  const menuItemStyle = "font-medium text-sm";
-  
-  const toggleSubMenu = (path: string) => {
-    setExpandedItems(prev => ({
-      ...prev,
-      [path]: !prev[path]
-    }));
-  };
-  
+
   return (
-    <div className="bg-background/95 backdrop-blur-lg border border-border rounded-md shadow-lg animate-fade-in overflow-auto max-h-[80vh] w-full">
-      <nav className="py-2 flex flex-col space-y-1">
-        {navLinks.map((link) => {
-          // If this link has children
-          if (link.children && link.children.length > 0) {
-            return (
-              <Accordion type="single" collapsible key={link.path}>
-                <AccordionItem value={link.path} className="border-0">
-                  <AccordionTrigger
-                    className={cn(
-                      "px-4 py-3 rounded-md flex items-center space-x-3 transition-colors",
-                      menuItemStyle,
-                      location.pathname === link.path
-                        ? "text-primary bg-primary/10"
-                        : "text-muted-foreground hover:text-foreground hover:bg-muted/50",
-                      link.locked ? "opacity-75" : ""
-                    )}
-                  >
-                    <span className="flex items-center space-x-3">
-                      <link.icon size={18} />
-                      <span>{link.label}</span>
-                      {link.locked && <span className="w-2 h-2 bg-amber-500 rounded-full ml-1"></span>}
-                    </span>
-                  </AccordionTrigger>
-                  <AccordionContent>
-                    <div className="flex flex-col space-y-1 pl-8 pt-1">
-                      {link.children.map((child) => {
-                        // If this child has its own children (third level nav)
-                        if (child.children && child.children.length > 0) {
-                          return (
-                            <div key={child.path} className="rounded-md">
-                              <div 
-                                className={cn(
-                                  "px-4 py-3 rounded-md flex items-center justify-between transition-colors", 
-                                  menuItemStyle,
-                                  location.pathname === child.path
-                                    ? "text-primary bg-primary/10"
-                                    : "text-muted-foreground hover:text-foreground hover:bg-muted/50",
-                                  child.locked ? "opacity-75" : ""
-                                )}
-                                onClick={() => toggleSubMenu(child.path)}
-                              >
-                                <div className="flex items-center space-x-3">
-                                  <child.icon size={18} />
-                                  <span>{child.label}</span>
-                                  {child.locked && <span className="w-2 h-2 bg-amber-500 rounded-full ml-1"></span>}
-                                </div>
-                                <ChevronDown 
-                                  size={16} 
-                                  className={`transition-transform ${expandedItems[child.path] ? 'rotate-180' : ''}`} 
-                                />
-                              </div>
-                              
-                              {/* Third level menu */}
-                              {expandedItems[child.path] && (
-                                <div className="flex flex-col space-y-1 pl-8 pt-1">
-                                  {child.children.map(grandchild => (
-                                    <Link
-                                      key={grandchild.path}
-                                      to={grandchild.path}
-                                      className={cn(
-                                        "px-4 py-3 rounded-md flex items-center space-x-3 transition-colors",
-                                        menuItemStyle,
-                                        location.pathname === grandchild.path
-                                          ? "text-primary bg-primary/10"
-                                          : "text-muted-foreground hover:text-foreground hover:bg-muted/50",
-                                        grandchild.locked ? "opacity-75" : ""
-                                      )}
-                                    >
-                                      <grandchild.icon size={18} />
-                                      <span>{grandchild.label}</span>
-                                      {grandchild.locked && <span className="w-2 h-2 bg-amber-500 rounded-full ml-1"></span>}
-                                    </Link>
-                                  ))}
-                                </div>
-                              )}
-                            </div>
-                          );
-                        }
-                        
-                        // Regular second-level link
-                        return (
-                          <Link
-                            key={child.path}
-                            to={child.path}
-                            className={cn(
-                              "px-4 py-3 rounded-md flex items-center space-x-3 transition-colors",
-                              menuItemStyle,
-                              location.pathname === child.path
-                                ? "text-primary bg-primary/10"
-                                : "text-muted-foreground hover:text-foreground hover:bg-muted/50",
-                              child.locked ? "opacity-75" : ""
-                            )}
-                          >
-                            <child.icon size={18} />
-                            <span>{child.label}</span>
-                            {child.locked && <span className="w-2 h-2 bg-amber-500 rounded-full ml-1"></span>}
-                          </Link>
-                        );
-                      })}
-                    </div>
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
-            );
-          }
-          
-          // Regular link without children
+    <div className="absolute right-0 top-full w-64 mt-2 py-2 bg-white dark:bg-gray-800 rounded-lg shadow-xl z-50 border border-gray-200 dark:border-gray-700">
+      {navLinks.map((link) => {
+        // Skip job links if user doesn't have access
+        if (link.path === "/jobs" && !hasJobsAccess) return null;
+
+        // If this link has children (dropdown)
+        if (link.children && link.children.length > 0) {
           return (
-            <Link
-              key={link.path}
-              to={link.path}
-              className={cn(
-                "px-4 py-3 rounded-md flex items-center space-x-3 transition-colors",
-                menuItemStyle,
-                location.pathname === link.path
-                  ? "text-primary bg-primary/10"
-                  : "text-muted-foreground hover:text-foreground hover:bg-muted/50",
-                link.locked ? "opacity-75" : ""
-              )}
-            >
-              <link.icon size={18} />
-              <span>{link.label}</span>
-              {link.locked && <span className="w-2 h-2 bg-amber-500 rounded-full ml-1"></span>}
-            </Link>
+            <div key={link.path} className="px-2 py-1">
+              <div className="flex items-center px-3 py-2 text-sm font-medium text-gray-600 dark:text-gray-300">
+                <link.icon size={16} className="mr-2" />
+                <span>{link.label}</span>
+              </div>
+              <div className="pl-6 mt-1 space-y-1">
+                {link.children.map((child) => (
+                  <Link
+                    key={child.path}
+                    to={child.path}
+                    className={`block px-3 py-1.5 text-sm ${
+                      location.pathname === child.path
+                        ? "text-blue-600 dark:text-blue-400 font-medium"
+                        : "text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400"
+                    }`}
+                  >
+                    <div className="flex items-center">
+                      <child.icon size={14} className="mr-2" />
+                      <span>{child.label}</span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
           );
-        })}
-      </nav>
+        }
+
+        // Regular links without children
+        return (
+          <Link
+            key={link.path}
+            to={link.path}
+            className={`block px-4 py-2 text-sm ${
+              location.pathname === link.path
+                ? "text-blue-600 dark:text-blue-400 font-medium"
+                : "text-gray-500 dark:text-gray-400 hover:text-blue-600 dark:hover:text-blue-400"
+            }`}
+          >
+            <div className="flex items-center">
+              <link.icon size={16} className="mr-2" />
+              <span>{link.label}</span>
+            </div>
+          </Link>
+        );
+      })}
     </div>
   );
 };
