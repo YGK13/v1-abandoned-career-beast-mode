@@ -2,8 +2,9 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { SSOProvider } from "@/utils/linkedInUtils";
-import { Linkedin, Github, Mail } from "lucide-react";
-import { toast } from "@/hooks/use-toast";
+import { Linkedin, Github } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface SSOButtonProps {
   provider: SSOProvider;
@@ -18,6 +19,8 @@ const SSOButton: React.FC<SSOButtonProps> = ({
   onSuccess,
   onError
 }) => {
+  const { toast } = useToast();
+  
   const getProviderConfig = () => {
     switch (provider) {
       case "linkedin":
@@ -52,8 +55,8 @@ const SSOButton: React.FC<SSOButtonProps> = ({
         };
       default:
         return {
-          icon: <Mail className="mr-2 h-4 w-4" />,
-          label: "Email",
+          icon: null,
+          label: provider.charAt(0).toUpperCase() + provider.slice(1),
           className: "bg-primary hover:bg-primary/90 text-white"
         };
     }
@@ -61,31 +64,34 @@ const SSOButton: React.FC<SSOButtonProps> = ({
 
   const config = getProviderConfig();
 
-  const handleClick = () => {
-    // Simulating the SSO login process
-    toast({
-      title: `${config.label} login initiated`,
-      description: "This is a simulated login. In a real app, this would redirect to the provider.",
-    });
-    
-    // Simulate a successful login after a brief delay
-    setTimeout(() => {
-      if (Math.random() > 0.1) { // 90% success rate for demo
-        toast({
-          title: `${config.label} login successful`,
-          description: "You've been authenticated successfully.",
-        });
-        onSuccess?.();
-      } else {
-        const error = new Error(`${config.label} authentication failed`);
-        toast({
-          title: "Authentication failed",
-          description: "There was an issue with your login. Please try again.",
-          variant: "destructive",
-        });
-        onError?.(error);
+  const handleClick = async () => {
+    try {
+      toast({
+        title: `Connecting to ${config.label}...`,
+        description: "You will be redirected to sign in.",
+      });
+      
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: provider === 'linkedin' ? 'linkedin_oidc' : provider,
+        options: {
+          redirectTo: `${window.location.origin}/auth`
+        }
+      });
+      
+      if (error) {
+        throw error;
       }
-    }, 1500);
+      
+      // Note: We don't call onSuccess here because the page will redirect
+    } catch (error: any) {
+      console.error(`${config.label} sign in error:`, error);
+      toast({
+        title: "Authentication failed",
+        description: error.message || `There was an issue with your ${config.label} login.`,
+        variant: "destructive",
+      });
+      onError?.(error);
+    }
   };
 
   return (

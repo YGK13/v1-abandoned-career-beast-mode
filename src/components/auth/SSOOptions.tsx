@@ -14,7 +14,7 @@ interface SSOOptionsProps {
 const SSOOptions: React.FC<SSOOptionsProps> = ({
   onSuccess,
   onError,
-  providers = ["google", "linkedin", "microsoft", "github", "apple"],
+  providers = ["google", "linkedin"],
   className,
 }) => {
   return (
