@@ -18,7 +18,7 @@ export interface LinkedInProfile {
 export const getUserLinkedInProfile = async (): Promise<LinkedInProfile | null> => {
   try {
     const { data, error } = await supabase
-      .from('user_linkedin_profiles' as any)
+      .from('user_linkedin_profiles')
       .select('*')
       .single();
     
