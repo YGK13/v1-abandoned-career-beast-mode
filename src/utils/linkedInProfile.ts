@@ -39,6 +39,11 @@ export const getUserLinkedInProfile = async (): Promise<LinkedInProfile | null> 
 
 // Function to check if the user has connected their LinkedIn profile
 export const hasLinkedInProfile = async (): Promise<boolean> => {
-  const profile = await getUserLinkedInProfile();
-  return profile !== null;
+  try {
+    const profile = await getUserLinkedInProfile();
+    return profile !== null;
+  } catch (error) {
+    console.error("Error checking LinkedIn profile:", error);
+    return false;
+  }
 };

@@ -66,7 +66,7 @@ const LinkedInAuthHelper: React.FC = () => {
           navigate("/linkedin", { replace: true });
         }, 2000);
         
-      } catch (err) {
+      } catch (err: any) {
         console.error("LinkedIn authentication error:", err);
         setError(err.message || "Failed to authenticate with LinkedIn");
         
@@ -89,7 +89,7 @@ const LinkedInAuthHelper: React.FC = () => {
     <div className="flex items-center justify-center min-h-[300px]">
       {isProcessing && (
         <div className="text-center">
-          <LoadingSpinner size="lg" />
+          <LoadingSpinner />
           <p className="mt-4 text-muted-foreground">Connecting to LinkedIn...</p>
         </div>
       )}
