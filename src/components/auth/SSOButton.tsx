@@ -91,10 +91,11 @@ const SSOButton: React.FC<SSOButtonProps> = ({
         }
       };
       
+      // Don't specify redirectTo - let Supabase handle the redirect based on its configuration
       const { error } = await supabase.auth.signInWithOAuth({
         provider: getSupabaseProvider(),
         options: {
-          redirectTo: `${window.location.origin}/auth`
+          // Remove the redirectTo option to let Supabase use its configured callback URL
         }
       });
       
