@@ -14,6 +14,9 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+// Default redirect URI if none provided
+const DEFAULT_REDIRECT_URI = 'https://wcxdaenhwiiowmoecpli.lovableproject.com/linkedin/callback';
+
 /**
  * Main handler function that processes incoming requests
  */
@@ -27,10 +30,11 @@ serve(async (req) => {
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     const body = await parseRequestBody(req);
     
-    // Log request information
+    // Log request and environment information
+    logEnvironmentInfo();
     logRequestInfo(body);
 
-    const { code, action, redirectUri = 'https://wcxdaenhwiiowmoecpli.lovableproject.com/linkedin/callback' } = body;
+    const { code, action, redirectUri = DEFAULT_REDIRECT_URI } = body;
 
     if (action === "exchange_token" && code) {
       return await handleExchangeToken(code, redirectUri);
@@ -58,15 +62,23 @@ async function parseRequestBody(req) {
 }
 
 /**
+ * Log environment information to help with debugging
+ */
+function logEnvironmentInfo() {
+  console.log("Environment variables loaded:");
+  console.log("- LINKEDIN_CLIENT_ID:", LINKEDIN_CLIENT_ID ? "Present (length: " + LINKEDIN_CLIENT_ID.length + ")" : "Missing");
+  console.log("- LINKEDIN_CLIENT_SECRET:", LINKEDIN_CLIENT_SECRET ? "Present (length: " + LINKEDIN_CLIENT_SECRET.length + ")" : "Missing");
+  console.log("- SUPABASE_URL:", SUPABASE_URL ? "Present" : "Missing");
+  console.log("- SUPABASE_ANON_KEY:", SUPABASE_ANON_KEY ? "Present" : "Missing");
+}
+
+/**
  * Log LinkedIn auth request information
  */
 function logRequestInfo(body) {
   const { action, redirectUri } = body;
   
   console.log("LinkedIn Auth Function called with action:", action);
-  console.log("Environment variables loaded:");
-  console.log("- LINKEDIN_CLIENT_ID:", LINKEDIN_CLIENT_ID ? "Present (length: " + LINKEDIN_CLIENT_ID.length + ")" : "Missing");
-  console.log("- LINKEDIN_CLIENT_SECRET:", LINKEDIN_CLIENT_SECRET ? "Present (length: " + LINKEDIN_CLIENT_SECRET.length + ")" : "Missing");
   console.log("- Redirect URI:", redirectUri);
 }
 
@@ -146,14 +158,20 @@ function logTokenRequestParams(code, redirectUri) {
  * Helper function to handle fetch requests with error logging
  */
 async function fetchWithErrorHandling(url, options) {
-  const response = await fetch(url, options);
-  const responseText = await response.text();
-  
-  console.log(`Response status from ${url}: ${response.status}`);
-  console.log(`Raw response: ${responseText}`);
-  
   try {
-    const parsedResponse = JSON.parse(responseText);
+    const response = await fetch(url, options);
+    const responseText = await response.text();
+    
+    console.log(`Response status from ${url}: ${response.status}`);
+    console.log(`Raw response: ${responseText.substring(0, 500)}${responseText.length > 500 ? '...' : ''}`);
+    
+    let parsedResponse;
+    try {
+      parsedResponse = JSON.parse(responseText);
+    } catch (e) {
+      console.error(`Error parsing response from ${url}:`, e);
+      throw new Error(`Invalid response from ${url}: ${responseText}`);
+    }
     
     if (!response.ok) {
       console.error(`API error from ${url}:`, parsedResponse);
@@ -162,8 +180,8 @@ async function fetchWithErrorHandling(url, options) {
     
     return parsedResponse;
   } catch (e) {
-    console.error(`Error parsing response from ${url}:`, e);
-    throw new Error(`Invalid response from ${url}`);
+    console.error(`Network error with ${url}:`, e);
+    throw new Error(`Request to ${url} failed: ${e.message}`);
   }
 }
 

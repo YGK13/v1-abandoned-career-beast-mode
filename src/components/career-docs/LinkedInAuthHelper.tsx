@@ -90,7 +90,18 @@ const LinkedInAuthHelper: React.FC = () => {
         
       } catch (err: any) {
         console.error("LinkedIn authentication error:", err);
-        setError(err.message || "Failed to authenticate with LinkedIn");
+        
+        // Extract more detailed error message
+        let errorMessage = err.message || "Failed to authenticate with LinkedIn";
+        
+        // Check for specific error types
+        if (errorMessage.includes("LinkedIn profiles table not available")) {
+          errorMessage = "Database setup issue: LinkedIn profiles table not available. Please contact support.";
+        } else if (errorMessage.includes("API request failed")) {
+          errorMessage = "LinkedIn API error: " + errorMessage;
+        }
+        
+        setError(errorMessage);
         
         // Try to extract more error details
         if (err.rawResponse) {
@@ -100,7 +111,7 @@ const LinkedInAuthHelper: React.FC = () => {
         toast({
           variant: "destructive",
           title: "Connection Failed",
-          description: err.message || "Failed to connect with LinkedIn",
+          description: errorMessage,
         });
       } finally {
         setIsProcessing(false);
@@ -111,6 +122,7 @@ const LinkedInAuthHelper: React.FC = () => {
       processAuthCode();
     } else {
       console.log("No code or error parameter found in URL");
+      setError("Missing authorization code. Please try connecting again.");
     }
   }, [searchParams, navigate, toast, user]);
   
@@ -137,9 +149,19 @@ const LinkedInAuthHelper: React.FC = () => {
             </div>
           )}
           
-          <Button onClick={() => navigate("/linkedin")}>
-            <ArrowLeft className="mr-2 h-4 w-4" /> Return to LinkedIn Page
-          </Button>
+          <div className="space-y-2">
+            <Button onClick={() => navigate("/linkedin")} className="w-full">
+              <ArrowLeft className="mr-2 h-4 w-4" /> Return to LinkedIn Page
+            </Button>
+            
+            <Button 
+              onClick={() => window.location.href = window.location.origin + "/linkedin"} 
+              variant="outline" 
+              className="w-full"
+            >
+              Try Again
+            </Button>
+          </div>
         </div>
       )}
       

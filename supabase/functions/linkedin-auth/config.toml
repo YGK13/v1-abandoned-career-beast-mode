@@ -4,4 +4,3 @@ project_id = "wcxdaenhwiiowmoecpli"
 [functions.linkedin-auth.deploy.env]
 LINKEDIN_CLIENT_ID = "77cdibmhgr0f9n"
 LINKEDIN_CLIENT_SECRET = "hhh0kXOVDCXHXhm2"
-LINKEDIN_REDIRECT_URL = "https://wcxdaenhwiiowmoecpli.lovableproject.com/linkedin/callback"
