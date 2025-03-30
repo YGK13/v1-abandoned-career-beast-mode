@@ -7,6 +7,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import DocumentCard from "@/components/DocumentCard";
 
 interface Document {
+  id: string; // Added id property
   title: string;
   type: string;
   date: string;
@@ -77,6 +78,7 @@ const DocumentsList: React.FC<DocumentsListProps> = ({ documents }) => {
               {filteredDocuments(type.id).map((doc, index) => (
                 <DocumentCard
                   key={index}
+                  id={doc.id} // Pass the id property
                   title={doc.title}
                   type={doc.type}
                   date={doc.date}

@@ -15,6 +15,7 @@ const CareerDocs = () => {
   // Document data would ideally come from an API or context
   const documents = [
     { 
+      id: "doc-1", // Added id property
       title: "Product Manager Resume", 
       type: "Resume", 
       date: "Apr 15, 2023", 
@@ -22,6 +23,7 @@ const CareerDocs = () => {
       thumbnailUrl: "https://images.unsplash.com/photo-1586281380349-632531db7ed4?q=80&w=2070&auto=format&fit=crop" 
     },
     { 
+      id: "doc-2", // Added id property
       title: "Performance Review Q1", 
       type: "Review", 
       date: "Mar 30, 2023", 
@@ -29,6 +31,7 @@ const CareerDocs = () => {
       thumbnailUrl: "https://images.unsplash.com/photo-1517842645767-c639042777db?q=80&w=2070&auto=format&fit=crop" 
     },
     { 
+      id: "doc-3", // Added id property
       title: "Scrum Master Certification", 
       type: "Certificate", 
       date: "Feb 12, 2023", 
@@ -36,6 +39,7 @@ const CareerDocs = () => {
       thumbnailUrl: "https://images.unsplash.com/photo-1551836022-deb4988cc6c0?q=80&w=2070&auto=format&fit=crop" 
     },
     { 
+      id: "doc-4", // Added id property
       title: "Leadership Training Completion", 
       type: "Certificate", 
       date: "Jan 05, 2023", 
@@ -43,6 +47,7 @@ const CareerDocs = () => {
       thumbnailUrl: "https://images.unsplash.com/photo-1606326608690-4e0281b1e588?q=80&w=2070&auto=format&fit=crop" 
     },
     { 
+      id: "doc-5", // Added id property
       title: "Tech Lead Resume", 
       type: "Resume", 
       date: "Dec 18, 2022", 
@@ -50,6 +55,7 @@ const CareerDocs = () => {
       thumbnailUrl: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=2070&auto=format&fit=crop" 
     },
     { 
+      id: "doc-6", // Added id property
       title: "Performance Review Q4", 
       type: "Review", 
       date: "Dec 05, 2022", 
@@ -57,6 +63,7 @@ const CareerDocs = () => {
       thumbnailUrl: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=2070&auto=format&fit=crop" 
     },
     { 
+      id: "doc-7", // Added id property
       title: "Data Science Certificate", 
       type: "Certificate", 
       date: "Nov 20, 2022", 
@@ -64,6 +71,7 @@ const CareerDocs = () => {
       thumbnailUrl: "https://images.unsplash.com/photo-1609743522653-52354461eb27?q=80&w=1974&auto=format&fit=crop" 
     },
     { 
+      id: "doc-8", // Added id property
       title: "Project Presentation", 
       type: "Other", 
       date: "Oct 10, 2022", 
