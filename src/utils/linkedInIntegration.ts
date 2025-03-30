@@ -47,9 +47,9 @@ export const processLinkedInProfile = (profile: any) => {
 
 export const saveLinkedInDataToSupabase = async (linkedInData: any, userId: string) => {
   try {
-    // Save the processed LinkedIn data to Supabase
-    const { data, error } = await supabase
-      .from("user_linkedin_profiles")
+    // Save the processed LinkedIn data to Supabase using the SQL connection
+    // instead of the from() method since the table is newly created
+    const { data, error } = await supabase.from('user_linkedin_profiles' as any)
       .upsert({
         user_id: userId,
         linkedin_id: linkedInData.id,

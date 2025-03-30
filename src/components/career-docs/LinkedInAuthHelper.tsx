@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { handleLinkedInCallback, processLinkedInProfile, saveLinkedInDataToSupabase } from "@/utils/linkedInIntegration";
 import { useToast } from "@/hooks/use-toast";
-import { LoadingSpinner } from "../layout/LoadingSpinner";
+import LoadingSpinner from "../layout/LoadingSpinner";
 import { useAuth } from "@/context/AuthContext";
 import { Button } from "../ui/button";
 import { AlertCircle, CheckCircle2 } from "lucide-react";

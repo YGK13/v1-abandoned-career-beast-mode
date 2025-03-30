@@ -8,17 +8,44 @@ import LinkedInPostHistory from "@/components/career-docs/linkedin-posts/LinkedI
 import LinkedInNextSteps from "@/components/career-docs/LinkedInNextSteps";
 import LinkedInAuthHelper from "@/components/career-docs/LinkedInAuthHelper";
 import { useSearchParams } from "react-router-dom";
+import { hasLinkedInProfile } from "@/utils/linkedInProfile";
+import { useAuth } from "@/context/AuthContext";
+import { Loader2 } from "lucide-react";
 
 const LinkedIn: React.FC = () => {
   const [searchParams] = useSearchParams();
   const [isCallback, setIsCallback] = useState(false);
+  const [isConnected, setIsConnected] = useState<boolean | null>(null);
+  const { user } = useAuth();
   
   useEffect(() => {
     // Check if this is a callback from LinkedIn OAuth
     if (searchParams.get("code")) {
       setIsCallback(true);
     }
-  }, [searchParams]);
+    
+    // Check if the user has already connected their LinkedIn profile
+    if (user) {
+      const checkConnection = async () => {
+        const connected = await hasLinkedInProfile();
+        setIsConnected(connected);
+      };
+      
+      checkConnection();
+    }
+  }, [searchParams, user]);
+  
+  // Show loading state while checking connection status
+  if (isConnected === null && !isCallback) {
+    return (
+      <Layout>
+        <div className="flex items-center justify-center min-h-[300px]">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          <p className="ml-2">Checking LinkedIn connection...</p>
+        </div>
+      </Layout>
+    );
+  }
   
   return (
     <Layout>
@@ -45,17 +72,17 @@ const LinkedIn: React.FC = () => {
             </div>
           </header>
 
-          {/* LinkedIn Profile Import Section */}
-          <LinkedInProfileImport />
+          {/* LinkedIn Profile Import Section - Only show if not connected */}
+          {!isConnected && <LinkedInProfileImport />}
           
-          {/* LinkedIn Profile Assessment Section */}
-          <LinkedInProfile />
+          {/* LinkedIn Profile Assessment Section - Only show if connected */}
+          {isConnected && <LinkedInProfile />}
           
-          {/* LinkedIn Post History & Analytics Section */}
-          <LinkedInPostHistory />
+          {/* LinkedIn Post History & Analytics Section - Only show if connected */}
+          {isConnected && <LinkedInPostHistory />}
           
-          {/* LinkedIn Post Suggestions Section */}
-          <LinkedInPostSuggestions />
+          {/* LinkedIn Post Suggestions Section - Only show if connected */}
+          {isConnected && <LinkedInPostSuggestions />}
           
           {/* Next Steps - Navigation options to other sections */}
           <LinkedInNextSteps />
