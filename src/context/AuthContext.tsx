@@ -88,6 +88,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const signIn = async (email: string, password: string) => {
+    // Note: We moved the actual signIn implementation to the Auth component
+    // to handle captcha, so this is just a stub for compatibility
     const response = await supabase.auth.signInWithPassword({
       email,
       password,
@@ -110,6 +112,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   };
 
   const signUp = async (email: string, password: string, userData?: any) => {
+    // Note: We moved the actual signUp implementation to the Auth component
+    // to handle captcha, so this is just a stub for compatibility
     const response = await supabase.auth.signUp({
       email,
       password,

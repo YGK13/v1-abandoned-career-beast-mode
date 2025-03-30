@@ -11,6 +11,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { useToast } from "@/hooks/use-toast";
 import SSOOptions from "@/components/auth/SSOOptions";
 import { Loader2 } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
 const Auth: React.FC = () => {
   const navigate = useNavigate();
@@ -30,6 +31,18 @@ const Auth: React.FC = () => {
     if (session) {
       navigate("/");
     }
+
+    // Load the hCaptcha script
+    const script = document.createElement("script");
+    script.src = "https://js.hcaptcha.com/1/api.js";
+    script.async = true;
+    script.defer = true;
+    document.head.appendChild(script);
+
+    return () => {
+      // Clean up script when component unmounts
+      document.head.removeChild(script);
+    };
   }, [session, navigate]);
 
   const handleSignIn = async (e: React.FormEvent) => {
@@ -45,12 +58,51 @@ const Auth: React.FC = () => {
 
     setIsSubmitting(true);
     try {
-      const { error } = await signIn(email, password);
-      if (!error) {
+      // Get the captcha token if the hCaptcha object exists
+      let captchaToken = null;
+      if (window.hcaptcha) {
+        captchaToken = window.hcaptcha.getResponse();
+        if (!captchaToken) {
+          toast({
+            title: "Captcha verification required",
+            description: "Please complete the captcha verification",
+            variant: "destructive",
+          });
+          setIsSubmitting(false);
+          return;
+        }
+      }
+
+      // Add captcha token to the sign in request
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+        options: {
+          captchaToken
+        }
+      });
+
+      if (error) {
+        toast({
+          title: "Sign in failed",
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
         navigate("/");
       }
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "An unexpected error occurred",
+        variant: "destructive",
+      });
     } finally {
       setIsSubmitting(false);
+      // Reset captcha
+      if (window.hcaptcha) {
+        window.hcaptcha.reset();
+      }
     }
   };
 
@@ -76,8 +128,31 @@ const Auth: React.FC = () => {
 
     setIsSubmitting(true);
     try {
-      const { error } = await signUp(email, password, {
-        full_name: fullName,
+      // Get the captcha token if the hCaptcha object exists
+      let captchaToken = null;
+      if (window.hcaptcha) {
+        captchaToken = window.hcaptcha.getResponse();
+        if (!captchaToken) {
+          toast({
+            title: "Captcha verification required",
+            description: "Please complete the captcha verification",
+            variant: "destructive",
+          });
+          setIsSubmitting(false);
+          return;
+        }
+      }
+
+      // Add captcha token to the sign up request
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: {
+            full_name: fullName,
+          },
+          captchaToken
+        }
       });
       
       if (!error) {
@@ -86,9 +161,25 @@ const Auth: React.FC = () => {
           description: "Please check your email to confirm your account",
         });
         setTab("signin");
+      } else {
+        toast({
+          title: "Sign up failed",
+          description: error.message,
+          variant: "destructive",
+        });
       }
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "An unexpected error occurred",
+        variant: "destructive",
+      });
     } finally {
       setIsSubmitting(false);
+      // Reset captcha
+      if (window.hcaptcha) {
+        window.hcaptcha.reset();
+      }
     }
   };
 
@@ -154,6 +245,7 @@ const Auth: React.FC = () => {
                         required
                       />
                     </div>
+                    <div className="h-captcha" data-sitekey="84a9a43c-ea3a-4a2a-bc18-b6f5bfb13b1f"></div>
                   </CardContent>
                   <CardFooter className="flex flex-col space-y-4">
                     <Button 
@@ -228,6 +320,7 @@ const Auth: React.FC = () => {
                         required
                       />
                     </div>
+                    <div className="h-captcha" data-sitekey="84a9a43c-ea3a-4a2a-bc18-b6f5bfb13b1f"></div>
                   </CardContent>
                   <CardFooter className="flex flex-col space-y-4">
                     <Button 
@@ -256,5 +349,16 @@ const Auth: React.FC = () => {
     </Layout>
   );
 };
+
+// Add TypeScript definitions for the hCaptcha
+declare global {
+  interface Window {
+    hcaptcha: {
+      render: (container: string, options: any) => string;
+      reset: (widgetId?: string) => void;
+      getResponse: (widgetId?: string) => string;
+    };
+  }
+}
 
 export default Auth;
