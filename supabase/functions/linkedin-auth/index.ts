@@ -14,7 +14,9 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-// Main handler function
+/**
+ * Main handler function that processes incoming requests
+ */
 serve(async (req) => {
   // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
@@ -92,12 +94,7 @@ async function handleExchangeToken(code, redirectUri) {
     
     console.log("Successfully retrieved LinkedIn profile data");
     
-    return new Response(JSON.stringify({ 
-      success: true, 
-      profile: linkedInProfile 
-    }), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    });
+    return createSuccessResponse(linkedInProfile);
   } catch (error) {
     console.error("Error in handleExchangeToken:", error);
     return createErrorResponse(error.message || "Failed to exchange token", 400);
@@ -126,32 +123,42 @@ async function exchangeCodeForToken(code, redirectUri) {
     }).toString()
   );
   
-  // Exchange authorization code for access token
-  const tokenResponse = await fetch('https://www.linkedin.com/oauth/v2/accessToken', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    body: tokenParams,
-  });
-
-  const tokenResponseText = await tokenResponse.text();
-  console.log("Raw token response status:", tokenResponse.status);
-  console.log("Raw token response:", tokenResponseText);
+  const tokenResponse = await fetchWithErrorHandling(
+    'https://www.linkedin.com/oauth/v2/accessToken',
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: tokenParams,
+    }
+  );
   
-  // Parse the token response
+  return tokenResponse;
+}
+
+/**
+ * Helper function to handle fetch requests with error logging
+ */
+async function fetchWithErrorHandling(url, options) {
+  const response = await fetch(url, options);
+  const responseText = await response.text();
+  
+  console.log(`Response status from ${url}: ${response.status}`);
+  console.log(`Raw response: ${responseText}`);
+  
   try {
-    const tokenData = JSON.parse(tokenResponseText);
+    const parsedResponse = JSON.parse(responseText);
     
-    if (!tokenResponse.ok) {
-      console.error("LinkedIn token exchange error:", tokenData);
-      throw new Error(`LinkedIn token exchange failed: ${JSON.stringify(tokenData)}`);
+    if (!response.ok) {
+      console.error(`API error from ${url}:`, parsedResponse);
+      throw new Error(`API request failed: ${JSON.stringify(parsedResponse)}`);
     }
     
-    return tokenData;
+    return parsedResponse;
   } catch (e) {
-    console.error("Error parsing token response:", e);
-    throw new Error("Invalid response from LinkedIn token endpoint");
+    console.error(`Error parsing response from ${url}:`, e);
+    throw new Error(`Invalid response from ${url}`);
   }
 }
 
@@ -159,30 +166,15 @@ async function exchangeCodeForToken(code, redirectUri) {
  * Fetch LinkedIn profile data
  */
 async function fetchLinkedInProfile(accessToken) {
-  const profileResponse = await fetch('https://api.linkedin.com/v2/me', {
-    headers: {
-      'Authorization': `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
-    },
-  });
-
-  const profileResponseText = await profileResponse.text();
-  console.log("Raw profile response status:", profileResponse.status);
-  console.log("Raw profile response:", profileResponseText);
-  
-  try {
-    const profileData = JSON.parse(profileResponseText);
-    
-    if (!profileResponse.ok) {
-      console.error("LinkedIn profile fetch error:", profileData);
-      throw new Error(`LinkedIn profile fetch failed: ${JSON.stringify(profileData)}`);
+  return await fetchWithErrorHandling(
+    'https://api.linkedin.com/v2/me', 
+    {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
+      },
     }
-    
-    return profileData;
-  } catch (e) {
-    console.error("Error parsing profile response:", e);
-    throw new Error("Invalid response from LinkedIn profile endpoint");
-  }
+  );
 }
 
 /**
@@ -190,21 +182,15 @@ async function fetchLinkedInProfile(accessToken) {
  */
 async function fetchLinkedInEmail(accessToken) {
   try {
-    const emailResponse = await fetch('https://api.linkedin.com/v2/emailAddress?q=members&projection=(elements*(handle~))', {
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-      },
-    });
-    
-    if (emailResponse.ok) {
-      const emailData = await emailResponse.json();
-      console.log("Email data:", JSON.stringify(emailData));
-      return emailData;
-    } else {
-      console.warn("Could not fetch email, response:", await emailResponse.text());
-      return {};
-    }
+    return await fetchWithErrorHandling(
+      'https://api.linkedin.com/v2/emailAddress?q=members&projection=(elements*(handle~))',
+      {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
   } catch (error) {
     console.warn("Could not fetch LinkedIn email, might be missing permission:", error);
     return {};
@@ -228,14 +214,26 @@ function processLinkedInData(profileData, emailData, tokenData) {
 }
 
 /**
+ * Create a standardized success response
+ */
+function createSuccessResponse(data) {
+  return new Response(
+    JSON.stringify({ success: true, profile: data }), 
+    {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    }
+  );
+}
+
+/**
  * Create a standardized error response
  */
 function createErrorResponse(message, status = 400) {
-  return new Response(JSON.stringify({ 
-    success: false, 
-    error: message 
-  }), {
-    status: status,
-    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-  });
+  return new Response(
+    JSON.stringify({ success: false, error: message }), 
+    {
+      status: status,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    }
+  );
 }
