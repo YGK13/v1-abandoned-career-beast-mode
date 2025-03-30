@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter }
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Bot, Send, Upload, Linkedin, FileText } from "lucide-react";
+import { Bot, Send, Upload, Linkedin, FileText, Sparkles } from "lucide-react";
 import MessageBubble from "./MessageBubble";
 import TypingIndicator from "./TypingIndicator";
 import { useCareerCoach } from "./useCareerCoach";
@@ -43,9 +43,14 @@ const AiCareerCoach: React.FC = () => {
             <Bot size={20} className="text-vivid-purple" />
           </div>
           <div className="flex-1">
-            <CardTitle className="text-vivid-purple">AI Career Coach</CardTitle>
+            <div className="flex items-center">
+              <CardTitle className="text-vivid-purple">AI Career Coach</CardTitle>
+              <Badge variant="outline" className="ml-2 bg-vivid-purple/10 text-vivid-purple border-vivid-purple/30">
+                <Sparkles size={12} className="mr-1" /> Enhanced
+              </Badge>
+            </div>
             <CardDescription className="text-secondary-purple">
-              Expert guidance based on "Be Your Own Commander-in-Chief"
+              Personalized guidance based on your career documents and "Be Your Own Commander-in-Chief"
             </CardDescription>
           </div>
           <div className="flex gap-2">
@@ -83,13 +88,13 @@ const AiCareerCoach: React.FC = () => {
             {userDocuments.length > 0 && (
               <Badge variant="outline" className="flex items-center gap-1 text-xs bg-light-purple/20 text-secondary-purple border-secondary-purple/30">
                 <FileText size={12} className="text-vivid-purple" />
-                <span>{userDocuments.length} Documents</span>
+                <span>{userDocuments.length} Documents Analyzed</span>
               </Badge>
             )}
             {linkedInData && (
               <Badge variant="outline" className="flex items-center gap-1 text-xs bg-light-purple/20 text-secondary-purple border-secondary-purple/30">
                 <Linkedin size={12} className="text-vivid-purple" />
-                <span>LinkedIn Connected</span>
+                <span>LinkedIn Profile Analyzed</span>
               </Badge>
             )}
           </div>
@@ -110,7 +115,7 @@ const AiCareerCoach: React.FC = () => {
         <div className="flex w-full items-center space-x-2">
           <Input
             type="text"
-            placeholder="Ask detailed career questions or get document-specific advice..."
+            placeholder="Ask detailed career questions for document-specific & personalized advice..."
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyPress}
