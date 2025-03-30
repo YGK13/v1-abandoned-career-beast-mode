@@ -8,23 +8,23 @@
 
 .card {
   background: white;
-  border-radius: 0.75rem;
+  border-radius: 0.5rem;
   padding: 1.5rem;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
 }
 
 .card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
 .button {
-  background: linear-gradient(to right, #4e6feb, #7a93ff);
+  background: linear-gradient(to right, #0A66C2, #1877F2);
   color: white;
   font-weight: 500;
   padding: 0.5rem 1rem;
-  border-radius: 0.75rem;
+  border-radius: 0.5rem;
   transition: all 0.2s ease;
 }
 
@@ -34,11 +34,11 @@
 
 /* Soft gradient backgrounds */
 .bg-soft-gradient {
-  background: linear-gradient(to bottom right, rgba(255,255,255,0.8), rgba(246,249,252,0.8));
+  background: linear-gradient(to bottom right, rgba(255,255,255,1), rgba(246,249,252,1));
 }
 
 .bg-accent-gradient {
-  background: linear-gradient(to right, #4e6feb, #7a93ff);
+  background: linear-gradient(to right, #0A66C2, #1877F2);
 }
 
 /* Clean dividers */
