@@ -57,7 +57,7 @@ const SSOButton: React.FC<SSOButtonProps> = ({
       default:
         return {
           icon: null,
-          label: String(provider).charAt(0).toUpperCase() + String(provider).slice(1),
+          label: typeof provider === 'string' ? provider.charAt(0).toUpperCase() + provider.slice(1) : 'Connect',
           className: "bg-primary hover:bg-primary/90 text-white"
         };
     }

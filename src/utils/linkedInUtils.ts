@@ -35,7 +35,7 @@ export const simulateImportProcess = (
   }, 700);
 };
 
-// Updated auth-related utilities with proper typing
+// Updated auth-related utilities with proper typing for Supabase providers
 export type SSOProvider = "linkedin" | "google" | "microsoft" | "apple" | "github" | string;
 
 export interface SSOConfig {
