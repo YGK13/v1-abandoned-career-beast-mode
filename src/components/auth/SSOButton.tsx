@@ -3,7 +3,8 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { useSSOAuth } from "@/hooks/useSSOAuth";
-import { SSOProvider, getSSOproviderInfo } from "@/utils/linkedInUtils";
+import { SSOProvider } from "@/utils/linkedInUtils";
+import { getProviderConfig } from "@/components/auth/SSOProviderConfig";
 
 interface SSOButtonProps {
   provider: SSOProvider;
@@ -12,7 +13,7 @@ interface SSOButtonProps {
 }
 
 const SSOButton: React.FC<SSOButtonProps> = ({ provider, onSuccess, onError }) => {
-  const { icon: Icon, color, label } = getSSOproviderInfo(provider);
+  const providerConfig = getProviderConfig(provider);
   const { isLoading, handleSignIn } = useSSOAuth({
     provider,
     onSuccess,
@@ -31,17 +32,16 @@ const SSOButton: React.FC<SSOButtonProps> = ({ provider, onSuccess, onError }) =
   return (
     <Button
       variant="outline"
-      className="w-full"
+      className={`w-full ${providerConfig.className}`}
       onClick={onClick}
       disabled={isLoading}
-      style={{ backgroundColor: color }}
     >
       {isLoading ? (
         <Loader2 className="h-4 w-4 animate-spin mr-2" />
       ) : (
-        <Icon className="h-4 w-4 mr-2" />
+        providerConfig.icon
       )}
-      {label}
+      {providerConfig.label}
     </Button>
   );
 };
