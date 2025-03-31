@@ -7,7 +7,6 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import SSOOptions from "@/components/auth/SSOOptions";
 import { supabase } from "@/integrations/supabase/client";
 
 interface SignInFormProps {
@@ -103,16 +102,12 @@ const SignInForm: React.FC<SignInFormProps> = ({
     }
   };
 
-  const handleSSOSuccess = () => {
-    onSuccess();
-  };
-
   return (
     <Card>
       <CardHeader>
         <CardTitle>Sign In</CardTitle>
         <CardDescription>
-          Enter your email to receive a login link or use a social provider
+          Enter your email to receive a login link
         </CardDescription>
       </CardHeader>
       <form onSubmit={handleSignIn}>
@@ -138,8 +133,6 @@ const SignInForm: React.FC<SignInFormProps> = ({
             {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
             Send Login Link
           </Button>
-          
-          <SSOOptions onSuccess={handleSSOSuccess} />
         </CardFooter>
       </form>
     </Card>

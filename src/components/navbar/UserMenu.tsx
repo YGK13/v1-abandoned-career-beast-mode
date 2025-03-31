@@ -4,9 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Menu, X, LogIn, LogOut, User, Settings } from "lucide-react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import SSOOptions from "../auth/SSOOptions";
 import { useAuth } from "@/context/AuthContext";
 
 interface UserMenuProps {
@@ -17,12 +15,6 @@ interface UserMenuProps {
 const UserMenu: React.FC<UserMenuProps> = ({ isMobileMenuOpen, toggleMobileMenu }) => {
   const navigate = useNavigate();
   const { user, profile, signOut } = useAuth();
-  const [showLoginDialog, setShowLoginDialog] = useState(false);
-  
-  const handleLoginSuccess = () => {
-    setShowLoginDialog(false);
-    navigate("/");
-  };
   
   const handleSignOut = async () => {
     await signOut();
@@ -98,20 +90,6 @@ const UserMenu: React.FC<UserMenuProps> = ({ isMobileMenuOpen, toggleMobileMenu 
           <span className="hidden sm:inline">Sign In</span>
         </Button>
       )}
-      
-      <Dialog open={showLoginDialog} onOpenChange={setShowLoginDialog}>
-        <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle>Sign in to your account</DialogTitle>
-            <DialogDescription>
-              Choose your preferred sign-in method to access all features
-            </DialogDescription>
-          </DialogHeader>
-          <div className="py-4">
-            <SSOOptions onSuccess={handleLoginSuccess} />
-          </div>
-        </DialogContent>
-      </Dialog>
       
       <Button
         variant="ghost"
