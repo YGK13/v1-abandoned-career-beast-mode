@@ -1,5 +1,6 @@
 
 import { useEffect, useRef, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 // Declare window.turnstile for TypeScript
 declare global {
@@ -12,6 +13,15 @@ export interface TurnstileOptions {
   containerId: string;
   onTokenChange?: (token: string | null) => void;
   siteKey?: string;
+}
+
+export interface TurnstileVerifyResponse {
+  success: boolean;
+  challenge_ts?: string;
+  hostname?: string;
+  error_codes?: string[];
+  action?: string;
+  cdata?: string;
 }
 
 export const TURNSTILE_SITE_KEY = "0x4AAAAAAABI4S10D2f9gYqA";
@@ -94,5 +104,28 @@ export const useTurnstile = (options: TurnstileOptions) => {
     }
   };
   
-  return { token, getToken, resetToken };
+  // New function to verify a token
+  const verifyToken = async (token: string | null): Promise<TurnstileVerifyResponse> => {
+    if (!token) {
+      return { success: false, error_codes: ["missing-token"] };
+    }
+    
+    try {
+      const { data, error } = await supabase.functions.invoke("verify-turnstile", {
+        body: { token },
+      });
+      
+      if (error) {
+        console.error("Error verifying token:", error);
+        return { success: false, error_codes: [error.message] };
+      }
+      
+      return data as TurnstileVerifyResponse;
+    } catch (error) {
+      console.error("Error calling verify-turnstile function:", error);
+      return { success: false, error_codes: [(error as Error).message] };
+    }
+  };
+  
+  return { token, getToken, resetToken, verifyToken };
 };
