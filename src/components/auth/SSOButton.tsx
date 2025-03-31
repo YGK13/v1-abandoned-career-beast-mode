@@ -114,14 +114,27 @@ const SSOButton: React.FC<SSOButtonProps> = ({
       
       console.log(`Starting OAuth flow for provider: ${provider} (Supabase provider: ${getSupabaseProvider()})`);
       
-      // Use signInWithOAuth with captchaToken if available
+      // Create the options object with the correct structure
+      const options: {
+        redirectTo: string;
+        skipBrowserRedirect: boolean;
+        queryParams?: { [key: string]: string };
+      } = {
+        redirectTo: `${window.location.origin}/auth`,
+        skipBrowserRedirect: false
+      };
+      
+      // If we have a captcha token, add it as a query parameter
+      if (captchaToken) {
+        options.queryParams = {
+          captchaToken
+        };
+      }
+      
+      // Use signInWithOAuth with the properly structured options
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: getSupabaseProvider(),
-        options: {
-          redirectTo: `${window.location.origin}/auth`,
-          skipBrowserRedirect: false,
-          captchaToken
-        }
+        options
       });
       
       if (error) {
