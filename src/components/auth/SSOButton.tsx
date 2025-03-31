@@ -1,4 +1,5 @@
-import React from "react";
+
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { SSOProvider } from "@/utils/linkedInUtils";
 import { Linkedin, Github } from "lucide-react";
@@ -13,6 +14,13 @@ interface SSOButtonProps {
   onError?: (error: Error) => void;
 }
 
+// Declare window.turnstile for TypeScript
+declare global {
+  interface Window {
+    turnstile: any;
+  }
+}
+
 const SSOButton: React.FC<SSOButtonProps> = ({ 
   provider, 
   className,
@@ -20,6 +28,7 @@ const SSOButton: React.FC<SSOButtonProps> = ({
   onError
 }) => {
   const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
   
   const getProviderConfig = () => {
     switch (provider) {
@@ -65,6 +74,7 @@ const SSOButton: React.FC<SSOButtonProps> = ({
   const config = getProviderConfig();
 
   const handleClick = async () => {
+    setIsLoading(true);
     try {
       toast({
         title: `Connecting to ${config.label}...`,
@@ -88,14 +98,39 @@ const SSOButton: React.FC<SSOButtonProps> = ({
         }
       };
       
+      // Get any available Turnstile token
+      let captchaToken = null;
+      if (window.turnstile) {
+        // Look for any visible turnstile widgets
+        const widgets = document.querySelectorAll('[data-turnstile-widget-id]');
+        if (widgets.length > 0) {
+          const widgetId = widgets[0].getAttribute('data-turnstile-widget-id');
+          if (widgetId) {
+            captchaToken = window.turnstile.getResponse(widgetId);
+            console.log("Found Turnstile token from widget:", widgetId);
+          }
+        }
+      }
+      
       console.log(`Starting OAuth flow for provider: ${provider} (Supabase provider: ${getSupabaseProvider()})`);
       
-      const providerStr = getSupabaseProvider();
-      const redirectTo = encodeURIComponent(`${window.location.origin}/auth`);
-      const authUrl = `https://wcxdaenhwiiowmoecpli.supabase.co/auth/v1/authorize?provider=${providerStr}&redirect_to=${redirectTo}`;
+      // Use signInWithOAuth with captchaToken if available
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: getSupabaseProvider(),
+        options: {
+          redirectTo: `${window.location.origin}/auth`,
+          skipBrowserRedirect: false,
+          captchaToken
+        }
+      });
       
-      console.log("Redirecting to:", authUrl);
-      window.location.href = authUrl;
+      if (error) {
+        throw error;
+      }
+
+      // The user will be redirected, so we don't need to do anything else here
+      console.log("OAuth initiated successfully:", data);
+      
     } catch (error: any) {
       console.error(`${config.label} sign in error:`, error);
       toast({
@@ -104,6 +139,8 @@ const SSOButton: React.FC<SSOButtonProps> = ({
         variant: "destructive",
       });
       onError?.(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -112,8 +149,13 @@ const SSOButton: React.FC<SSOButtonProps> = ({
       variant="outline"
       className={`w-full ${config.className} ${className}`}
       onClick={handleClick}
+      disabled={isLoading}
     >
-      {config.icon} 
+      {isLoading ? (
+        <span className="mr-2 h-4 w-4 animate-spin">○</span>
+      ) : (
+        config.icon
+      )}
       Sign in with {config.label}
     </Button>
   );

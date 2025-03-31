@@ -18,6 +18,13 @@ interface SignInFormProps {
   onSuccess: () => void;
 }
 
+// Declare window.turnstile for TypeScript
+declare global {
+  interface Window {
+    turnstile: any;
+  }
+}
+
 const SignInForm: React.FC<SignInFormProps> = ({ 
   email, 
   setEmail, 
@@ -31,6 +38,7 @@ const SignInForm: React.FC<SignInFormProps> = ({
   const [searchParams] = useSearchParams();
   const turnstileWidgetId = useRef<string | null>(null);
   const turnstileContainerRef = useRef<HTMLDivElement>(null);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
 
   // Handle OAuth callback error (if present in URL)
   useEffect(() => {
@@ -57,13 +65,56 @@ const SignInForm: React.FC<SignInFormProps> = ({
     }
   }, [searchParams, toast, onSuccess]);
 
-  // We're simplifying this to avoid the Cloudflare Turnstile captcha issues
+  // Initialize Cloudflare Turnstile
+  useEffect(() => {
+    const renderTurnstile = () => {
+      if (window.turnstile && turnstileContainerRef.current) {
+        // Use hCaptcha site key from Supabase secrets
+        const siteKey = "0x4AAAAAAABI4S10D2f9gYqA";
+        
+        console.log("Rendering Turnstile with site key:", siteKey);
+        turnstileWidgetId.current = window.turnstile.render(turnstileContainerRef.current, {
+          sitekey: siteKey,
+          callback: function(token: string) {
+            console.log("Turnstile token received:", token.substring(0, 10) + "...");
+            setCaptchaToken(token);
+          },
+          "expired-callback": function() {
+            console.log("Turnstile token expired");
+            setCaptchaToken(null);
+          }
+        });
+      }
+    };
+
+    // Attempt to render initially or wait for Turnstile to load
+    if (window.turnstile) {
+      renderTurnstile();
+    } else {
+      const checkTurnstileLoaded = setInterval(() => {
+        if (window.turnstile) {
+          clearInterval(checkTurnstileLoaded);
+          renderTurnstile();
+        }
+      }, 100);
+      
+      return () => clearInterval(checkTurnstileLoaded);
+    }
+
+    // Clean up Turnstile widget on unmount
+    return () => {
+      if (window.turnstile && turnstileWidgetId.current) {
+        window.turnstile.reset(turnstileWidgetId.current);
+      }
+    };
+  }, []);
+
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email || !password) {
+    if (!email) {
       toast({
-        title: "Missing fields",
-        description: "Please fill in all fields",
+        title: "Missing email",
+        description: "Please enter your email address",
         variant: "destructive",
       });
       return;
@@ -73,11 +124,31 @@ const SignInForm: React.FC<SignInFormProps> = ({
     try {
       console.log("Attempting sign in with email:", email);
       
-      // Use email link authentication as a workaround
+      if (!captchaToken && window.turnstile && turnstileWidgetId.current) {
+        const token = window.turnstile.getResponse(turnstileWidgetId.current);
+        if (token) {
+          setCaptchaToken(token);
+          console.log("Retrieved Turnstile token:", token.substring(0, 10) + "...");
+        } else {
+          console.log("No Turnstile token available, trying to reset and get a new one");
+          window.turnstile.reset(turnstileWidgetId.current);
+          
+          toast({
+            title: "Captcha verification required",
+            description: "Please complete the captcha verification",
+            variant: "destructive",
+          });
+          setIsSubmitting(false);
+          return;
+        }
+      }
+      
+      // Use email link authentication with captcha token
       const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
-          emailRedirectTo: `${window.location.origin}/auth`
+          emailRedirectTo: `${window.location.origin}/auth`,
+          captchaToken: captchaToken || undefined
         }
       });
 
@@ -88,6 +159,13 @@ const SignInForm: React.FC<SignInFormProps> = ({
           description: error.message,
           variant: "destructive",
         });
+        
+        // If captcha error, reset the captcha
+        if (error.message.includes("captcha")) {
+          if (window.turnstile && turnstileWidgetId.current) {
+            window.turnstile.reset(turnstileWidgetId.current);
+          }
+        }
       } else {
         toast({
           title: "Check your email",
