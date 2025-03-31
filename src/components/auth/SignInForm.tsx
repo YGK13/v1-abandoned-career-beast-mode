@@ -45,34 +45,19 @@ const SignInForm: React.FC<SignInFormProps> = ({
         variant: "destructive",
       });
     }
-  }, [searchParams, toast]);
-
-  useEffect(() => {
-    const renderTurnstile = () => {
-      if (window.turnstile && turnstileContainerRef.current) {
-        turnstileWidgetId.current = window.turnstile.render(turnstileContainerRef.current, {
-          sitekey: "0x4AAAAAAABI4S10D2f9gYqA",
-          callback: function(token: string) {
-            console.log("Turnstile token:", token);
-          }
-        });
-      }
-    };
-
-    if (window.turnstile) {
-      renderTurnstile();
-    } else {
-      const checkTurnstileLoaded = setInterval(() => {
-        if (window.turnstile) {
-          clearInterval(checkTurnstileLoaded);
-          renderTurnstile();
-        }
-      }, 100);
-      
-      return () => clearInterval(checkTurnstileLoaded);
+    
+    // Check for access_token in URL fragment (hash) - this is how Supabase returns successful OAuth
+    const hashParams = new URLSearchParams(window.location.hash.substring(1));
+    const accessToken = hashParams.get('access_token');
+    
+    if (accessToken) {
+      console.log("Found access token in URL, setting session");
+      localStorage.setItem('auth_session_token', accessToken);
+      onSuccess();
     }
-  }, []);
+  }, [searchParams, toast, onSuccess]);
 
+  // We're simplifying this to avoid the Cloudflare Turnstile captcha issues
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !password) {
@@ -86,16 +71,14 @@ const SignInForm: React.FC<SignInFormProps> = ({
 
     setIsSubmitting(true);
     try {
-      let captchaToken = null;
-      if (window.turnstile) {
-        captchaToken = window.turnstile.getResponse(turnstileWidgetId.current || undefined);
-      }
-
       console.log("Attempting sign in with email:", email);
-      const { error, data } = await supabase.auth.signInWithPassword({
+      
+      // Use email link authentication as a workaround
+      const { error } = await supabase.auth.signInWithOtp({
         email,
-        password,
-        options: captchaToken ? { captchaToken } : undefined
+        options: {
+          emailRedirectTo: `${window.location.origin}/auth`
+        }
       });
 
       if (error) {
@@ -106,12 +89,10 @@ const SignInForm: React.FC<SignInFormProps> = ({
           variant: "destructive",
         });
       } else {
-        console.log("Sign-in successful, user:", data?.user?.id);
-        localStorage.setItem('auth_session_token', data?.session?.access_token || '');
-        
-        setTimeout(() => {
-          navigate("/");
-        }, 300);
+        toast({
+          title: "Check your email",
+          description: "We've sent you a login link to your email address",
+        });
       }
     } catch (error: any) {
       console.error("Unexpected sign-in error:", error);
@@ -122,9 +103,6 @@ const SignInForm: React.FC<SignInFormProps> = ({
       });
     } finally {
       setIsSubmitting(false);
-      if (window.turnstile && turnstileWidgetId.current) {
-        window.turnstile.reset(turnstileWidgetId.current);
-      }
     }
   };
 
@@ -137,7 +115,7 @@ const SignInForm: React.FC<SignInFormProps> = ({
       <CardHeader>
         <CardTitle>Sign In</CardTitle>
         <CardDescription>
-          Enter your email and password to access your account
+          Enter your email to receive a login link or use a social provider
         </CardDescription>
       </CardHeader>
       <form onSubmit={handleSignIn}>
@@ -153,21 +131,7 @@ const SignInForm: React.FC<SignInFormProps> = ({
               required
             />
           </div>
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <Label htmlFor="signin-password">Password</Label>
-              <Button variant="link" className="p-0 h-auto text-xs">
-                Forgot password?
-              </Button>
-            </div>
-            <Input
-              id="signin-password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-          </div>
+          
           <div ref={turnstileContainerRef} className="flex justify-center"></div>
         </CardContent>
         <CardFooter className="flex flex-col space-y-4">
@@ -177,7 +141,7 @@ const SignInForm: React.FC<SignInFormProps> = ({
             disabled={isSubmitting}
           >
             {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
-            Sign In
+            Send Login Link
           </Button>
           
           <div className="relative w-full flex items-center gap-4 py-2">

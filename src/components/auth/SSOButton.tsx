@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { SSOProvider } from "@/utils/linkedInUtils";
@@ -91,19 +90,12 @@ const SSOButton: React.FC<SSOButtonProps> = ({
       
       console.log(`Starting OAuth flow for provider: ${provider} (Supabase provider: ${getSupabaseProvider()})`);
       
-      const { data, error } = await supabase.auth.signInWithOAuth({
-        provider: getSupabaseProvider(),
-        options: {
-          redirectTo: `${window.location.origin}/auth` // Redirect back to the auth page after successful authentication
-        }
-      });
+      const providerStr = getSupabaseProvider();
+      const redirectTo = encodeURIComponent(`${window.location.origin}/auth`);
+      const authUrl = `https://wcxdaenhwiiowmoecpli.supabase.co/auth/v1/authorize?provider=${providerStr}&redirect_to=${redirectTo}`;
       
-      if (error) {
-        console.error(`OAuth error:`, error);
-        throw error;
-      }
-      
-      console.log(`OAuth response:`, data);
+      console.log("Redirecting to:", authUrl);
+      window.location.href = authUrl;
     } catch (error: any) {
       console.error(`${config.label} sign in error:`, error);
       toast({
