@@ -55,6 +55,7 @@ const SignInForm: React.FC<SignInFormProps> = ({
     try {
       console.log("Attempting sign in with email:", email);
       
+      // Using the simple signInWithPassword method without any captcha parameters
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password

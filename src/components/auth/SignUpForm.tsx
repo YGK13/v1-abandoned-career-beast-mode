@@ -63,6 +63,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
     try {
       console.log("Attempting signup");
 
+      // Simple signup without any captcha-related options
       const { error } = await supabase.auth.signUp({
         email,
         password,
