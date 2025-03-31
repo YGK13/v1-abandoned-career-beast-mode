@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { SSOProvider } from "@/utils/linkedInUtils";
@@ -37,7 +36,7 @@ const SSOButton: React.FC<SSOButtonProps> = ({
   useEffect(() => {
     const renderTurnstile = () => {
       if (window.turnstile && turnstileContainerRef.current) {
-        // Use hCaptcha site key from Supabase secrets
+        // Use Cloudflare Turnstile site key
         const siteKey = "0x4AAAAAAABI4S10D2f9gYqA";
         
         console.log(`Rendering Turnstile for ${provider} button with site key:`, siteKey);
@@ -177,6 +176,7 @@ const SSOButton: React.FC<SSOButtonProps> = ({
       const options = {
         redirectTo,
         skipBrowserRedirect: false,
+        queryParams: captchaToken ? { captchaToken } : undefined
       };
       
       console.log(`Using redirect URL: ${redirectTo}`);
