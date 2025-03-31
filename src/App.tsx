@@ -32,9 +32,6 @@ import Checkout from "./pages/Checkout";
 import FAQ from "./pages/FAQ";
 import Help from "./pages/Help";
 import NotFound from "./pages/NotFound";
-import { BioGeneratorProvider } from "./components/monetize/BioGeneratorContext";
-import LinkedIn from "./pages/LinkedIn"; // Import the LinkedIn page
-import Google from "./pages/Google"; // Import the Google page
 import { Toaster } from "./components/ui/toaster";
 
 function App() {
@@ -61,7 +58,7 @@ function App() {
         <Route path="/monetize-expertise" element={<MonetizeExpertise />} />
         <Route path="/monetize/:platformId" element={<MonetizePlatformDetails />} />
         <Route path="/monetize" element={<Monetize />} />
-        <Route path="/bio-generator" element={<BioGeneratorProvider><BioGenerator /></BioGeneratorProvider>} />
+        <Route path="/bio-generator" element={<BioGenerator />} />
         <Route path="/personal-brand" element={<PersonalBrand />} />
         <Route path="/manage-everything" element={<ManageEverything />} />
         <Route path="/onboarding" element={<OnboardingPage />} />
