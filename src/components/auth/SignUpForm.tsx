@@ -4,9 +4,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2 } from "lucide-react";
+import { Loader2, Eye, EyeOff } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import SSOOptions from "@/components/auth/SSOOptions";
 import { supabase } from "@/integrations/supabase/client";
 
 interface SignUpFormProps {
@@ -33,7 +32,12 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
   onSignUpComplete
 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const { toast } = useToast();
+
+  const togglePasswordVisibility = () => setShowPassword(!showPassword);
+  const toggleConfirmPasswordVisibility = () => setShowConfirmPassword(!showConfirmPassword);
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -96,10 +100,6 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
     }
   };
 
-  const handleSSOSuccess = () => {
-    // No need to do anything special here, just let the auth context handle it
-  };
-
   return (
     <Card>
       <CardHeader>
@@ -133,23 +133,45 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
           </div>
           <div className="space-y-2">
             <Label htmlFor="signup-password">Password</Label>
-            <Input
-              id="signup-password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+            <div className="relative">
+              <Input
+                id="signup-password"
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="absolute right-2 top-1/2 -translate-y-1/2"
+                onClick={togglePasswordVisibility}
+              >
+                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </Button>
+            </div>
           </div>
           <div className="space-y-2">
             <Label htmlFor="confirm-password">Confirm Password</Label>
-            <Input
-              id="confirm-password"
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-            />
+            <div className="relative">
+              <Input
+                id="confirm-password"
+                type={showConfirmPassword ? "text" : "password"}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+              />
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="absolute right-2 top-1/2 -translate-y-1/2"
+                onClick={toggleConfirmPasswordVisibility}
+              >
+                {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </Button>
+            </div>
           </div>
         </CardContent>
         <CardFooter className="flex flex-col space-y-4">
@@ -161,8 +183,6 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
             {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
             Create Account
           </Button>
-          
-          <SSOOptions onSuccess={handleSSOSuccess} />
         </CardFooter>
       </form>
     </Card>

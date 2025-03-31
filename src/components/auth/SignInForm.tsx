@@ -1,11 +1,11 @@
 
-import React, { useState, useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2 } from "lucide-react";
+import { Loader2, Eye, EyeOff } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
@@ -25,34 +25,11 @@ const SignInForm: React.FC<SignInFormProps> = ({
   onSuccess
 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
 
-  // Handle OAuth callback error (if present in URL)
-  useEffect(() => {
-    const error = searchParams.get('error');
-    const errorDescription = searchParams.get('error_description');
-    
-    if (error) {
-      console.error("OAuth error:", error, errorDescription);
-      toast({
-        title: "Authentication Error",
-        description: errorDescription || "There was an issue signing in with the provider",
-        variant: "destructive",
-      });
-    }
-    
-    // Check for access_token in URL fragment (hash) - this is how Supabase returns successful OAuth
-    const hashParams = new URLSearchParams(window.location.hash.substring(1));
-    const accessToken = hashParams.get('access_token');
-    
-    if (accessToken) {
-      console.log("Found access token in URL, setting session");
-      localStorage.setItem('auth_session_token', accessToken);
-      onSuccess();
-    }
-  }, [searchParams, toast, onSuccess]);
+  const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -65,16 +42,22 @@ const SignInForm: React.FC<SignInFormProps> = ({
       return;
     }
 
+    if (!password) {
+      toast({
+        title: "Missing password",
+        description: "Please enter your password",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsSubmitting(true);
     try {
       console.log("Attempting sign in with email:", email);
       
-      // Use email link authentication
-      const { error } = await supabase.auth.signInWithOtp({
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
-        options: {
-          emailRedirectTo: `${window.location.origin}/auth`
-        }
+        password
       });
 
       if (error) {
@@ -86,9 +69,10 @@ const SignInForm: React.FC<SignInFormProps> = ({
         });
       } else {
         toast({
-          title: "Check your email",
-          description: "We've sent you a login link to your email address",
+          title: "Welcome back!",
+          description: "You've successfully signed in",
         });
+        onSuccess();
       }
     } catch (error: any) {
       console.error("Unexpected sign-in error:", error);
@@ -107,7 +91,7 @@ const SignInForm: React.FC<SignInFormProps> = ({
       <CardHeader>
         <CardTitle>Sign In</CardTitle>
         <CardDescription>
-          Enter your email to receive a login link
+          Enter your email and password to access your account
         </CardDescription>
       </CardHeader>
       <form onSubmit={handleSignIn}>
@@ -123,6 +107,27 @@ const SignInForm: React.FC<SignInFormProps> = ({
               required
             />
           </div>
+          <div className="space-y-2">
+            <Label htmlFor="signin-password">Password</Label>
+            <div className="relative">
+              <Input
+                id="signin-password"
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+              <Button
+                type="button"
+                variant="ghost"
+                size="icon"
+                className="absolute right-2 top-1/2 -translate-y-1/2"
+                onClick={togglePasswordVisibility}
+              >
+                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </Button>
+            </div>
+          </div>
         </CardContent>
         <CardFooter className="flex flex-col space-y-4">
           <Button 
@@ -131,7 +136,7 @@ const SignInForm: React.FC<SignInFormProps> = ({
             disabled={isSubmitting}
           >
             {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
-            Send Login Link
+            Sign In
           </Button>
         </CardFooter>
       </form>

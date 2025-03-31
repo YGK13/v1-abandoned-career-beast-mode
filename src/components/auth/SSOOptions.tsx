@@ -12,7 +12,7 @@ const SSOOptions: React.FC<SSOOptionsProps> = ({
   onError,
   className,
 }) => {
-  // This is an empty component that will be rebuilt later
+  // This is an empty component that can be expanded later if needed
   return null;
 };
 
