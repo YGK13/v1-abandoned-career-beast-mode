@@ -16,22 +16,19 @@ export const useSSOAuth = (options: SSOAuthOptions) => {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   
-  const handleSignIn = async (captchaToken: string | null) => {
+  const handleSignIn = async () => {
     setIsLoading(true);
     
     try {
       const supabaseProvider = getSupabaseProvider(provider);
       
-      // Create the redirect URL with captcha token as a URL parameter if available
-      const redirectTo = captchaToken 
-        ? `${window.location.origin}/auth?captchaToken=${encodeURIComponent(captchaToken)}`
-        : `${window.location.origin}/auth`;
+      // Create the redirect URL
+      const redirectTo = `${window.location.origin}/auth`;
       
       // Prepare Supabase OAuth options
       const options = {
         redirectTo,
-        skipBrowserRedirect: false,
-        queryParams: captchaToken ? { captchaToken } : undefined
+        skipBrowserRedirect: false
       };
       
       console.log(`Using redirect URL: ${redirectTo}`);

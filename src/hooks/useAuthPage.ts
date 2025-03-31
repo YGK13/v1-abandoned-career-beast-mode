@@ -21,30 +21,6 @@ export const useAuthPage = () => {
       console.log("User already logged in, redirecting to home");
       navigate("/");
     }
-
-    // Load the Cloudflare Turnstile script
-    const script = document.createElement("script");
-    script.src = "https://challenges.cloudflare.com/turnstile/v0/api.js";
-    script.async = true;
-    script.defer = true;
-    document.head.appendChild(script);
-
-    // Cloudflare Turnstile configuration (replace with your actual site key)
-    // Use type assertion (as HTMLElement) to fix the type mismatch
-    const turnstileContainer = document.querySelector('.cf-turnstile') as HTMLElement;
-    if (turnstileContainer && window.turnstile) {
-      window.turnstile.render(turnstileContainer, {
-        sitekey: '0x4AAAAAAABI4S10D2f9gYqA',
-        theme: 'light'
-      });
-    }
-
-    return () => {
-      // Clean up script when component unmounts
-      if (document.head.contains(script)) {
-        document.head.removeChild(script);
-      }
-    };
   }, [session, navigate]);
 
   return {

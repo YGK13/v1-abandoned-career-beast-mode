@@ -1,5 +1,5 @@
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -21,13 +21,6 @@ interface SignUpFormProps {
   onSignUpComplete: () => void;
 }
 
-// Declare window.turnstile for TypeScript
-declare global {
-  interface Window {
-    turnstile: any;
-  }
-}
-
 const SignUpForm: React.FC<SignUpFormProps> = ({
   email,
   setEmail,
@@ -41,47 +34,6 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
-  const turnstileWidgetId = useRef<string | null>(null);
-  const turnstileContainerRef = useRef<HTMLDivElement>(null);
-  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
-
-  useEffect(() => {
-    const renderTurnstile = () => {
-      if (window.turnstile && turnstileContainerRef.current) {
-        console.log("Rendering Turnstile on Sign Up form");
-        turnstileWidgetId.current = window.turnstile.render(turnstileContainerRef.current, {
-          sitekey: "0x4AAAAAAABI4S10D2f9gYqA",
-          callback: function(token: string) {
-            console.log("Turnstile token received in signup:", token.substring(0, 10) + "...");
-            setCaptchaToken(token);
-          },
-          "expired-callback": function() {
-            console.log("Turnstile token expired in signup");
-            setCaptchaToken(null);
-          }
-        });
-      }
-    };
-
-    if (window.turnstile) {
-      renderTurnstile();
-    } else {
-      const checkTurnstileLoaded = setInterval(() => {
-        if (window.turnstile) {
-          clearInterval(checkTurnstileLoaded);
-          renderTurnstile();
-        }
-      }, 100);
-      
-      return () => clearInterval(checkTurnstileLoaded);
-    }
-
-    return () => {
-      if (window.turnstile && turnstileWidgetId.current) {
-        window.turnstile.reset(turnstileWidgetId.current);
-      }
-    };
-  }, []);
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -105,27 +57,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
 
     setIsSubmitting(true);
     try {
-      // Get the captcha token if not already set
-      if (!captchaToken && window.turnstile && turnstileWidgetId.current) {
-        const token = window.turnstile.getResponse(turnstileWidgetId.current);
-        if (token) {
-          setCaptchaToken(token);
-          console.log("Retrieved Turnstile token for signup:", token.substring(0, 10) + "...");
-        } else {
-          console.log("No Turnstile token available for signup, trying to reset");
-          window.turnstile.reset(turnstileWidgetId.current);
-          
-          toast({
-            title: "Captcha verification required",
-            description: "Please complete the captcha verification",
-            variant: "destructive",
-          });
-          setIsSubmitting(false);
-          return;
-        }
-      }
-
-      console.log("Attempting signup with captcha token:", captchaToken?.substring(0, 10) + "...");
+      console.log("Attempting signup");
 
       const { error } = await supabase.auth.signUp({
         email,
@@ -134,7 +66,6 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
           data: {
             full_name: fullName,
           },
-          captchaToken: captchaToken || undefined,
           emailRedirectTo: `${window.location.origin}/auth`
         }
       });
@@ -152,13 +83,6 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
           description: error.message,
           variant: "destructive",
         });
-        
-        // Reset captcha if there was an error related to captcha
-        if (error.message.includes("captcha")) {
-          if (window.turnstile && turnstileWidgetId.current) {
-            window.turnstile.reset(turnstileWidgetId.current);
-          }
-        }
       }
     } catch (error: any) {
       console.error("Sign up unexpected error:", error);
@@ -227,7 +151,6 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
               required
             />
           </div>
-          <div ref={turnstileContainerRef} className="flex justify-center"></div>
         </CardContent>
         <CardFooter className="flex flex-col space-y-4">
           <Button 
@@ -238,12 +161,6 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
             {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
             Create Account
           </Button>
-          
-          <div className="relative w-full flex items-center gap-4 py-2">
-            <div className="flex-grow h-px bg-muted"></div>
-            <span className="text-muted-foreground text-sm">or sign up with</span>
-            <div className="flex-grow h-px bg-muted"></div>
-          </div>
           
           <SSOOptions onSuccess={handleSSOSuccess} />
         </CardFooter>
