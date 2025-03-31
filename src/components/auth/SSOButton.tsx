@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { SSOProvider } from "@/utils/linkedInUtils";
 import { Linkedin, Github } from "lucide-react";
@@ -29,6 +29,53 @@ const SSOButton: React.FC<SSOButtonProps> = ({
 }) => {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const turnstileWidgetId = useRef<string | null>(null);
+  const turnstileContainerRef = useRef<HTMLDivElement>(null);
+  
+  // Initialize Cloudflare Turnstile
+  useEffect(() => {
+    const renderTurnstile = () => {
+      if (window.turnstile && turnstileContainerRef.current) {
+        // Use hCaptcha site key from Supabase secrets
+        const siteKey = "0x4AAAAAAABI4S10D2f9gYqA";
+        
+        console.log(`Rendering Turnstile for ${provider} button with site key:`, siteKey);
+        turnstileWidgetId.current = window.turnstile.render(turnstileContainerRef.current, {
+          sitekey: siteKey,
+          callback: function(token: string) {
+            console.log(`Turnstile token received for ${provider}:`, token.substring(0, 10) + "...");
+            setCaptchaToken(token);
+          },
+          "expired-callback": function() {
+            console.log(`Turnstile token expired for ${provider}`);
+            setCaptchaToken(null);
+          }
+        });
+      }
+    };
+
+    // Attempt to render initially or wait for Turnstile to load
+    if (window.turnstile) {
+      renderTurnstile();
+    } else {
+      const checkTurnstileLoaded = setInterval(() => {
+        if (window.turnstile) {
+          clearInterval(checkTurnstileLoaded);
+          renderTurnstile();
+        }
+      }, 100);
+      
+      return () => clearInterval(checkTurnstileLoaded);
+    }
+
+    // Clean up Turnstile widget on unmount
+    return () => {
+      if (window.turnstile && turnstileWidgetId.current) {
+        window.turnstile.reset(turnstileWidgetId.current);
+      }
+    };
+  }, [provider]);
   
   const getProviderConfig = () => {
     switch (provider) {
@@ -98,40 +145,43 @@ const SSOButton: React.FC<SSOButtonProps> = ({
         }
       };
       
-      // Get any available Turnstile token
-      let captchaToken = null;
-      if (window.turnstile) {
-        // Look for any visible turnstile widgets
-        const widgets = document.querySelectorAll('[data-turnstile-widget-id]');
-        if (widgets.length > 0) {
-          const widgetId = widgets[0].getAttribute('data-turnstile-widget-id');
-          if (widgetId) {
-            captchaToken = window.turnstile.getResponse(widgetId);
-            console.log("Found Turnstile token from widget:", widgetId);
-          }
+      // Get Turnstile token if not already set
+      if (!captchaToken && window.turnstile && turnstileWidgetId.current) {
+        const token = window.turnstile.getResponse(turnstileWidgetId.current);
+        if (token) {
+          setCaptchaToken(token);
+          console.log(`Retrieved Turnstile token for ${provider}:`, token.substring(0, 10) + "...");
+        } else {
+          console.log(`No Turnstile token available for ${provider}, trying to reset`);
+          window.turnstile.reset(turnstileWidgetId.current);
+          
+          toast({
+            title: "Captcha verification required",
+            description: "Please complete the captcha verification and try again",
+            variant: "destructive",
+          });
+          setIsLoading(false);
+          return;
         }
       }
       
       console.log(`Starting OAuth flow for provider: ${provider} (Supabase provider: ${getSupabaseProvider()})`);
+      console.log(`Captcha token available: ${Boolean(captchaToken)}`);
       
-      // Create the options object with the correct structure
-      const options: {
-        redirectTo: string;
-        skipBrowserRedirect: boolean;
-        queryParams?: { [key: string]: string };
-      } = {
-        redirectTo: `${window.location.origin}/auth`,
-        skipBrowserRedirect: false
+      // Create the redirect URL with captcha token as a URL parameter if available
+      const redirectTo = captchaToken 
+        ? `${window.location.origin}/auth?captchaToken=${encodeURIComponent(captchaToken)}`
+        : `${window.location.origin}/auth`;
+      
+      // Prepare Supabase OAuth options
+      const options = {
+        redirectTo,
+        skipBrowserRedirect: false,
       };
       
-      // If we have a captcha token, add it as a query parameter
-      if (captchaToken) {
-        options.queryParams = {
-          captchaToken
-        };
-      }
+      console.log(`Using redirect URL: ${redirectTo}`);
       
-      // Use signInWithOAuth with the properly structured options
+      // Start the OAuth flow
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: getSupabaseProvider(),
         options
@@ -158,19 +208,24 @@ const SSOButton: React.FC<SSOButtonProps> = ({
   };
 
   return (
-    <Button 
-      variant="outline"
-      className={`w-full ${config.className} ${className}`}
-      onClick={handleClick}
-      disabled={isLoading}
-    >
-      {isLoading ? (
-        <span className="mr-2 h-4 w-4 animate-spin">○</span>
-      ) : (
-        config.icon
-      )}
-      Sign in with {config.label}
-    </Button>
+    <div className="space-y-3">
+      <Button 
+        variant="outline"
+        className={`w-full ${config.className} ${className}`}
+        onClick={handleClick}
+        disabled={isLoading}
+      >
+        {isLoading ? (
+          <span className="mr-2 h-4 w-4 animate-spin">○</span>
+        ) : (
+          config.icon
+        )}
+        Sign in with {config.label}
+      </Button>
+      
+      {/* Hidden div for Turnstile widget */}
+      <div ref={turnstileContainerRef} className="h-0 overflow-hidden"></div>
+    </div>
   );
 };
 
