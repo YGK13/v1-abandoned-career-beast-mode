@@ -1,5 +1,6 @@
+
 import React, { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -27,8 +28,24 @@ const SignInForm: React.FC<SignInFormProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const turnstileWidgetId = useRef<string | null>(null);
   const turnstileContainerRef = useRef<HTMLDivElement>(null);
+
+  // Handle OAuth callback error (if present in URL)
+  useEffect(() => {
+    const error = searchParams.get('error');
+    const errorDescription = searchParams.get('error_description');
+    
+    if (error) {
+      console.error("OAuth error:", error, errorDescription);
+      toast({
+        title: "Authentication Error",
+        description: errorDescription || "There was an issue signing in with the provider",
+        variant: "destructive",
+      });
+    }
+  }, [searchParams, toast]);
 
   useEffect(() => {
     const renderTurnstile = () => {

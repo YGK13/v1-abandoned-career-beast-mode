@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { SSOProvider } from "@/utils/linkedInUtils";
@@ -92,6 +93,9 @@ const SSOButton: React.FC<SSOButtonProps> = ({
       
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: getSupabaseProvider(),
+        options: {
+          redirectTo: `${window.location.origin}/auth` // Redirect back to the auth page after successful authentication
+        }
       });
       
       if (error) {
