@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { useTurnstile, TurnstileVerifyResponse } from "@/utils/turnstileUtils";
 
 interface SignInFormProps {
   email: string;
@@ -25,6 +26,7 @@ const SignInForm: React.FC<SignInFormProps> = ({
   onSuccess
 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const { toast } = useToast();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -54,6 +56,15 @@ const SignInForm: React.FC<SignInFormProps> = ({
     }
   }, [searchParams, toast, onSuccess]);
 
+  // Initialize Turnstile
+  const turnstile = useTurnstile({
+    containerId: "turnstile-container",
+    onTokenChange: (token) => {
+      console.log("Turnstile token changed:", token);
+      setCaptchaToken(token);
+    }
+  });
+
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email) {
@@ -69,11 +80,33 @@ const SignInForm: React.FC<SignInFormProps> = ({
     try {
       console.log("Attempting sign in with email:", email);
       
-      // Use email link authentication without captcha token
+      // Verify captcha token first
+      if (captchaToken) {
+        console.log("Verifying captcha token");
+        const verification: TurnstileVerifyResponse = await turnstile.verifyToken();
+        
+        if (!verification.success) {
+          console.error("Captcha verification failed:", verification);
+          toast({
+            title: "Captcha verification failed",
+            description: "Please refresh the page and try again",
+            variant: "destructive",
+          });
+          setIsSubmitting(false);
+          return;
+        }
+        
+        console.log("Captcha verified successfully");
+      } else {
+        console.log("No captcha token, proceeding without verification");
+      }
+      
+      // Use email link authentication with captcha token
       const { error } = await supabase.auth.signInWithOtp({
         email,
         options: {
-          emailRedirectTo: `${window.location.origin}/auth`
+          emailRedirectTo: `${window.location.origin}/auth`,
+          captchaToken
         }
       });
 
@@ -123,6 +156,9 @@ const SignInForm: React.FC<SignInFormProps> = ({
               required
             />
           </div>
+          
+          {/* Turnstile container */}
+          <div id="turnstile-container" className="flex justify-center mt-4"></div>
         </CardContent>
         <CardFooter className="flex flex-col space-y-4">
           <Button 
