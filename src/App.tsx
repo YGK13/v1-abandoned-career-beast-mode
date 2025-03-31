@@ -33,6 +33,8 @@ import FAQ from "./pages/FAQ";
 import Help from "./pages/Help";
 import NotFound from "./pages/NotFound";
 import { Toaster } from "./components/ui/toaster";
+import LinkedIn from "./pages/LinkedIn"; // Import LinkedIn page
+import Google from "./pages/Google"; // Import Google page
 
 function App() {
   return (
