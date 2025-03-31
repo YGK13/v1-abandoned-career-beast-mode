@@ -8,7 +8,6 @@ import { Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import SSOOptions from "@/components/auth/SSOOptions";
 import { supabase } from "@/integrations/supabase/client";
-import { useTurnstile, TurnstileVerifyResponse } from "@/utils/turnstileUtils";
 
 interface SignUpFormProps {
   email: string;
@@ -34,17 +33,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
   onSignUpComplete
 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const { toast } = useToast();
-
-  // Initialize Turnstile
-  const turnstile = useTurnstile({
-    containerId: "turnstile-signup-container",
-    onTokenChange: (token) => {
-      console.log("Turnstile signup token changed:", token);
-      setCaptchaToken(token);
-    }
-  });
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -70,27 +59,6 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
     try {
       console.log("Attempting signup");
 
-      // Verify captcha token first
-      if (captchaToken) {
-        console.log("Verifying signup captcha token");
-        const verification: TurnstileVerifyResponse = await turnstile.verifyToken();
-        
-        if (!verification.success) {
-          console.error("Signup captcha verification failed:", verification);
-          toast({
-            title: "Captcha verification failed",
-            description: "Please refresh the page and try again",
-            variant: "destructive",
-          });
-          setIsSubmitting(false);
-          return;
-        }
-        
-        console.log("Signup captcha verified successfully");
-      } else {
-        console.log("No signup captcha token, proceeding without verification");
-      }
-
       const { error } = await supabase.auth.signUp({
         email,
         password,
@@ -98,8 +66,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
           data: {
             full_name: fullName,
           },
-          emailRedirectTo: `${window.location.origin}/auth`,
-          captchaToken
+          emailRedirectTo: `${window.location.origin}/auth`
         }
       });
       
@@ -184,9 +151,6 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
               required
             />
           </div>
-          
-          {/* Turnstile container */}
-          <div id="turnstile-signup-container" className="flex justify-center mt-4"></div>
         </CardContent>
         <CardFooter className="flex flex-col space-y-4">
           <Button 
