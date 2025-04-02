@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,8 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Loader2, Eye, EyeOff } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { getHCaptchaToken, setupCaptcha, cleanupCaptcha } from "@/utils/captchaUtils";
+import SSOOptions from "@/components/auth/SSOOptions";
 
 interface SignInFormProps {
   email: string;
@@ -28,6 +30,16 @@ const SignInForm: React.FC<SignInFormProps> = ({
   const [showPassword, setShowPassword] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Set up hCaptcha when component mounts
+    setupCaptcha();
+    
+    // Clean up hCaptcha when component unmounts
+    return () => {
+      cleanupCaptcha();
+    };
+  }, []);
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
@@ -55,10 +67,16 @@ const SignInForm: React.FC<SignInFormProps> = ({
     try {
       console.log("Attempting sign in with email:", email);
       
-      // Using the simple signInWithPassword method without any captcha parameters
+      // Get hCaptcha token
+      const captchaData = await getHCaptchaToken();
+      
+      // Using signInWithPassword with captcha parameters if available
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
-        password
+        password,
+        options: captchaData ? {
+          captchaToken: captchaData.token
+        } : undefined
       });
 
       if (error) {
@@ -139,6 +157,8 @@ const SignInForm: React.FC<SignInFormProps> = ({
             {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
             Sign In
           </Button>
+          
+          <SSOOptions onSuccess={onSuccess} />
         </CardFooter>
       </form>
     </Card>

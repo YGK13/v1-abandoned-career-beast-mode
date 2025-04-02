@@ -13,12 +13,54 @@ export interface SSOAuthOptions {
 
 export const useSSOAuth = (options: SSOAuthOptions) => {
   const { provider, onSuccess, onError } = options;
+  const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
   
-  // Return a minimal interface for now
-  return {
-    isLoading: false,
-    handleSignIn: async () => {
-      console.log("SSO functionality removed and will be rebuilt");
+  const supabaseProvider = getSupabaseProvider(provider);
+  
+  const handleSignIn = async () => {
+    try {
+      setIsLoading(true);
+      console.log(`Initiating ${provider} SSO login`);
+      
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: supabaseProvider as any,
+        options: {
+          redirectTo: `${window.location.origin}/auth`
+        }
+      });
+      
+      if (error) {
+        console.error(`${provider} SSO error:`, error);
+        toast({
+          title: "Authentication Error",
+          description: error.message,
+          variant: "destructive",
+        });
+        
+        if (onError) onError(error);
+        return;
+      }
+      
+      // If successful, the user will be redirected to the OAuth provider
+      console.log(`${provider} SSO initiated successfully`);
+      
+    } catch (error: any) {
+      console.error(`Unexpected ${provider} SSO error:`, error);
+      toast({
+        title: "Authentication Error",
+        description: error.message || "An unexpected error occurred",
+        variant: "destructive",
+      });
+      
+      if (onError) onError(error);
+    } finally {
+      setIsLoading(false);
     }
+  };
+  
+  return {
+    isLoading,
+    handleSignIn
   };
 };
