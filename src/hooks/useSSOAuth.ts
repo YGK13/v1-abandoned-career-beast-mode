@@ -16,18 +16,29 @@ export const useSSOAuth = (options: SSOAuthOptions) => {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   
-  const supabaseProvider = getSupabaseProvider(provider);
+  // Get the correct Supabase provider string
+  const getProvider = () => {
+    try {
+      return getSupabaseProvider(provider);
+    } catch (error) {
+      console.error(`Error getting provider for ${provider}:`, error);
+      return provider.toLowerCase();
+    }
+  };
+  
+  const supabaseProvider = getProvider();
   
   const handleSignIn = async () => {
     try {
       setIsLoading(true);
       console.log(`Initiating ${provider} SSO login with provider: ${supabaseProvider}`);
       
+      // Disable hCaptcha completely
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: supabaseProvider as any,
         options: {
           redirectTo: `${window.location.origin}/auth`,
-          scopes: provider === 'linkedin' ? 'r_liteprofile r_emailaddress' : undefined
+          scopes: provider.toLowerCase() === 'linkedin' ? 'r_liteprofile r_emailaddress' : undefined
         }
       });
       

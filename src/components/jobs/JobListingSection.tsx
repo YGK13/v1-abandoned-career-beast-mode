@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Job } from "./data/types";
 import JobSearch from "./components/JobSearch";
@@ -18,12 +19,12 @@ interface JobListingSectionProps {
 }
 
 const JobListingSection: React.FC<JobListingSectionProps> = ({
-  jobs,
-  offMarketJobs,
-  searchQuery,
+  jobs = [],
+  offMarketJobs = [],
+  searchQuery = "",
   onSearchChange,
-  matchThreshold,
-  onlyRemote,
+  matchThreshold = [70],
+  onlyRemote = false,
   onApply,
   onResetFilters
 }) => {
@@ -35,32 +36,51 @@ const JobListingSection: React.FC<JobListingSectionProps> = ({
     { id: "saved", name: "Saved" },
   ];
 
-  const allJobs = [...jobs, ...offMarketJobs].map((job, index) => ({
+  // Add default values to prevent errors with undefined properties
+  const safeJobs = jobs?.map((job, index) => ({
     ...job,
-    id: job.id || `job-${index}`
-  }));
+    id: job.id || `job-${index}`,
+    status: job.status || 'all',
+    source: job.source || 'general',
+    skills: job.skills || []
+  })) || [];
+  
+  const safeOffMarketJobs = offMarketJobs?.map((job, index) => ({
+    ...job,
+    id: job.id || `offmarket-${index}`,
+    status: job.status || 'offmarket',
+    source: job.source || 'offmarket',
+    skills: job.skills || []
+  })) || [];
+
+  const allJobs = [...safeJobs, ...safeOffMarketJobs];
 
   const filteredJobs = (category: string) => {
-    let filtered = allJobs;
-    
-    if (category !== "all") {
-      filtered = filtered.filter(job => job.status === category);
+    try {
+      let filtered = allJobs;
+      
+      if (category !== "all") {
+        filtered = filtered.filter(job => job.status === category);
+      }
+      
+      if (searchQuery) {
+        filtered = filtered.filter(job => 
+          job.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          job.company?.toLowerCase().includes(searchQuery.toLowerCase())
+        );
+      }
+      
+      filtered = filtered.filter(job => job.matchScore >= matchThreshold[0]);
+      
+      if (onlyRemote) {
+        filtered = filtered.filter(job => job.location?.toLowerCase().includes("remote"));
+      }
+      
+      return filtered;
+    } catch (error) {
+      console.error("Error filtering jobs:", error);
+      return [];
     }
-    
-    if (searchQuery) {
-      filtered = filtered.filter(job => 
-        job.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        job.company.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    }
-    
-    filtered = filtered.filter(job => job.matchScore >= matchThreshold[0]);
-    
-    if (onlyRemote) {
-      filtered = filtered.filter(job => job.location.toLowerCase().includes("remote"));
-    }
-    
-    return filtered;
   };
 
   return (
@@ -75,27 +95,32 @@ const JobListingSection: React.FC<JobListingSectionProps> = ({
       
       <JobCategoryTabs categories={jobCategories}>
         {(categoryId) => {
-          const jobsToShow = filteredJobs(categoryId);
-          
-          return (
-            <>
-              {jobsToShow.length > 0 ? (
-                <JobsGrid 
-                  jobs={jobsToShow} 
-                  onApply={onApply} 
-                />
-              ) : (
-                <EmptyJobsState 
-                  searchQuery={searchQuery} 
-                  onResetFilters={onResetFilters} 
-                />
-              )}
+          try {
+            const jobsToShow = filteredJobs(categoryId);
+            
+            return (
+              <>
+                {jobsToShow.length > 0 ? (
+                  <JobsGrid 
+                    jobs={jobsToShow} 
+                    onApply={onApply} 
+                  />
+                ) : (
+                  <EmptyJobsState 
+                    searchQuery={searchQuery} 
+                    onResetFilters={onResetFilters} 
+                  />
+                )}
 
-              {categoryId === "offmarket" && jobsToShow.length > 0 && (
-                <OffMarketBanner />
-              )}
-            </>
-          );
+                {categoryId === "offmarket" && jobsToShow.length > 0 && (
+                  <OffMarketBanner />
+                )}
+              </>
+            );
+          } catch (error) {
+            console.error("Error rendering job category:", error);
+            return <div className="p-8 text-center text-muted-foreground">There was an error loading jobs. Please try again.</div>;
+          }
         }}
       </JobCategoryTabs>
     </>

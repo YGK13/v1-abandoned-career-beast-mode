@@ -17,6 +17,7 @@ const JobsGrid: React.FC<JobsGridProps> = ({ jobs, onApply }) => {
 
   // Function to determine if a job is fresh (≤ 7 days)
   const isFreshJob = (postedDate: string) => {
+    if (!postedDate) return false;
     if (postedDate.includes('just now') || postedDate.includes('hour')) return true;
     if (postedDate.includes('day')) {
       const days = parseInt(postedDate.split(' ')[0]);
@@ -34,12 +35,12 @@ const JobsGrid: React.FC<JobsGridProps> = ({ jobs, onApply }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       {jobs.map((job, index) => (
-        <div key={index} className="relative">
+        <div key={job.id || index} className="relative">
           <JobBadges 
             job={job} 
             isFresh={isFreshJob(job.postedDate)} 
           />
-          <SourceLabel source={job.source} />
+          <SourceLabel source={job.source || 'general'} />
           
           <JobCard
             title={job.title}

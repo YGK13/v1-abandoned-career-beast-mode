@@ -1,5 +1,5 @@
 
-// Utility functions for hCaptcha integration (currently disabled)
+// Utility functions for hCaptcha integration (completely disabled)
 
 export interface CaptchaData {
   token: string;
@@ -8,7 +8,7 @@ export interface CaptchaData {
 
 // This function now returns null since hCaptcha is disabled
 export const getHCaptchaToken = async (): Promise<CaptchaData | null> => {
-  console.log('hCaptcha is disabled');
+  console.log('hCaptcha is completely disabled');
   return null;
 };
 

@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "@/components/Layout";
 import JobsHeader from "@/components/jobs/JobsHeader";
 import JobFilters from "@/components/jobs/JobFilters";
@@ -16,14 +16,60 @@ const Jobs = () => {
   const [matchThreshold, setMatchThreshold] = useState([70]);
   const [onlyRemote, setOnlyRemote] = useState(false);
   const [isAutoApplyOpen, setIsAutoApplyOpen] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   
+  useEffect(() => {
+    // Reset error state when component mounts
+    setError(null);
+  }, []);
+
   const handleResetFilters = () => {
     setSearchQuery("");
     setMatchThreshold([70]);
     setOnlyRemote(false);
   };
 
-  const appStats = getApplicationStats();
+  // Safely get application stats with error handling
+  const getStats = () => {
+    try {
+      return getApplicationStats();
+    } catch (error) {
+      console.error("Error getting application stats:", error);
+      setError("Failed to load application statistics");
+      return {
+        total: 0,
+        applied: 0,
+        interviews: 0,
+        offers: 0,
+        saved: 0
+      };
+    }
+  };
+
+  const appStats = getStats();
+
+  // Handle errors during job rendering
+  if (error) {
+    return (
+      <Layout>
+        <div className="page-container">
+          <JobsHeader />
+          <DashboardCard>
+            <div className="p-6 text-center">
+              <h3 className="text-lg font-medium text-destructive mb-2">Error Loading Jobs</h3>
+              <p className="text-muted-foreground">{error}</p>
+              <button 
+                onClick={() => window.location.reload()} 
+                className="mt-4 px-4 py-2 bg-primary text-white rounded-md"
+              >
+                Reload Page
+              </button>
+            </div>
+          </DashboardCard>
+        </div>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
@@ -95,25 +141,25 @@ const Jobs = () => {
                 <div className="space-y-1">
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Applied</span>
-                    <span className="font-medium">{appStats.applied}/{appStats.total}</span>
+                    <span className="font-medium">{appStats.applied}/{appStats.total || 1}</span>
                   </div>
-                  <Progress value={(appStats.applied/appStats.total) * 100} className="h-2" />
+                  <Progress value={appStats.total ? (appStats.applied/appStats.total) * 100 : 0} className="h-2" />
                 </div>
                 
                 <div className="space-y-1">
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Interviews</span>
-                    <span className="font-medium">{appStats.interviews}/{appStats.total}</span>
+                    <span className="font-medium">{appStats.interviews}/{appStats.total || 1}</span>
                   </div>
-                  <Progress value={(appStats.interviews/appStats.total) * 100} className="h-2" />
+                  <Progress value={appStats.total ? (appStats.interviews/appStats.total) * 100 : 0} className="h-2" />
                 </div>
                 
                 <div className="space-y-1">
                   <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Offers</span>
-                    <span className="font-medium">{appStats.offers}/{appStats.total}</span>
+                    <span className="font-medium">{appStats.offers}/{appStats.total || 1}</span>
                   </div>
-                  <Progress value={(appStats.offers/appStats.total) * 100} className="h-2" />
+                  <Progress value={appStats.total ? (appStats.offers/appStats.total) * 100 : 0} className="h-2" />
                 </div>
               </div>
               
@@ -151,8 +197,8 @@ const Jobs = () => {
           
           <div className="md:col-span-3">
             <JobListingSection 
-              jobs={jobs}
-              offMarketJobs={offMarketJobs}
+              jobs={jobs || []}
+              offMarketJobs={offMarketJobs || []}
               searchQuery={searchQuery}
               onSearchChange={setSearchQuery}
               matchThreshold={matchThreshold}

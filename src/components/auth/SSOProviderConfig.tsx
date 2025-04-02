@@ -3,7 +3,9 @@ import React from "react";
 import { Linkedin, Mail } from "lucide-react";
 
 export const getProviderConfig = (provider: string) => {
-  switch (provider.toLowerCase()) {
+  const providerLower = provider.toLowerCase();
+  
+  switch (providerLower) {
     case "linkedin":
       return {
         icon: <Linkedin className="h-4 w-4 mr-2" />,
@@ -45,12 +47,14 @@ export const getProviderConfig = (provider: string) => {
 };
 
 export const getSupabaseProvider = (provider: string): string => {
-  switch (provider.toLowerCase()) {
+  const providerLower = provider.toLowerCase();
+  
+  switch (providerLower) {
     case "linkedin":
       return "linkedin_oidc"; // Use OIDC flow for LinkedIn
     case "google":
       return "google";
     default:
-      return provider;
+      return providerLower;
   }
 };
