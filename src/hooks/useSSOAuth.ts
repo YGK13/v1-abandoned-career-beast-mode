@@ -21,12 +21,13 @@ export const useSSOAuth = (options: SSOAuthOptions) => {
   const handleSignIn = async () => {
     try {
       setIsLoading(true);
-      console.log(`Initiating ${provider} SSO login`);
+      console.log(`Initiating ${provider} SSO login with provider: ${supabaseProvider}`);
       
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: supabaseProvider as any,
         options: {
-          redirectTo: `${window.location.origin}/auth`
+          redirectTo: `${window.location.origin}/auth`,
+          scopes: provider === 'linkedin' ? 'r_liteprofile r_emailaddress' : undefined
         }
       });
       
@@ -43,7 +44,7 @@ export const useSSOAuth = (options: SSOAuthOptions) => {
       }
       
       // If successful, the user will be redirected to the OAuth provider
-      console.log(`${provider} SSO initiated successfully`);
+      console.log(`${provider} SSO initiated successfully`, data);
       
     } catch (error: any) {
       console.error(`Unexpected ${provider} SSO error:`, error);

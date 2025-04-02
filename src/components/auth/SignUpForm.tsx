@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -7,7 +7,6 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Loader2, Eye, EyeOff } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { getHCaptchaToken, setupCaptcha, cleanupCaptcha } from "@/utils/captchaUtils";
 import SSOOptions from "@/components/auth/SSOOptions";
 
 interface SignUpFormProps {
@@ -38,16 +37,6 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const { toast } = useToast();
 
-  useEffect(() => {
-    // Set up hCaptcha when component mounts
-    setupCaptcha();
-    
-    // Clean up hCaptcha when component unmounts
-    return () => {
-      cleanupCaptcha();
-    };
-  }, []);
-
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
   const toggleConfirmPasswordVisibility = () => setShowConfirmPassword(!showConfirmPassword);
 
@@ -75,10 +64,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
     try {
       console.log("Attempting signup");
 
-      // Get hCaptcha token
-      const captchaData = await getHCaptchaToken();
-
-      // Signup with captcha token if available
+      // Simple signup without captcha
       const { error } = await supabase.auth.signUp({
         email,
         password,
@@ -86,8 +72,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
           data: {
             full_name: fullName,
           },
-          emailRedirectTo: `${window.location.origin}/auth`,
-          captchaToken: captchaData?.token
+          emailRedirectTo: `${window.location.origin}/auth`
         }
       });
       

@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
@@ -21,10 +22,10 @@ const SSOButton: React.FC<SSOButtonProps> = ({ provider, onSuccess, onError }) =
 
   const onClick = async () => {
     try {
-      // No need for captcha, proceed with OAuth
+      console.log(`Initiating ${provider} OAuth flow`);
       await handleSignIn();
     } catch (error) {
-      console.error("Error during OAuth flow:", error);
+      console.error(`Error during ${provider} OAuth flow:`, error);
     }
   };
 
