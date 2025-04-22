@@ -1,23 +1,23 @@
 
-// Utility functions for hCaptcha integration (completely disabled)
+// Utility functions for captcha (completely disabled)
 
 export interface CaptchaData {
   token: string;
   siteKey: string;
 }
 
-// This function now returns null since hCaptcha is disabled
+// Completely remove captcha functionality
 export const getHCaptchaToken = async (): Promise<CaptchaData | null> => {
-  console.log('hCaptcha is completely disabled');
+  console.log('Captcha is completely disabled');
   return null;
 };
 
 // Setup is a no-op
 export const setupCaptcha = () => {
-  console.log('hCaptcha setup disabled');
+  console.log('Captcha setup is disabled');
 };
 
 // Cleanup is a no-op
 export const cleanupCaptcha = () => {
-  console.log('hCaptcha cleanup disabled');
+  console.log('Captcha cleanup is disabled');
 };

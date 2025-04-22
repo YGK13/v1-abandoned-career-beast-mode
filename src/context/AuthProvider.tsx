@@ -5,7 +5,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { AuthContextType } from "./AuthContextTypes";
 import { useToast } from "@/hooks/use-toast";
 
-// Create the context
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
@@ -132,7 +131,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         password,
         options: {
           data: userData,
-          emailRedirectTo: `${window.location.origin}/auth`
         }
       });
       
@@ -147,7 +145,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       
       toast({
         title: "Account created",
-        description: "Please check your email to confirm your account.",
+        description: "You can now sign in with your new account.",
       });
       return { data, error: null };
     } catch (error: any) {
