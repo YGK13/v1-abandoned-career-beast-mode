@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, Eye, EyeOff } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 import SSOOptions from "@/components/auth/SSOOptions";
 
 interface SignInFormProps {
@@ -29,6 +29,7 @@ const SignInForm: React.FC<SignInFormProps> = ({
   const [showPassword, setShowPassword] = useState(false);
   const { toast } = useToast();
   const navigate = useNavigate();
+  const { signIn } = useAuth();
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
@@ -56,24 +57,10 @@ const SignInForm: React.FC<SignInFormProps> = ({
     try {
       console.log("Attempting sign in with email:", email);
       
-      // Simple sign in without captcha
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password
-      });
+      const { error } = await signIn(email, password);
 
-      if (error) {
-        console.error("Sign-in error:", error);
-        toast({
-          title: "Sign in failed",
-          description: error.message,
-          variant: "destructive",
-        });
-      } else {
-        toast({
-          title: "Welcome back!",
-          description: "You've successfully signed in",
-        });
+      if (!error) {
+        console.log("Sign in successful");
         onSuccess();
       }
     } catch (error: any) {

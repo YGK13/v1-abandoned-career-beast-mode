@@ -1,15 +1,18 @@
 
-import React from "react";
+import React, { useEffect } from "react";
 import Layout from "@/components/Layout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Loader2 } from "lucide-react";
 import SignInForm from "@/components/auth/SignInForm";
 import SignUpForm from "@/components/auth/SignUpForm";
 import { useAuthPage } from "@/hooks/useAuthPage";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 
 const Auth: React.FC = () => {
+  const navigate = useNavigate();
+  const { session, isLoading } = useAuth();
   const {
-    isLoading,
     tab,
     setTab,
     email,
@@ -20,8 +23,15 @@ const Auth: React.FC = () => {
     setConfirmPassword,
     fullName,
     setFullName,
-    navigate
   } = useAuthPage();
+
+  useEffect(() => {
+    // Redirect if already logged in
+    if (session) {
+      console.log("User already logged in, redirecting to home");
+      navigate("/");
+    }
+  }, [session, navigate]);
 
   if (isLoading) {
     return (

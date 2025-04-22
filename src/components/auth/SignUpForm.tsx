@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2, Eye, EyeOff } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 import SSOOptions from "@/components/auth/SSOOptions";
 
 interface SignUpFormProps {
@@ -36,6 +36,7 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const { toast } = useToast();
+  const { signUp } = useAuth();
 
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
   const toggleConfirmPasswordVisibility = () => setShowConfirmPassword(!showConfirmPassword);
@@ -64,31 +65,12 @@ const SignUpForm: React.FC<SignUpFormProps> = ({
     try {
       console.log("Attempting signup");
 
-      // Simple signup without captcha
-      const { error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: {
-            full_name: fullName,
-          },
-          emailRedirectTo: `${window.location.origin}/auth`
-        }
+      const { error } = await signUp(email, password, {
+        full_name: fullName,
       });
       
       if (!error) {
-        toast({
-          title: "Account created",
-          description: "Please check your email to confirm your account",
-        });
         onSignUpComplete();
-      } else {
-        console.error("Sign up error:", error);
-        toast({
-          title: "Sign up failed",
-          description: error.message,
-          variant: "destructive",
-        });
       }
     } catch (error: any) {
       console.error("Sign up unexpected error:", error);
