@@ -39,7 +39,8 @@ const LinkedInAuthHelper: React.FC = () => {
         params: Object.fromEntries(searchParams.entries()),
         savedState,
         userAuthenticated: !!user,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
+        appClientId: "77v743vuwvrw2" // Using the newer client ID from screenshot
       };
       
       setDebugInfo(debug);
@@ -57,13 +58,25 @@ const LinkedInAuthHelper: React.FC = () => {
       // Check if there's an error from LinkedIn
       if (errorParam) {
         console.error(`LinkedIn returned an error: ${errorParam} - ${errorDescription}`);
-        setError(`LinkedIn Error: ${errorParam} - ${errorDescription || 'No description provided'}`);
+        
+        // Special handling for "the application is disabled" error
+        if (errorDescription?.includes("application is disabled")) {
+          setError(`LinkedIn Error: Your LinkedIn application appears to be disabled or not properly configured.
+          
+Please check:
+1. Your LinkedIn app status in the LinkedIn Developer Portal
+2. Your app is set to "Live" mode, not "Development" mode
+3. The redirect URI is set correctly to ${window.location.origin}/linkedin
+4. Your app has the necessary OpenID permissions (openid, profile, email)`);
+        } else {
+          setError(`LinkedIn Error: ${errorParam} - ${errorDescription || 'No description provided'}`);
+        }
         return;
       }
       
       if (!code) {
         console.error("No authorization code found in URL parameters");
-        setError("No authorization code found in the URL");
+        setError("No authorization code found in the URL. Please try connecting again.");
         return;
       }
       
@@ -107,7 +120,7 @@ const LinkedInAuthHelper: React.FC = () => {
           }, 2000);
         } else {
           console.warn("User not authenticated, cannot save LinkedIn data to database");
-          setError("You need to be logged in to connect your LinkedIn profile");
+          setError("You need to be logged in to connect your LinkedIn profile. Please log in first.");
         }
         
       } catch (err: any) {
@@ -122,7 +135,7 @@ const LinkedInAuthHelper: React.FC = () => {
         } else if (errorMessage.includes("API request failed")) {
           errorMessage = "LinkedIn API error: " + errorMessage;
         } else if (errorMessage.includes("application is disabled") || errorMessage.includes("not authorized")) {
-          errorMessage = "LinkedIn application issue: The LinkedIn application may be disabled or not properly configured";
+          errorMessage = "LinkedIn application issue: The LinkedIn application may be disabled or not properly configured. Try using the other Career Beast Mode app in your LinkedIn Developer Portal.";
         }
         
         setError(errorMessage);
@@ -165,7 +178,7 @@ const LinkedInAuthHelper: React.FC = () => {
             <AlertCircle className="h-12 w-12 text-destructive" />
           </div>
           <h2 className="text-xl font-semibold mb-2">Connection Failed</h2>
-          <p className="text-muted-foreground mb-4">{error}</p>
+          <p className="text-muted-foreground mb-4" style={{ whiteSpace: 'pre-line' }}>{error}</p>
           
           <div className="mb-4 p-3 bg-muted/50 rounded-md text-left overflow-auto max-h-[200px] text-xs">
             <h4 className="font-medium mb-2">Debug Information:</h4>

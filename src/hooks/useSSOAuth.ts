@@ -36,13 +36,13 @@ export const useSSOAuth = (options: SSOAuthOptions) => {
       const origin = window.location.origin;
       
       // Make sure we're always redirecting to /linkedin for LinkedIn authentication
-      const redirectUrl = origin + "/linkedin";
+      const redirectUrl = `${origin}/linkedin`;
       
       console.log(`Redirect URL: ${redirectUrl}`);
       
-      // The actual OAuth scopes available in the LinkedIn app
+      // Using OpenID Connect scopes for LinkedIn
       const scopes = provider.toLowerCase() === 'linkedin' 
-        ? 'openid profile email' // Using standard OpenID scopes that match what's shown in your screenshots
+        ? 'openid profile email' 
         : undefined;
       
       console.log(`Using scopes: ${scopes}`);
@@ -54,6 +54,7 @@ export const useSSOAuth = (options: SSOAuthOptions) => {
           redirectTo: redirectUrl,
           scopes: scopes,
           queryParams: provider.toLowerCase() === 'linkedin' ? {
+            // Adding a unique state parameter helps with debugging
             state: `linkedin-auth-${Date.now()}`,
           } : undefined,
         }
@@ -63,7 +64,7 @@ export const useSSOAuth = (options: SSOAuthOptions) => {
         console.error(`${provider} SSO error:`, error);
         toast({
           title: "Authentication Error",
-          description: error.message,
+          description: `Error: ${error.message}. Please make sure your LinkedIn app is properly configured with correct redirect URLs.`,
           variant: "destructive",
         });
         
@@ -78,7 +79,7 @@ export const useSSOAuth = (options: SSOAuthOptions) => {
       console.error(`Unexpected ${provider} SSO error:`, error);
       toast({
         title: "Authentication Error",
-        description: error.message || "An unexpected error occurred",
+        description: error.message || "An unexpected error occurred during authentication",
         variant: "destructive",
       });
       

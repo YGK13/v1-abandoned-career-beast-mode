@@ -2,7 +2,7 @@
 import { supabase } from "@/integrations/supabase/client";
 
 // LinkedIn OAuth configuration
-const LINKEDIN_CLIENT_ID = "77cdibmhgr0f9n"; // LinkedIn client ID
+const LINKEDIN_CLIENT_ID = "77v743vuwvrw2"; // Updated LinkedIn client ID from screenshot
 const CURRENT_ORIGIN = typeof window !== 'undefined' ? window.location.origin : '';
 const REDIRECT_URI = `${CURRENT_ORIGIN}/linkedin`;
 
@@ -16,7 +16,7 @@ export const generateLinkedInAuthUrl = () => {
   }
   
   // Define the scopes we're requesting according to what's available in your app
-  // Based on your screenshot, your app has these permissions: openid, profile, email
+  // Using OpenID Connect scopes which are supported by LinkedIn
   const scope = encodeURIComponent("openid profile email");
   
   console.log("Creating LinkedIn auth URL with client ID:", LINKEDIN_CLIENT_ID);
