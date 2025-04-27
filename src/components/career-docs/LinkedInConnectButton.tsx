@@ -2,7 +2,7 @@
 import React from "react";
 import { Linkedin, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { generateLinkedInAuthUrl } from "@/utils/linkedInIntegration";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 

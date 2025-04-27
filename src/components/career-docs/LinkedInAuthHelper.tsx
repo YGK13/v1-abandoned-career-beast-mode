@@ -36,7 +36,7 @@ const LinkedInAuthHelper: React.FC = () => {
         savedState,
         userAuthenticated: !!user,
         timestamp: new Date().toISOString(),
-        appClientId: "860zwskzeg81k0" // Updated to match the new app ID
+        appClientId: "860zwskzeg81k0" // Ensure client ID matches the one in the linkedInIntegration.ts
       };
       
       setDebugInfo(debug);
