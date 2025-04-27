@@ -4,7 +4,7 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import { handleLinkedInCallback, processLinkedInProfile, saveLinkedInDataToSupabase } from "@/utils/linkedInIntegration";
 import { useToast } from "@/hooks/use-toast";
 import LoadingSpinner from "../layout/LoadingSpinner";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/hooks/useAuth";
 import { Button } from "../ui/button";
 import { AlertCircle, CheckCircle2, ArrowLeft } from "lucide-react";
 
@@ -45,9 +45,9 @@ const LinkedInAuthHelper: React.FC = () => {
         return;
       }
       
+      // Continue even if state doesn't match for debugging purposes
       if (state !== savedState) {
         console.warn(`State mismatch. Received: ${state}, Saved: ${savedState}`);
-        // Continue despite state mismatch for debugging
       }
       
       setIsProcessing(true);
@@ -99,6 +99,8 @@ const LinkedInAuthHelper: React.FC = () => {
           errorMessage = "Database setup issue: LinkedIn profiles table not available. Please contact support.";
         } else if (errorMessage.includes("API request failed")) {
           errorMessage = "LinkedIn API error: " + errorMessage;
+        } else if (errorMessage.includes("application is disabled") || errorMessage.includes("not authorized")) {
+          errorMessage = "LinkedIn application issue: The LinkedIn application may be disabled or not properly configured";
         }
         
         setError(errorMessage);
