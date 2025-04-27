@@ -51,7 +51,7 @@ export const getSupabaseProvider = (provider: string): string => {
   
   switch (providerLower) {
     case "linkedin":
-      return "linkedin_oidc"; // Use OIDC flow for LinkedIn
+      return "linkedin_oidc"; // Ensure we use OIDC flow for LinkedIn
     case "google":
       return "google";
     default:

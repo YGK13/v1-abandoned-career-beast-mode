@@ -33,8 +33,10 @@ export const useSSOAuth = (options: SSOAuthOptions) => {
       setIsLoading(true);
       console.log(`Initiating ${provider} SSO login with provider: ${supabaseProvider}`);
       
-      // Determine the redirect URL based on provider
-      const redirectUrl = `${window.location.origin}/linkedin`;
+      // Get the full domain for the redirect URL
+      const origin = window.location.origin;
+      // For LinkedIn, we need to redirect back to the LinkedIn callback page
+      const redirectUrl = `${origin}/linkedin`;
       
       console.log(`Redirect URL: ${redirectUrl}`);
       
@@ -45,7 +47,7 @@ export const useSSOAuth = (options: SSOAuthOptions) => {
           redirectTo: redirectUrl,
           scopes: provider.toLowerCase() === 'linkedin' ? 'r_liteprofile r_emailaddress' : undefined,
           queryParams: provider.toLowerCase() === 'linkedin' ? {
-            // Add these parameters for LinkedIn to help with debugging
+            // Add state parameter for better security and debugging
             state: `linkedin-auth-${Date.now()}`,
           } : undefined,
         }
