@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { handleLinkedInCallback, processLinkedInProfile, saveLinkedInDataToSupabase } from "@/utils/linkedInIntegration";
@@ -35,7 +36,7 @@ const LinkedInAuthHelper: React.FC = () => {
         savedState,
         userAuthenticated: !!user,
         timestamp: new Date().toISOString(),
-        appClientId: "77kzqpoduzjywo"
+        appClientId: "860zwskzeg81k0" // Updated to match the new app ID
       };
       
       setDebugInfo(debug);
@@ -56,10 +57,11 @@ const LinkedInAuthHelper: React.FC = () => {
           setError(`LinkedIn Error: Your LinkedIn application appears to be disabled or not properly configured.
           
 Please check:
-1. Your LinkedIn app status in the LinkedIn Developer Portal
-2. Your app is set to "Live" mode, not "Development" mode
-3. The redirect URI is set correctly to ${window.location.origin}/linkedin
-4. Your app has the necessary OpenID permissions (openid, profile, email)`);
+1. Your LinkedIn app status in the LinkedIn Developer Portal - ensure the app is marked as "Live" not "Development"
+2. Confirm that your app has properly configured redirect URIs (${window.location.origin}/linkedin)
+3. Confirm you've added the necessary authorized members to your app during Development mode
+4. Verify the app has the necessary OpenID permissions (openid, profile, email)
+5. The client ID and secret are correctly entered in both the frontend code and Supabase Edge Function`);
         } else {
           setError(`LinkedIn Error: ${errorParam} - ${errorDescription || 'No description provided'}`);
         }
@@ -118,7 +120,7 @@ Please check:
         } else if (errorMessage.includes("API request failed")) {
           errorMessage = "LinkedIn API error: " + errorMessage;
         } else if (errorMessage.includes("application is disabled") || errorMessage.includes("not authorized")) {
-          errorMessage = "LinkedIn application issue: The LinkedIn application may be disabled or not properly configured. Try using the other Career Beast Mode app in your LinkedIn Developer Portal.";
+          errorMessage = "LinkedIn application issue: The LinkedIn application may be disabled or not properly configured. Try checking your app settings in the LinkedIn Developer Portal.";
         }
         
         setError(errorMessage);

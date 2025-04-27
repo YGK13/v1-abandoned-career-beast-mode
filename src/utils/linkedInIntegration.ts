@@ -2,7 +2,7 @@
 import { supabase } from "@/integrations/supabase/client";
 
 // LinkedIn OAuth configuration
-const LINKEDIN_CLIENT_ID = "77kzqpoduzjywo"; // LinkedIn client ID from screenshot
+const LINKEDIN_CLIENT_ID = "860zwskzeg81k0"; // Updated LinkedIn client ID from new screenshot
 const CURRENT_ORIGIN = typeof window !== 'undefined' ? window.location.origin : '';
 const REDIRECT_URI = `${CURRENT_ORIGIN}/linkedin`;
 
