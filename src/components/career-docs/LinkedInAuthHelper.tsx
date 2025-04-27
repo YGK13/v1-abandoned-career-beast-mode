@@ -22,12 +22,14 @@ const LinkedInAuthHelper: React.FC = () => {
 
   useEffect(() => {
     const processAuthCode = async () => {
+      console.log("LinkedInAuthHelper mounted, processing URL params");
       const code = searchParams.get("code");
       const state = searchParams.get("state");
       const errorParam = searchParams.get("error");
       const errorDescription = searchParams.get("error_description");
       
       const savedState = sessionStorage.getItem("linkedin_oauth_state");
+      console.log("Retrieved linkedin_oauth_state from session storage:", savedState);
       sessionStorage.removeItem("linkedin_oauth_state");
       
       const debug = {
@@ -36,7 +38,6 @@ const LinkedInAuthHelper: React.FC = () => {
         savedState,
         userAuthenticated: !!user,
         timestamp: new Date().toISOString(),
-        appClientId: "860zwskzeg81k0" // Ensure client ID matches the one in the linkedInIntegration.ts
       };
       
       setDebugInfo(debug);
@@ -81,7 +82,9 @@ Please check:
       setIsProcessing(true);
       
       try {
+        console.time("linkedin-callback-processing");
         const linkedInProfile = await handleLinkedInCallback(code);
+        console.timeEnd("linkedin-callback-processing");
         console.log("Retrieved LinkedIn profile:", linkedInProfile);
         
         if (!linkedInProfile) {

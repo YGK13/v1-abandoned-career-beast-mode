@@ -8,10 +8,12 @@ const SUPABASE_ANON_KEY = Deno.env.get('SUPABASE_ANON_KEY') ?? '';
 const LINKEDIN_CLIENT_ID = Deno.env.get('LINKEDIN_CLIENT_ID') ?? '';
 const LINKEDIN_CLIENT_SECRET = Deno.env.get('LINKEDIN_CLIENT_SECRET') ?? '';
 
-// CORS headers for cross-origin requests
+// CORS headers for cross-origin requests - update with more permissive settings for debugging
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Headers': '*',
+  'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
+  'Access-Control-Max-Age': '86400',
 };
 
 // Default redirect URI if none provided
@@ -21,12 +23,22 @@ const DEFAULT_REDIRECT_URI = 'https://wcxdaenhwiiowmoecpli.lovableproject.com/li
  * Main handler function that processes incoming requests
  */
 serve(async (req) => {
-  // Handle CORS preflight requests
+  console.log("LinkedIn auth function called with URL:", req.url);
+  console.log("Request method:", req.method);
+
+  // Handle CORS preflight requests with detailed logging
   if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders });
+    console.log("Handling OPTIONS preflight request");
+    console.log("Request headers:", Object.fromEntries(req.headers.entries()));
+    return new Response(null, { 
+      headers: corsHeaders,
+      status: 204
+    });
   }
 
   try {
+    console.log("Creating Supabase client with URL:", SUPABASE_URL ? "Present" : "Missing");
+
     const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
     const body = await parseRequestBody(req);
     
@@ -40,6 +52,7 @@ serve(async (req) => {
       return await handleExchangeToken(code, redirectUri);
     }
 
+    console.log("Invalid action or missing code:", { action, hasCode: !!code });
     return createErrorResponse("Invalid action or missing authorization code", 400);
   } catch (error) {
     console.error("LinkedIn auth function error:", error);
@@ -87,24 +100,37 @@ function logRequestInfo(body) {
  */
 async function handleExchangeToken(code, redirectUri) {
   console.log("Exchanging authorization code for access token");
+  console.log("Code (first 10 chars):", code.substring(0, 10) + "...");
+  console.log("Redirect URI:", redirectUri);
   
   try {
     // Exchange code for access token
     const tokenData = await exchangeCodeForToken(code, redirectUri);
+    console.log("Token exchange response:", tokenData ? "Success" : "Failed");
+    
     if (!tokenData.access_token) {
+      console.error("No access token in response:", tokenData);
       return createErrorResponse("Failed to obtain access token", 400);
     }
     
     // Get user profile data
+    console.log("Fetching LinkedIn profile with access token");
     const profileData = await fetchLinkedInProfile(tokenData.access_token);
+    console.log("Profile data retrieved:", profileData ? "Success" : "Failed");
     
     // Get email data if available
+    console.log("Fetching LinkedIn email");
     const emailData = await fetchLinkedInEmail(tokenData.access_token);
+    console.log("Email data retrieved:", emailData ? "Success" : "Failed");
     
     // Process and combine profile data
     const linkedInProfile = processLinkedInData(profileData, emailData, tokenData);
     
-    console.log("Successfully retrieved LinkedIn profile data");
+    console.log("Successfully retrieved LinkedIn profile data", {
+      id: linkedInProfile.id,
+      firstName: linkedInProfile.firstName,
+      hasEmail: !!linkedInProfile.email
+    });
     
     return createSuccessResponse(linkedInProfile);
   } catch (error) {

@@ -14,11 +14,22 @@ serve(async (req) => {
   }
   
   try {
+    // Log the request details for debugging
+    console.log("LinkedIn config function called");
+    console.log("Request method:", req.method);
+    console.log("Request headers:", Object.fromEntries(req.headers.entries()));
+    
+    // Get LinkedIn client ID from environment variables
     const LINKEDIN_CLIENT_ID = Deno.env.get('LINKEDIN_CLIENT_ID') ?? '';
+    console.log("Retrieved LINKEDIN_CLIENT_ID:", LINKEDIN_CLIENT_ID ? "Present (length: " + LINKEDIN_CLIENT_ID.length + ")" : "Missing");
     
     if (!LINKEDIN_CLIENT_ID) {
+      console.error("LINKEDIN_CLIENT_ID not found in environment variables");
       throw new Error("LinkedIn client ID not configured in environment");
     }
+    
+    // Log all environment variables (without values) for debugging
+    console.log("Available environment variables:", Object.keys(Deno.env.toObject()));
     
     return new Response(
       JSON.stringify({

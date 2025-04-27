@@ -1,3 +1,4 @@
+
 import { supabase } from "@/integrations/supabase/client";
 
 // LinkedIn OAuth configuration - will now be fetched from edge function
@@ -11,6 +12,7 @@ export const generateLinkedInAuthUrl = async () => {
   // Store state in sessionStorage for validation when the user returns
   if (typeof window !== 'undefined') {
     sessionStorage.setItem("linkedin_oauth_state", state);
+    console.log("Set linkedin_oauth_state in session storage:", state);
   }
   
   // Define the scopes we're requesting according to what's available in your app
@@ -18,10 +20,16 @@ export const generateLinkedInAuthUrl = async () => {
   const scope = encodeURIComponent("openid profile email");
   
   try {
+    console.log("Fetching LinkedIn client ID from edge function");
+    console.time("linkedin-config-fetch");
+    
     // Fetch the LinkedIn client ID from Supabase edge function
     const { data, error } = await supabase.functions.invoke('linkedin-auth-config', {
       body: { action: "get_client_id" }
     });
+    
+    console.timeEnd("linkedin-config-fetch");
+    console.log("Edge function response:", data, error);
     
     if (error) {
       console.error("Error fetching LinkedIn client ID:", error);
@@ -54,6 +62,7 @@ export const generateLinkedInAuthUrl = async () => {
 export const handleLinkedInCallback = async (code: string): Promise<any> => {
   try {
     console.log("Calling Supabase function with code:", code.substring(0, 10) + "...");
+    console.time("linkedin-auth-exchange");
     
     // Exchange the authorization code for an access token using our Supabase edge function
     const { data, error } = await supabase.functions.invoke('linkedin-auth', {
@@ -64,6 +73,7 @@ export const handleLinkedInCallback = async (code: string): Promise<any> => {
       }
     });
 
+    console.timeEnd("linkedin-auth-exchange");
     console.log("Supabase function response:", data, error);
 
     if (error) {
