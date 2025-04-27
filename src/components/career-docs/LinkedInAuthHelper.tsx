@@ -32,6 +32,15 @@ const LinkedInAuthHelper: React.FC = () => {
       // Clear saved state
       sessionStorage.removeItem("linkedin_oauth_state");
       
+      // Log all parameters to help with debugging
+      console.log("LinkedIn callback received:", {
+        code: code ? `${code.substring(0, 10)}...` : null,
+        state,
+        error: errorParam,
+        errorDescription,
+        savedState
+      });
+      
       // Check if there's an error from LinkedIn
       if (errorParam) {
         console.error(`LinkedIn returned an error: ${errorParam} - ${errorDescription}`);
@@ -54,7 +63,7 @@ const LinkedInAuthHelper: React.FC = () => {
       
       try {
         // Get LinkedIn profile data
-        console.log("Getting LinkedIn profile with code:", code);
+        console.log("Getting LinkedIn profile with code:", code.substring(0, 10) + "...");
         const linkedInProfile = await handleLinkedInCallback(code);
         console.log("Retrieved LinkedIn profile:", linkedInProfile);
         

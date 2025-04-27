@@ -3,7 +3,6 @@ import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { getSupabaseProvider } from "@/components/auth/SSOProviderConfig";
-import { SSOProvider } from "@/utils/linkedInUtils";
 
 export interface SSOAuthOptions {
   provider: string;
@@ -35,7 +34,6 @@ export const useSSOAuth = (options: SSOAuthOptions) => {
       
       // Get the full domain for the redirect URL
       const origin = window.location.origin;
-      // For LinkedIn, we need to redirect back to the LinkedIn callback page
       const redirectUrl = `${origin}/linkedin`;
       
       console.log(`Redirect URL: ${redirectUrl}`);
@@ -47,7 +45,6 @@ export const useSSOAuth = (options: SSOAuthOptions) => {
           redirectTo: redirectUrl,
           scopes: provider.toLowerCase() === 'linkedin' ? 'r_liteprofile r_emailaddress' : undefined,
           queryParams: provider.toLowerCase() === 'linkedin' ? {
-            // Add state parameter for better security and debugging
             state: `linkedin-auth-${Date.now()}`,
           } : undefined,
         }

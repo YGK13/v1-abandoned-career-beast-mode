@@ -1,10 +1,9 @@
-
 import { supabase } from "@/integrations/supabase/client";
 
 // LinkedIn OAuth configuration
-const LINKEDIN_CLIENT_ID = "77cdibmhgr0f9n"; // LinkedIn client ID from your screenshot
+const LINKEDIN_CLIENT_ID = "77cdibmhgr0f9n"; // LinkedIn client ID
 // Get the current origin dynamically to handle different environments
-const CURRENT_ORIGIN = window.location.origin;
+const CURRENT_ORIGIN = typeof window !== 'undefined' ? window.location.origin : '';
 const REDIRECT_URI = `${CURRENT_ORIGIN}/linkedin`;
 
 export const generateLinkedInAuthUrl = () => {
@@ -12,7 +11,9 @@ export const generateLinkedInAuthUrl = () => {
   const state = Math.random().toString(36).substring(2, 15);
   
   // Store state in sessionStorage for validation when the user returns
-  sessionStorage.setItem("linkedin_oauth_state", state);
+  if (typeof window !== 'undefined') {
+    sessionStorage.setItem("linkedin_oauth_state", state);
+  }
   
   // Define the scopes we're requesting - these must match what's configured in LinkedIn
   const scope = encodeURIComponent("r_liteprofile r_emailaddress");
