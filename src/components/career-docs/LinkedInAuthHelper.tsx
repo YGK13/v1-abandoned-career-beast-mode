@@ -3,10 +3,10 @@ import React, { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { handleLinkedInCallback, processLinkedInProfile, saveLinkedInDataToSupabase } from "@/utils/linkedInIntegration";
 import { useToast } from "@/hooks/use-toast";
-import LoadingSpinner from "../layout/LoadingSpinner";
 import { useAuth } from "@/hooks/useAuth";
-import { Button } from "../ui/button";
-import { AlertCircle, CheckCircle2, ArrowLeft, Bug } from "lucide-react";
+import LinkedInAuthError from "./linkedin-auth/LinkedInAuthError";
+import LinkedInAuthSuccess from "./linkedin-auth/LinkedInAuthSuccess";
+import LinkedInAuthProcessing from "./linkedin-auth/LinkedInAuthProcessing";
 
 const LinkedInAuthHelper: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -27,25 +27,20 @@ const LinkedInAuthHelper: React.FC = () => {
       const errorParam = searchParams.get("error");
       const errorDescription = searchParams.get("error_description");
       
-      // Get the state we saved before redirecting to LinkedIn
       const savedState = sessionStorage.getItem("linkedin_oauth_state");
-      
-      // Clear saved state
       sessionStorage.removeItem("linkedin_oauth_state");
       
-      // Collect debug information
       const debug = {
         currentUrl: window.location.href,
         params: Object.fromEntries(searchParams.entries()),
         savedState,
         userAuthenticated: !!user,
         timestamp: new Date().toISOString(),
-        appClientId: "77v743vuwvrw2" // Using the newer client ID from screenshot
+        appClientId: "77v743vuwvrw2"
       };
       
       setDebugInfo(debug);
       
-      // Log all parameters to help with debugging
       console.log("LinkedIn callback received:", {
         code: code ? `${code.substring(0, 10)}...` : null,
         state,
@@ -55,11 +50,9 @@ const LinkedInAuthHelper: React.FC = () => {
         ...debug
       });
       
-      // Check if there's an error from LinkedIn
       if (errorParam) {
         console.error(`LinkedIn returned an error: ${errorParam} - ${errorDescription}`);
         
-        // Special handling for "the application is disabled" error
         if (errorDescription?.includes("application is disabled")) {
           setError(`LinkedIn Error: Your LinkedIn application appears to be disabled or not properly configured.
           
@@ -80,7 +73,6 @@ Please check:
         return;
       }
       
-      // Continue even if state doesn't match for debugging purposes
       if (state !== savedState) {
         console.warn(`State mismatch. Received: ${state}, Saved: ${savedState}`);
       }
@@ -88,8 +80,6 @@ Please check:
       setIsProcessing(true);
       
       try {
-        // Get LinkedIn profile data
-        console.log("Getting LinkedIn profile with code:", code.substring(0, 10) + "...");
         const linkedInProfile = await handleLinkedInCallback(code);
         console.log("Retrieved LinkedIn profile:", linkedInProfile);
         
@@ -97,16 +87,13 @@ Please check:
           throw new Error("Failed to retrieve LinkedIn profile data");
         }
         
-        // Process the profile data
         const processedProfile = processLinkedInProfile(linkedInProfile);
         console.log("Processed profile:", processedProfile);
         
-        // If user is authenticated, save data to Supabase
         if (user) {
           console.log("Saving LinkedIn data for user:", user.id);
           await saveLinkedInDataToSupabase(processedProfile, user.id);
           
-          // Show success message
           setSuccess(true);
           
           toast({
@@ -114,7 +101,6 @@ Please check:
             description: "Your LinkedIn profile has been successfully connected.",
           });
           
-          // Wait 2 seconds before redirecting for better UX
           setTimeout(() => {
             navigate("/linkedin", { replace: true });
           }, 2000);
@@ -126,10 +112,8 @@ Please check:
       } catch (err: any) {
         console.error("LinkedIn authentication error:", err);
         
-        // Extract more detailed error message
         let errorMessage = err.message || "Failed to authenticate with LinkedIn";
         
-        // Check for specific error types
         if (errorMessage.includes("LinkedIn profiles table not available")) {
           errorMessage = "Database setup issue: LinkedIn profiles table not available. Please contact support.";
         } else if (errorMessage.includes("API request failed")) {
@@ -140,7 +124,6 @@ Please check:
         
         setError(errorMessage);
         
-        // Try to extract more error details
         if (err.rawResponse) {
           setRawResponse(err.rawResponse);
         }
@@ -165,65 +148,17 @@ Please check:
   
   return (
     <div className="flex items-center justify-center min-h-[300px]">
-      {isProcessing && (
-        <div className="text-center">
-          <LoadingSpinner />
-          <p className="mt-4 text-muted-foreground">Connecting to LinkedIn...</p>
-        </div>
-      )}
+      {isProcessing && <LinkedInAuthProcessing />}
       
       {error && (
-        <div className="text-center p-6 max-w-md">
-          <div className="flex justify-center mb-4">
-            <AlertCircle className="h-12 w-12 text-destructive" />
-          </div>
-          <h2 className="text-xl font-semibold mb-2">Connection Failed</h2>
-          <p className="text-muted-foreground mb-4" style={{ whiteSpace: 'pre-line' }}>{error}</p>
-          
-          <div className="mb-4 p-3 bg-muted/50 rounded-md text-left overflow-auto max-h-[200px] text-xs">
-            <h4 className="font-medium mb-2">Debug Information:</h4>
-            <pre className="whitespace-pre-wrap">{JSON.stringify(debugInfo, null, 2)}</pre>
-          </div>
-          
-          {rawResponse && (
-            <div className="mb-4 p-3 bg-muted/50 rounded-md text-left overflow-auto max-h-[200px] text-xs">
-              <pre>{JSON.stringify(rawResponse, null, 2)}</pre>
-            </div>
-          )}
-          
-          <div className="space-y-2">
-            <Button onClick={() => navigate("/linkedin")} className="w-full">
-              <ArrowLeft className="mr-2 h-4 w-4" /> Return to LinkedIn Page
-            </Button>
-            
-            <Button 
-              onClick={() => window.location.href = window.location.origin + "/linkedin"} 
-              variant="outline" 
-              className="w-full"
-            >
-              Try Again
-            </Button>
-            
-            <Button 
-              onClick={() => navigate("/auth")}
-              variant="outline"
-              className="w-full"
-            >
-              <Bug className="mr-2 h-4 w-4" /> Go to Auth Page
-            </Button>
-          </div>
-        </div>
+        <LinkedInAuthError 
+          error={error}
+          debugInfo={debugInfo}
+          rawResponse={rawResponse}
+        />
       )}
       
-      {success && (
-        <div className="text-center p-6 max-w-md">
-          <div className="flex justify-center mb-4">
-            <CheckCircle2 className="h-12 w-12 text-success" />
-          </div>
-          <h2 className="text-xl font-semibold mb-2">Successfully Connected</h2>
-          <p className="text-muted-foreground">Your LinkedIn profile has been successfully connected. Redirecting...</p>
-        </div>
-      )}
+      {success && <LinkedInAuthSuccess />}
     </div>
   );
 };
