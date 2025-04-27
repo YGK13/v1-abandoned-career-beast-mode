@@ -13,6 +13,9 @@ interface LinkedInConnectButtonProps {
 const LinkedInConnectButton: React.FC<LinkedInConnectButtonProps> = ({ onClick }) => {
   const [showLoginOptions, setShowLoginOptions] = React.useState(false);
   const [showDebugInfo, setShowDebugInfo] = React.useState(false);
+  // Get the LinkedIn client ID and redirect URI from the current environment
+  const linkedInClientId = "860zwskzeg81k0"; // The client ID from your config
+  const redirectUri = typeof window !== 'undefined' ? `${window.location.origin}/linkedin` : '';
 
   const handleConnectLinkedIn = () => {
     try {
@@ -77,8 +80,8 @@ const LinkedInConnectButton: React.FC<LinkedInConnectButtonProps> = ({ onClick }
             <Alert className="mt-4 text-xs">
               <AlertTitle>LinkedIn App Configuration</AlertTitle>
               <AlertDescription className="space-y-2">
-                <p><strong>App Client ID:</strong> {LINKEDIN_CLIENT_ID}</p>
-                <p><strong>Redirect URI:</strong> {REDIRECT_URI}</p>
+                <p><strong>App Client ID:</strong> {linkedInClientId}</p>
+                <p><strong>Redirect URI:</strong> {redirectUri}</p>
                 <p><strong>Required Scopes:</strong> openid, profile, email</p>
                 <p className="text-sm mt-2">
                   Ensure these match exactly with your LinkedIn Developer Portal settings.
