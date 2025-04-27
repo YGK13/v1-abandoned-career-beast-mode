@@ -40,12 +40,19 @@ export const useSSOAuth = (options: SSOAuthOptions) => {
       
       console.log(`Redirect URL: ${redirectUrl}`);
       
+      // The actual OAuth scopes available in the LinkedIn app
+      const scopes = provider.toLowerCase() === 'linkedin' 
+        ? 'openid profile email' // Using standard OpenID scopes that match what's shown in your screenshots
+        : undefined;
+      
+      console.log(`Using scopes: ${scopes}`);
+      
       // Configure the OAuth request with the correct parameters
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: supabaseProvider as any,
         options: {
           redirectTo: redirectUrl,
-          scopes: provider.toLowerCase() === 'linkedin' ? 'r_liteprofile r_emailaddress' : undefined,
+          scopes: scopes,
           queryParams: provider.toLowerCase() === 'linkedin' ? {
             state: `linkedin-auth-${Date.now()}`,
           } : undefined,

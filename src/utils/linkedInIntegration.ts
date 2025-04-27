@@ -15,8 +15,9 @@ export const generateLinkedInAuthUrl = () => {
     sessionStorage.setItem("linkedin_oauth_state", state);
   }
   
-  // Define the scopes we're requesting - these must match what's configured in LinkedIn
-  const scope = encodeURIComponent("r_liteprofile r_emailaddress");
+  // Define the scopes we're requesting according to what's available in your app
+  // Based on your screenshot, your app has these permissions: openid, profile, email
+  const scope = encodeURIComponent("openid profile email");
   
   console.log("Creating LinkedIn auth URL with client ID:", LINKEDIN_CLIENT_ID);
   console.log("Current origin:", CURRENT_ORIGIN);

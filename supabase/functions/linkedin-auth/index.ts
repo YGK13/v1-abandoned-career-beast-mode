@@ -1,4 +1,3 @@
-
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.4";
 
@@ -189,15 +188,22 @@ async function fetchWithErrorHandling(url, options) {
  * Fetch LinkedIn profile data
  */
 async function fetchLinkedInProfile(accessToken) {
-  return await fetchWithErrorHandling(
-    'https://api.linkedin.com/v2/me', 
-    {
-      headers: {
-        'Authorization': `Bearer ${accessToken}`,
-        'Content-Type': 'application/json',
-      },
-    }
-  );
+  console.log("Fetching LinkedIn profile data with token");
+  
+  try {
+    return await fetchWithErrorHandling(
+      'https://api.linkedin.com/v2/userinfo', // Using the OpenID userinfo endpoint
+      {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+  } catch (error) {
+    console.error("Error fetching LinkedIn profile:", error);
+    throw error;
+  }
 }
 
 /**
@@ -222,14 +228,17 @@ async function fetchLinkedInEmail(accessToken) {
 
 /**
  * Process and combine LinkedIn profile data
+ * Updated to handle the OpenID Connect userinfo response format
  */
 function processLinkedInData(profileData, emailData, tokenData) {
+  console.log("Processing LinkedIn profile data:", JSON.stringify(profileData).substring(0, 200));
+  
   return {
-    id: profileData.id,
-    firstName: profileData.localizedFirstName,
-    lastName: profileData.localizedLastName,
-    profileUrl: `https://www.linkedin.com/in/${profileData.id}`,
-    email: emailData?.elements?.[0]?.['handle~']?.emailAddress || null,
+    id: profileData.sub || profileData.id,
+    firstName: profileData.given_name || profileData.name?.split(' ')[0] || '',
+    lastName: profileData.family_name || profileData.name?.split(' ').slice(1).join(' ') || '',
+    profileUrl: profileData.profile || `https://www.linkedin.com/in/${profileData.sub || profileData.id}`,
+    email: profileData.email || emailData?.elements?.[0]?.['handle~']?.emailAddress || null,
     accessToken: tokenData.access_token,
     expiresIn: tokenData.expires_in,
     tokenType: tokenData.token_type,
