@@ -4,6 +4,7 @@ import { Linkedin, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { generateLinkedInAuthUrl } from "@/utils/linkedInIntegration";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 
 interface LinkedInConnectButtonProps {
   onClick: () => void;
@@ -11,6 +12,7 @@ interface LinkedInConnectButtonProps {
 
 const LinkedInConnectButton: React.FC<LinkedInConnectButtonProps> = ({ onClick }) => {
   const [showLoginOptions, setShowLoginOptions] = React.useState(false);
+  const [showDebugInfo, setShowDebugInfo] = React.useState(false);
 
   const handleConnectLinkedIn = () => {
     try {
@@ -60,6 +62,30 @@ const LinkedInConnectButton: React.FC<LinkedInConnectButtonProps> = ({ onClick }
           >
             Connect with other platforms
           </Button>
+
+          {/* Debug information button */}
+          <Button
+            variant="ghost"
+            size="sm"
+            className="mt-8"
+            onClick={() => setShowDebugInfo(!showDebugInfo)}
+          >
+            {showDebugInfo ? "Hide" : "Show"} Debug Info
+          </Button>
+
+          {showDebugInfo && (
+            <Alert className="mt-4 text-xs">
+              <AlertTitle>LinkedIn App Configuration</AlertTitle>
+              <AlertDescription className="space-y-2">
+                <p><strong>App Client ID:</strong> {LINKEDIN_CLIENT_ID}</p>
+                <p><strong>Redirect URI:</strong> {REDIRECT_URI}</p>
+                <p><strong>Required Scopes:</strong> openid, profile, email</p>
+                <p className="text-sm mt-2">
+                  Ensure these match exactly with your LinkedIn Developer Portal settings.
+                </p>
+              </AlertDescription>
+            </Alert>
+          )}
         </div>
       </div>
     </>
