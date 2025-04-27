@@ -1,12 +1,10 @@
-
 import { supabase } from "@/integrations/supabase/client";
 
-// LinkedIn OAuth configuration
-const LINKEDIN_CLIENT_ID = "860zwskzeg81k0"; // Updated LinkedIn client ID from new screenshot
+// LinkedIn OAuth configuration - will now be fetched from edge function
 const CURRENT_ORIGIN = typeof window !== 'undefined' ? window.location.origin : '';
 const REDIRECT_URI = `${CURRENT_ORIGIN}/linkedin`;
 
-export const generateLinkedInAuthUrl = () => {
+export const generateLinkedInAuthUrl = async () => {
   // Generate a random state value for security
   const state = Math.random().toString(36).substring(2, 15);
   
@@ -19,16 +17,38 @@ export const generateLinkedInAuthUrl = () => {
   // Using OpenID Connect scopes which are supported by LinkedIn
   const scope = encodeURIComponent("openid profile email");
   
-  console.log("Creating LinkedIn auth URL with client ID:", LINKEDIN_CLIENT_ID);
-  console.log("Current origin:", CURRENT_ORIGIN);
-  console.log("Redirect URI:", REDIRECT_URI);
-  
-  // Direct LinkedIn OAuth URL with all necessary parameters
-  const authUrl = `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=${LINKEDIN_CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&state=${state}&scope=${scope}`;
-  
-  console.log("Generated LinkedIn auth URL:", authUrl);
-  
-  return authUrl;
+  try {
+    // Fetch the LinkedIn client ID from Supabase edge function
+    const { data, error } = await supabase.functions.invoke('linkedin-auth-config', {
+      body: { action: "get_client_id" }
+    });
+    
+    if (error) {
+      console.error("Error fetching LinkedIn client ID:", error);
+      throw new Error("Failed to get LinkedIn configuration");
+    }
+    
+    const clientId = data?.clientId;
+    
+    if (!clientId) {
+      console.error("No LinkedIn client ID returned from server");
+      throw new Error("LinkedIn app configuration missing");
+    }
+    
+    console.log("Creating LinkedIn auth URL with client ID:", clientId);
+    console.log("Current origin:", CURRENT_ORIGIN);
+    console.log("Redirect URI:", REDIRECT_URI);
+    
+    // Direct LinkedIn OAuth URL with all necessary parameters
+    const authUrl = `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&state=${state}&scope=${scope}`;
+    
+    console.log("Generated LinkedIn auth URL:", authUrl);
+    
+    return authUrl;
+  } catch (error) {
+    console.error("Error generating LinkedIn auth URL:", error);
+    throw error;
+  }
 };
 
 export const handleLinkedInCallback = async (code: string): Promise<any> => {

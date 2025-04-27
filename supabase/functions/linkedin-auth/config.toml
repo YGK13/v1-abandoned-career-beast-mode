@@ -1,6 +1,4 @@
 
 project_id = "wcxdaenhwiiowmoecpli"
 
-[functions.linkedin-auth.deploy.env]
-LINKEDIN_CLIENT_ID = "860zwskzeg81k0"
-LINKEDIN_CLIENT_SECRET = "OencdFT6bYfEBH9s"
+# The function will retrieve these environment variables from Supabase secrets

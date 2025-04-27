@@ -15,7 +15,7 @@ const corsHeaders = {
 };
 
 // Default redirect URI if none provided
-const DEFAULT_REDIRECT_URI = 'https://wcxdaenhwiiowmoecpli.lovableproject.com/linkedin/callback';
+const DEFAULT_REDIRECT_URI = 'https://wcxdaenhwiiowmoecpli.lovableproject.com/linkedin';
 
 /**
  * Main handler function that processes incoming requests

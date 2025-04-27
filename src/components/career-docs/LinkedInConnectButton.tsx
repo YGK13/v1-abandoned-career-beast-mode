@@ -1,30 +1,41 @@
 
-import React from "react";
-import { Linkedin, Upload } from "lucide-react";
+import React, { useState } from "react";
+import { Linkedin, Upload, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { generateLinkedInAuthUrl } from "@/utils/linkedInIntegration";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { useToast } from "@/hooks/use-toast";
 
 interface LinkedInConnectButtonProps {
   onClick: () => void;
 }
 
 const LinkedInConnectButton: React.FC<LinkedInConnectButtonProps> = ({ onClick }) => {
-  const [showLoginOptions, setShowLoginOptions] = React.useState(false);
-  const [showDebugInfo, setShowDebugInfo] = React.useState(false);
-  // Get the LinkedIn client ID and redirect URI from the current environment
-  const linkedInClientId = "860zwskzeg81k0"; // The client ID from your config
+  const [showLoginOptions, setShowLoginOptions] = useState(false);
+  const [showDebugInfo, setShowDebugInfo] = useState(false);
+  const [isConnecting, setIsConnecting] = useState(false);
+  const { toast } = useToast();
+  
+  // Get the redirect URI from the current environment
   const redirectUri = typeof window !== 'undefined' ? `${window.location.origin}/linkedin` : '';
 
-  const handleConnectLinkedIn = () => {
+  const handleConnectLinkedIn = async () => {
     try {
+      setIsConnecting(true);
       // Generate and redirect to LinkedIn OAuth URL
-      const authUrl = generateLinkedInAuthUrl();
+      const authUrl = await generateLinkedInAuthUrl();
       console.log("Redirecting to LinkedIn OAuth URL:", authUrl);
       window.location.href = authUrl;
     } catch (error) {
       console.error("Error generating LinkedIn auth URL:", error);
+      toast({
+        title: "Connection Error",
+        description: "Failed to connect with LinkedIn. Please try again later.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsConnecting(false);
     }
   };
 
@@ -41,8 +52,17 @@ const LinkedInConnectButton: React.FC<LinkedInConnectButtonProps> = ({ onClick }
             variant="default" 
             className="bg-[#0a66c2] hover:bg-[#0a66c2]/90"
             onClick={handleConnectLinkedIn}
+            disabled={isConnecting}
           >
-            <Linkedin className="mr-2 h-4 w-4" /> Connect with LinkedIn
+            {isConnecting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Connecting...
+              </>
+            ) : (
+              <>
+                <Linkedin className="mr-2 h-4 w-4" /> Connect with LinkedIn
+              </>
+            )}
           </Button>
           
           <Dialog open={showLoginOptions} onOpenChange={setShowLoginOptions}>
@@ -80,7 +100,6 @@ const LinkedInConnectButton: React.FC<LinkedInConnectButtonProps> = ({ onClick }
             <Alert className="mt-4 text-xs">
               <AlertTitle>LinkedIn App Configuration</AlertTitle>
               <AlertDescription className="space-y-2">
-                <p><strong>App Client ID:</strong> {linkedInClientId}</p>
                 <p><strong>Redirect URI:</strong> {redirectUri}</p>
                 <p><strong>Required Scopes:</strong> openid, profile, email</p>
                 <p className="text-sm mt-2">
