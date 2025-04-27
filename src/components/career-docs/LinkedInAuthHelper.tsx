@@ -36,7 +36,7 @@ const LinkedInAuthHelper: React.FC = () => {
         savedState,
         userAuthenticated: !!user,
         timestamp: new Date().toISOString(),
-        appClientId: "77v743vuwvrw2"
+        appClientId: "77kzqpoduzjywo"
       };
       
       setDebugInfo(debug);

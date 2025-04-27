@@ -2,5 +2,5 @@
 project_id = "wcxdaenhwiiowmoecpli"
 
 [functions.linkedin-auth.deploy.env]
-LINKEDIN_CLIENT_ID = "77v743vuwvrw2"
-LINKEDIN_CLIENT_SECRET = "hhh0kXOVDCXHXhm2"
+LINKEDIN_CLIENT_ID = "77kzqpoduzjywo"
+LINKEDIN_CLIENT_SECRET = "WP_AP1.EEGlathc4hDePGK"
