@@ -33,7 +33,7 @@ export const useSSOAuth = (options: SSOAuthOptions) => {
       setIsLoading(true);
       console.log(`Initiating ${provider} SSO login with provider: ${supabaseProvider}`);
       
-      // Disable hCaptcha completely
+      // Configure the OAuth request with the correct parameters
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: supabaseProvider as any,
         options: {
