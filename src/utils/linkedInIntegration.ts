@@ -1,8 +1,8 @@
+
 import { supabase } from "@/integrations/supabase/client";
 
 // LinkedIn OAuth configuration
 const LINKEDIN_CLIENT_ID = "77cdibmhgr0f9n"; // LinkedIn client ID
-// Get the current origin dynamically to handle different environments
 const CURRENT_ORIGIN = typeof window !== 'undefined' ? window.location.origin : '';
 const REDIRECT_URI = `${CURRENT_ORIGIN}/linkedin`;
 

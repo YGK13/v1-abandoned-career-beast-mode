@@ -34,7 +34,9 @@ export const useSSOAuth = (options: SSOAuthOptions) => {
       
       // Get the full domain for the redirect URL
       const origin = window.location.origin;
-      const redirectUrl = `${origin}/linkedin`;
+      
+      // Make sure we're always redirecting to /linkedin for LinkedIn authentication
+      const redirectUrl = origin + "/linkedin";
       
       console.log(`Redirect URL: ${redirectUrl}`);
       
