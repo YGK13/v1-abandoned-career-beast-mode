@@ -1,4 +1,3 @@
-
 import { supabase } from "@/integrations/supabase/client";
 
 // LinkedIn OAuth configuration
@@ -18,6 +17,7 @@ export const generateLinkedInAuthUrl = () => {
   const scope = encodeURIComponent("r_liteprofile r_emailaddress");
   
   console.log("Creating LinkedIn auth URL with client ID:", LINKEDIN_CLIENT_ID);
+  console.log("Current origin:", CURRENT_ORIGIN);
   console.log("Redirect URI:", REDIRECT_URI);
   
   // Direct LinkedIn OAuth URL with all necessary parameters
