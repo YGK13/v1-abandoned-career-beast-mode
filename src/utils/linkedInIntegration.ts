@@ -1,8 +1,25 @@
+
 import { supabase } from "@/integrations/supabase/client";
 
 // LinkedIn OAuth configuration - will now be fetched from edge function
 const CURRENT_ORIGIN = typeof window !== 'undefined' ? window.location.origin : '';
 const REDIRECT_URI = `${CURRENT_ORIGIN}/linkedin`;
+
+// Track timing for debugging
+const TIMERS: Record<string, number> = {};
+
+function startTimer(name: string) {
+  TIMERS[name] = Date.now();
+  console.log(`Starting timer: ${name}`);
+}
+
+function endTimer(name: string) {
+  const start = TIMERS[name];
+  if (!start) return;
+  const duration = Date.now() - start;
+  console.log(`Timer ${name} completed in ${duration}ms`);
+  return duration;
+}
 
 export const generateLinkedInAuthUrl = async () => {
   // Generate a random state value for security
@@ -19,10 +36,11 @@ export const generateLinkedInAuthUrl = async () => {
   const scope = encodeURIComponent("openid profile email");
   
   try {
+    startTimer("linkedin-config-fetch");
     console.log("Fetching LinkedIn client ID from edge function");
-    console.time("linkedin-config-fetch");
     console.log("Current location:", window.location.href);
     console.log("Origin being used:", CURRENT_ORIGIN);
+    console.log("Expected redirect URI:", REDIRECT_URI);
     
     // Fetch the LinkedIn client ID from Supabase edge function
     const { data, error } = await supabase.functions.invoke('linkedin-auth-config', {
@@ -33,8 +51,8 @@ export const generateLinkedInAuthUrl = async () => {
       }
     });
     
-    console.timeEnd("linkedin-config-fetch");
-    console.log("Edge function response:", data, error);
+    const fetchTime = endTimer("linkedin-config-fetch");
+    console.log(`Edge function response after ${fetchTime}ms:`, data, error);
     
     if (error) {
       console.error("Error fetching LinkedIn client ID:", error);
@@ -70,9 +88,9 @@ export const generateLinkedInAuthUrl = async () => {
 };
 
 export const handleLinkedInCallback = async (code: string): Promise<any> => {
+  startTimer("linkedin-auth-exchange");
   try {
     console.log("Calling Supabase function with code:", code.substring(0, 10) + "...");
-    console.time("linkedin-auth-exchange");
     
     // Exchange the authorization code for an access token using our Supabase edge function
     const { data, error } = await supabase.functions.invoke('linkedin-auth', {
@@ -83,8 +101,8 @@ export const handleLinkedInCallback = async (code: string): Promise<any> => {
       }
     });
 
-    console.timeEnd("linkedin-auth-exchange");
-    console.log("Supabase function response:", data, error);
+    const exchangeTime = endTimer("linkedin-auth-exchange");
+    console.log(`Supabase function response after ${exchangeTime}ms:`, data, error);
 
     if (error) {
       console.error("Supabase function error:", error);

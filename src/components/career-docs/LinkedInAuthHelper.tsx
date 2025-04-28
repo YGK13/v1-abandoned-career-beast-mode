@@ -32,42 +32,43 @@ const LinkedInAuthHelper: React.FC = () => {
       console.log("Retrieved linkedin_oauth_state from session storage:", savedState);
       sessionStorage.removeItem("linkedin_oauth_state");
       
+      // Gather debug info
       const debug = {
         currentUrl: window.location.href,
-        currentLocation: window.location,
+        currentPath: window.location.pathname,
+        fullOrigin: window.location.origin,
+        domainPath: `${window.location.origin}/linkedin`,
         params: Object.fromEntries(searchParams.entries()),
+        currentTimestamp: new Date().toISOString(),
         savedState,
         userAuthenticated: !!user,
-        timestamp: new Date().toISOString(),
+        userEmail: user?.email || null,
       };
       
       setDebugInfo(debug);
       
-      console.log("LinkedIn callback received:", {
-        code: code ? `${code.substring(0, 10)}...` : null,
-        state,
-        error: errorParam,
-        errorDescription,
-        savedState,
-        ...debug
-      });
+      console.log("LinkedIn callback debug info:", debug);
       
       if (errorParam) {
         console.error(`LinkedIn returned an error: ${errorParam} - ${errorDescription}`);
         
+        let detailedError = `LinkedIn Error: ${errorParam} - ${errorDescription || 'No description provided'}`;
+        
         if (errorDescription?.includes("application is disabled")) {
-          setError(`LinkedIn Error: Your LinkedIn application appears to be disabled or not properly configured.
+          detailedError = `LinkedIn Error: Your LinkedIn application appears to be disabled or not properly configured.
           
 Please check:
 1. Your LinkedIn app status in the LinkedIn Developer Portal - ensure the app is marked as "Live" not "Development"
-2. Confirm that your app has properly configured redirect URIs: ${window.location.href}
-3. Current URL should be listed as an authorized redirect URI in your LinkedIn app settings
-4. Confirm you've added the necessary authorized members to your app during Development mode
-5. Verify the app has the necessary OpenID permissions (openid, profile, email)
-6. The client ID and secret are correctly entered in both the frontend code and Supabase Edge Function`);
-        } else {
-          setError(`LinkedIn Error: ${errorParam} - ${errorDescription || 'No description provided'}`);
+2. Confirm that redirect URIs are properly configured:
+   - Current URL: ${window.location.href}
+   - This should be listed as an authorized redirect URI in your LinkedIn app settings
+   - If using Supabase environment variable, check LINKEDIN_REDIRECT_URL is set to: ${window.location.origin}/linkedin
+3. If app is in Development mode, confirm you've been added as an authorized test user
+4. Verify the app has the necessary OpenID permissions (openid, profile, email)
+5. Check that client ID and secret are correctly entered in Supabase secrets`;
         }
+        
+        setError(detailedError);
         return;
       }
       
@@ -80,6 +81,18 @@ Please check:
       if (state !== savedState) {
         console.warn(`State mismatch. Received: ${state}, Saved: ${savedState}`);
         // Continue anyway for debugging purposes
+      }
+      
+      // Check if user is logged in before proceeding
+      if (!user) {
+        console.warn("User not authenticated, cannot save LinkedIn data to database");
+        setError("You need to be logged in to connect your LinkedIn profile. Please log in first and try again.");
+        
+        // Add navigation option to redirect to auth page
+        setTimeout(() => {
+          navigate("/auth", { replace: true });
+        }, 5000);
+        return;
       }
       
       setIsProcessing(true);
@@ -112,11 +125,7 @@ Please check:
           setTimeout(() => {
             navigate("/linkedin", { replace: true });
           }, 2000);
-        } else {
-          console.warn("User not authenticated, cannot save LinkedIn data to database");
-          setError("You need to be logged in to connect your LinkedIn profile. Please log in first.");
         }
-        
       } catch (err: any) {
         console.error("LinkedIn authentication error:", err);
         

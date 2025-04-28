@@ -33,6 +33,16 @@ serve(async (req) => {
     const LINKEDIN_REDIRECT_URL = Deno.env.get('LINKEDIN_REDIRECT_URL') ?? '';
     console.log("Retrieved LINKEDIN_REDIRECT_URL:", LINKEDIN_REDIRECT_URL || "Not set in environment");
     
+    // Get the current origin from Supabase project URL
+    const SUPABASE_PROJECT_URL = Deno.env.get('SUPABASE_URL') ?? '';
+    const projectId = SUPABASE_PROJECT_URL.split('https://')[1]?.split('.')[0] || '';
+    console.log("Project ID from SUPABASE_URL:", projectId);
+    
+    // Construct expected redirect URL for Lovable
+    const expectedLovableRedirectUrl = projectId ? 
+      `https://${projectId}.lovableproject.com/linkedin` : '';
+    console.log("Expected Lovable redirect URL:", expectedLovableRedirectUrl);
+    
     // Log all environment variables (without values) for debugging
     console.log("Available environment variables:", Object.keys(Deno.env.toObject()));
     
@@ -40,7 +50,10 @@ serve(async (req) => {
       JSON.stringify({
         success: true,
         clientId: LINKEDIN_CLIENT_ID,
-        redirectUrl: LINKEDIN_REDIRECT_URL || null
+        redirectUrl: LINKEDIN_REDIRECT_URL || null,
+        expectedRedirectUrl: expectedLovableRedirectUrl || null,
+        projectId: projectId || null,
+        debugTime: new Date().toISOString()
       }),
       { 
         headers: { 
