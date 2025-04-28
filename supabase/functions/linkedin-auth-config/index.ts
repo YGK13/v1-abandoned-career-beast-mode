@@ -18,6 +18,7 @@ serve(async (req) => {
     console.log("LinkedIn config function called");
     console.log("Request method:", req.method);
     console.log("Request headers:", Object.fromEntries(req.headers.entries()));
+    console.log("Request URL:", req.url);
     
     // Get LinkedIn client ID from environment variables
     const LINKEDIN_CLIENT_ID = Deno.env.get('LINKEDIN_CLIENT_ID') ?? '';
@@ -28,13 +29,18 @@ serve(async (req) => {
       throw new Error("LinkedIn client ID not configured in environment");
     }
     
+    // Get redirect URL from environment if available
+    const LINKEDIN_REDIRECT_URL = Deno.env.get('LINKEDIN_REDIRECT_URL') ?? '';
+    console.log("Retrieved LINKEDIN_REDIRECT_URL:", LINKEDIN_REDIRECT_URL || "Not set in environment");
+    
     // Log all environment variables (without values) for debugging
     console.log("Available environment variables:", Object.keys(Deno.env.toObject()));
     
     return new Response(
       JSON.stringify({
         success: true,
-        clientId: LINKEDIN_CLIENT_ID
+        clientId: LINKEDIN_CLIENT_ID,
+        redirectUrl: LINKEDIN_REDIRECT_URL || null
       }),
       { 
         headers: { 

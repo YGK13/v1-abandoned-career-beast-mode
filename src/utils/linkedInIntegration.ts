@@ -1,4 +1,3 @@
-
 import { supabase } from "@/integrations/supabase/client";
 
 // LinkedIn OAuth configuration - will now be fetched from edge function
@@ -22,10 +21,16 @@ export const generateLinkedInAuthUrl = async () => {
   try {
     console.log("Fetching LinkedIn client ID from edge function");
     console.time("linkedin-config-fetch");
+    console.log("Current location:", window.location.href);
+    console.log("Origin being used:", CURRENT_ORIGIN);
     
     // Fetch the LinkedIn client ID from Supabase edge function
     const { data, error } = await supabase.functions.invoke('linkedin-auth-config', {
-      body: { action: "get_client_id" }
+      body: { 
+        action: "get_client_id",
+        currentUrl: window.location.href,
+        redirectUri: REDIRECT_URI
+      }
     });
     
     console.timeEnd("linkedin-config-fetch");
@@ -37,18 +42,23 @@ export const generateLinkedInAuthUrl = async () => {
     }
     
     const clientId = data?.clientId;
+    const configuredRedirectUrl = data?.redirectUrl;
     
     if (!clientId) {
       console.error("No LinkedIn client ID returned from server");
       throw new Error("LinkedIn app configuration missing");
     }
     
+    // Use the redirect URL from config if available, otherwise use the default
+    const finalRedirectUri = configuredRedirectUrl || REDIRECT_URI;
+    
     console.log("Creating LinkedIn auth URL with client ID:", clientId);
     console.log("Current origin:", CURRENT_ORIGIN);
-    console.log("Redirect URI:", REDIRECT_URI);
+    console.log("Using redirect URI:", finalRedirectUri);
+    console.log("Encoded redirect URI:", encodeURIComponent(finalRedirectUri));
     
     // Direct LinkedIn OAuth URL with all necessary parameters
-    const authUrl = `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(REDIRECT_URI)}&state=${state}&scope=${scope}`;
+    const authUrl = `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(finalRedirectUri)}&state=${state}&scope=${scope}`;
     
     console.log("Generated LinkedIn auth URL:", authUrl);
     

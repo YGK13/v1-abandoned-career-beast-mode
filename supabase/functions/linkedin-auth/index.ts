@@ -1,4 +1,3 @@
-
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.4";
 
@@ -7,6 +6,7 @@ const SUPABASE_URL = Deno.env.get('SUPABASE_URL') ?? '';
 const SUPABASE_ANON_KEY = Deno.env.get('SUPABASE_ANON_KEY') ?? '';
 const LINKEDIN_CLIENT_ID = Deno.env.get('LINKEDIN_CLIENT_ID') ?? '';
 const LINKEDIN_CLIENT_SECRET = Deno.env.get('LINKEDIN_CLIENT_SECRET') ?? '';
+const LINKEDIN_REDIRECT_URL = Deno.env.get('LINKEDIN_REDIRECT_URL') ?? '';
 
 // CORS headers for cross-origin requests - update with more permissive settings for debugging
 const corsHeaders = {
@@ -16,20 +16,17 @@ const corsHeaders = {
   'Access-Control-Max-Age': '86400',
 };
 
-// Default redirect URI if none provided
-const DEFAULT_REDIRECT_URI = 'https://wcxdaenhwiiowmoecpli.lovableproject.com/linkedin';
-
 /**
  * Main handler function that processes incoming requests
  */
 serve(async (req) => {
   console.log("LinkedIn auth function called with URL:", req.url);
   console.log("Request method:", req.method);
+  console.log("Request headers:", Object.fromEntries(req.headers.entries()));
 
   // Handle CORS preflight requests with detailed logging
   if (req.method === 'OPTIONS') {
     console.log("Handling OPTIONS preflight request");
-    console.log("Request headers:", Object.fromEntries(req.headers.entries()));
     return new Response(null, { 
       headers: corsHeaders,
       status: 204
@@ -46,10 +43,14 @@ serve(async (req) => {
     logEnvironmentInfo();
     logRequestInfo(body);
 
-    const { code, action, redirectUri = DEFAULT_REDIRECT_URI } = body;
+    const { code, action, redirectUri } = body;
+    
+    // Get the redirect URI from environment variable, body param, or fallback to a default
+    const effectiveRedirectUri = chooseRedirectUri(redirectUri);
+    console.log("Effective redirect URI:", effectiveRedirectUri);
 
     if (action === "exchange_token" && code) {
-      return await handleExchangeToken(code, redirectUri);
+      return await handleExchangeToken(code, effectiveRedirectUri);
     }
 
     console.log("Invalid action or missing code:", { action, hasCode: !!code });
@@ -59,6 +60,27 @@ serve(async (req) => {
     return createErrorResponse(error.message || "An unexpected error occurred", 500);
   }
 });
+
+/**
+ * Choose the most appropriate redirect URI
+ */
+function chooseRedirectUri(providedRedirectUri) {
+  // Priority: 1. Environment variable, 2. Provided in request, 3. Default fallback
+  if (LINKEDIN_REDIRECT_URL) {
+    console.log("Using redirect URI from environment variable:", LINKEDIN_REDIRECT_URL);
+    return LINKEDIN_REDIRECT_URL;
+  }
+  
+  if (providedRedirectUri) {
+    console.log("Using redirect URI from request:", providedRedirectUri);
+    return providedRedirectUri;
+  }
+  
+  // Fallback to a default
+  const fallbackUri = 'https://wcxdaenhwiiowmoecpli.lovableproject.com/linkedin';
+  console.log("Using fallback redirect URI:", fallbackUri);
+  return fallbackUri;
+}
 
 /**
  * Parse and validate the request body
@@ -81,8 +103,10 @@ function logEnvironmentInfo() {
   console.log("Environment variables loaded:");
   console.log("- LINKEDIN_CLIENT_ID:", LINKEDIN_CLIENT_ID ? "Present (length: " + LINKEDIN_CLIENT_ID.length + ")" : "Missing");
   console.log("- LINKEDIN_CLIENT_SECRET:", LINKEDIN_CLIENT_SECRET ? "Present (length: " + LINKEDIN_CLIENT_SECRET.length + ")" : "Missing");
+  console.log("- LINKEDIN_REDIRECT_URL:", LINKEDIN_REDIRECT_URL || "Not set in environment");
   console.log("- SUPABASE_URL:", SUPABASE_URL ? "Present" : "Missing");
   console.log("- SUPABASE_ANON_KEY:", SUPABASE_ANON_KEY ? "Present" : "Missing");
+  console.log("- All environment variable names:", Object.keys(Deno.env.toObject()));
 }
 
 /**
@@ -92,7 +116,7 @@ function logRequestInfo(body) {
   const { action, redirectUri } = body;
   
   console.log("LinkedIn Auth Function called with action:", action);
-  console.log("- Redirect URI:", redirectUri);
+  console.log("- Redirect URI from request:", redirectUri || "Not provided");
 }
 
 /**

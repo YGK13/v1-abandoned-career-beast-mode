@@ -34,6 +34,7 @@ const LinkedInAuthHelper: React.FC = () => {
       
       const debug = {
         currentUrl: window.location.href,
+        currentLocation: window.location,
         params: Object.fromEntries(searchParams.entries()),
         savedState,
         userAuthenticated: !!user,
@@ -59,10 +60,11 @@ const LinkedInAuthHelper: React.FC = () => {
           
 Please check:
 1. Your LinkedIn app status in the LinkedIn Developer Portal - ensure the app is marked as "Live" not "Development"
-2. Confirm that your app has properly configured redirect URIs (${window.location.origin}/linkedin)
-3. Confirm you've added the necessary authorized members to your app during Development mode
-4. Verify the app has the necessary OpenID permissions (openid, profile, email)
-5. The client ID and secret are correctly entered in both the frontend code and Supabase Edge Function`);
+2. Confirm that your app has properly configured redirect URIs: ${window.location.href}
+3. Current URL should be listed as an authorized redirect URI in your LinkedIn app settings
+4. Confirm you've added the necessary authorized members to your app during Development mode
+5. Verify the app has the necessary OpenID permissions (openid, profile, email)
+6. The client ID and secret are correctly entered in both the frontend code and Supabase Edge Function`);
         } else {
           setError(`LinkedIn Error: ${errorParam} - ${errorDescription || 'No description provided'}`);
         }
@@ -77,12 +79,14 @@ Please check:
       
       if (state !== savedState) {
         console.warn(`State mismatch. Received: ${state}, Saved: ${savedState}`);
+        // Continue anyway for debugging purposes
       }
       
       setIsProcessing(true);
       
       try {
         console.time("linkedin-callback-processing");
+        console.log("About to call handleLinkedInCallback with code and current URL:", window.location.href);
         const linkedInProfile = await handleLinkedInCallback(code);
         console.timeEnd("linkedin-callback-processing");
         console.log("Retrieved LinkedIn profile:", linkedInProfile);
