@@ -91,7 +91,7 @@ const LinkedInConnectButton: React.FC<LinkedInConnectButtonProps> = ({ onClick }
         
         {/* Show warning if not logged in */}
         {!user && (
-          <Alert variant="warning" className="mb-4">
+          <Alert variant="destructive" className="mb-4">
             <AlertCircle className="h-4 w-4" />
             <AlertTitle>Login Required</AlertTitle>
             <AlertDescription>
