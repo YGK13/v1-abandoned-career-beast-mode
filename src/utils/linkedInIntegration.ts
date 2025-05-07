@@ -1,7 +1,7 @@
 
 import { supabase } from "@/integrations/supabase/client";
 
-// LinkedIn OAuth configuration - will now be fetched from edge function
+// LinkedIn OAuth configuration
 const CURRENT_ORIGIN = typeof window !== 'undefined' ? window.location.origin : '';
 const REDIRECT_URI = `${CURRENT_ORIGIN}/linkedin`;
 
@@ -42,45 +42,32 @@ export const generateLinkedInAuthUrl = async () => {
     console.log("Origin being used:", CURRENT_ORIGIN);
     console.log("Expected redirect URI:", REDIRECT_URI);
     
-    // Fetch the LinkedIn client ID from Supabase edge function
-    const { data, error } = await supabase.functions.invoke('linkedin-auth-config', {
-      body: { 
-        action: "get_client_id",
-        currentUrl: window.location.href,
-        redirectUri: REDIRECT_URI
+    // Using Supabase auth directly with LinkedIn OIDC provider
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'linkedin_oidc',
+      options: {
+        redirectTo: REDIRECT_URI,
+        scopes: 'openid profile email',
+        queryParams: {
+          state: `linkedin-auth-${Date.now()}`
+        }
       }
     });
     
-    const fetchTime = endTimer("linkedin-config-fetch");
-    console.log(`Edge function response after ${fetchTime}ms:`, data, error);
+    endTimer("linkedin-config-fetch");
     
     if (error) {
-      console.error("Error fetching LinkedIn client ID:", error);
-      throw new Error("Failed to get LinkedIn configuration");
+      console.error("Error initiating LinkedIn OAuth:", error);
+      throw new Error(`Failed to initiate LinkedIn authentication: ${error.message}`);
     }
     
-    const clientId = data?.clientId;
-    const configuredRedirectUrl = data?.redirectUrl;
-    
-    if (!clientId) {
-      console.error("No LinkedIn client ID returned from server");
-      throw new Error("LinkedIn app configuration missing");
+    if (!data?.url) {
+      throw new Error("No authentication URL returned from Supabase");
     }
     
-    // Use the redirect URL from config if available, otherwise use the default
-    const finalRedirectUri = configuredRedirectUrl || REDIRECT_URI;
+    console.log("Generated LinkedIn auth URL via Supabase:", data.url);
     
-    console.log("Creating LinkedIn auth URL with client ID:", clientId);
-    console.log("Current origin:", CURRENT_ORIGIN);
-    console.log("Using redirect URI:", finalRedirectUri);
-    console.log("Encoded redirect URI:", encodeURIComponent(finalRedirectUri));
-    
-    // Direct LinkedIn OAuth URL with all necessary parameters
-    const authUrl = `https://www.linkedin.com/oauth/v2/authorization?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(finalRedirectUri)}&state=${state}&scope=${scope}`;
-    
-    console.log("Generated LinkedIn auth URL:", authUrl);
-    
-    return authUrl;
+    return data.url;
   } catch (error) {
     console.error("Error generating LinkedIn auth URL:", error);
     throw error;
@@ -90,31 +77,51 @@ export const generateLinkedInAuthUrl = async () => {
 export const handleLinkedInCallback = async (code: string): Promise<any> => {
   startTimer("linkedin-auth-exchange");
   try {
-    console.log("Calling Supabase function with code:", code.substring(0, 10) + "...");
+    console.log("Processing LinkedIn OAuth callback with code:", code.substring(0, 10) + "...");
     
-    // Exchange the authorization code for an access token using our Supabase edge function
-    const { data, error } = await supabase.functions.invoke('linkedin-auth', {
-      body: { 
-        code, 
-        action: "exchange_token", 
-        redirectUri: REDIRECT_URI 
-      }
-    });
-
+    // The actual handling is managed by Supabase automatically
+    // This function is primarily for logging and handling any additional processing
+    
+    // Get the current session to verify successful login
+    const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+    
     const exchangeTime = endTimer("linkedin-auth-exchange");
-    console.log(`Supabase function response after ${exchangeTime}ms:`, data, error);
+    console.log(`Session check completed after ${exchangeTime}ms:`, 
+      sessionData?.session ? "Session exists" : "No session found");
 
-    if (error) {
-      console.error("Supabase function error:", error);
-      throw new Error(error.message || "Error connecting with LinkedIn");
+    if (sessionError) {
+      console.error("Error getting session after LinkedIn auth:", sessionError);
+      throw new Error(`Error verifying authentication: ${sessionError.message}`);
     }
     
-    if (!data || !data.success) {
-      console.error("LinkedIn auth failed:", data?.error || "Unknown error");
-      throw new Error(data?.error || "Failed to authenticate with LinkedIn");
+    if (!sessionData?.session) {
+      console.error("No session found after LinkedIn authentication");
+      
+      // Try to manually exchange the code if needed
+      const { data: userData, error: userError } = await supabase.auth.exchangeCodeForSession(code);
+      
+      if (userError) {
+        console.error("Error exchanging code for session:", userError);
+        throw new Error(`Failed to exchange code: ${userError.message}`);
+      }
+      
+      if (!userData?.session) {
+        throw new Error("Failed to authenticate with LinkedIn");
+      }
+      
+      console.log("Successfully exchanged code for session");
+      return userData.user;
     }
     
-    return data.profile;
+    // Get user profile data
+    const { data: userData, error: userError } = await supabase.auth.getUser();
+    
+    if (userError || !userData?.user) {
+      console.error("Error getting user data after LinkedIn auth:", userError);
+      throw new Error("Failed to retrieve user profile after authentication");
+    }
+    
+    return userData.user;
   } catch (err) {
     console.error("LinkedIn integration error:", err);
     throw err;
@@ -125,11 +132,11 @@ export const processLinkedInProfile = (profile: any) => {
   // Process and standardize the LinkedIn profile data
   return {
     id: profile.id,
-    fullName: `${profile.firstName} ${profile.lastName}`,
-    firstName: profile.firstName,
-    lastName: profile.lastName,
+    fullName: profile.user_metadata?.full_name || `${profile.user_metadata?.name || ''}`,
+    firstName: profile.user_metadata?.given_name || profile.user_metadata?.name?.split(' ')[0] || '',
+    lastName: profile.user_metadata?.family_name || profile.user_metadata?.name?.split(' ').slice(1).join(' ') || '',
     email: profile.email,
-    profileUrl: profile.profileUrl,
+    profileUrl: profile.user_metadata?.profile || '',
     accessToken: profile.accessToken,
   };
 };
@@ -137,17 +144,6 @@ export const processLinkedInProfile = (profile: any) => {
 export const saveLinkedInDataToSupabase = async (linkedInData: any, userId: string) => {
   try {
     console.log("Saving LinkedIn data to user_linkedin_profiles table for user:", userId);
-    
-    // Check if table exists first
-    const { error: tableCheckError } = await supabase
-      .from('user_linkedin_profiles')
-      .select('id', { count: 'exact', head: true });
-    
-    if (tableCheckError) {
-      // Table might not exist
-      console.error("Error checking user_linkedin_profiles table:", tableCheckError);
-      throw new Error("LinkedIn profiles table not available: " + tableCheckError.message);
-    }
     
     // Save the processed LinkedIn data to Supabase
     const { data, error } = await supabase.from('user_linkedin_profiles')

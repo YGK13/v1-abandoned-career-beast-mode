@@ -11,21 +11,24 @@ import LinkedInPageHeader from "@/components/linkedin/LinkedInPageHeader";
 import LinkedInLoadingState from "@/components/linkedin/LinkedInLoadingState";
 import { useSearchParams } from "react-router-dom";
 import { getUserLinkedInProfile } from "@/utils/linkedInProfile";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 
 const LinkedIn: React.FC = () => {
   const [searchParams] = useSearchParams();
-  const [isCallback, setIsCallback] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
   const [isConnected, setIsConnected] = useState<boolean | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const { user } = useAuth();
   const { toast } = useToast();
   
   useEffect(() => {
-    // Check if this is a callback from LinkedIn OAuth
-    if (searchParams.get("code")) {
-      setIsCallback(true);
+    // Check for authentication parameters in URL
+    const code = searchParams.get("code");
+    const error = searchParams.get("error");
+    
+    if (code || error) {
+      setIsProcessing(true);
       setIsLoading(false);
       return;
     }
@@ -68,8 +71,8 @@ const LinkedIn: React.FC = () => {
     );
   }
   
-  // Show callback handler if this is a callback from LinkedIn OAuth
-  if (isCallback) {
+  // Show auth handler if we have code or error in URL
+  if (isProcessing) {
     return (
       <Layout>
         <LinkedInAuthHelper />

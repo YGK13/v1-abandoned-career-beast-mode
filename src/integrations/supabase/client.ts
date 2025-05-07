@@ -17,7 +17,7 @@ export const supabase = createClient<Database>(
       autoRefreshToken: true,
       persistSession: true,
       storage: localStorage,
-      detectSessionInUrl: false
+      detectSessionInUrl: true // Enable detecting OAuth session in URL
     },
     global: {
       headers: {

@@ -17,20 +17,19 @@ const LinkedInAuthHelper: React.FC = () => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
-  const [rawResponse, setRawResponse] = useState<any>(null);
   const [debugInfo, setDebugInfo] = useState<any>({});
 
   useEffect(() => {
     const processAuthCode = async () => {
       console.log("LinkedInAuthHelper mounted, processing URL params");
+      
+      // Gather all URL parameters for debugging
+      const allParams = Object.fromEntries(searchParams.entries());
+      console.log("All URL parameters:", allParams);
+      
       const code = searchParams.get("code");
-      const state = searchParams.get("state");
       const errorParam = searchParams.get("error");
       const errorDescription = searchParams.get("error_description");
-      
-      const savedState = sessionStorage.getItem("linkedin_oauth_state");
-      console.log("Retrieved linkedin_oauth_state from session storage:", savedState);
-      sessionStorage.removeItem("linkedin_oauth_state");
       
       // Gather debug info
       const debug = {
@@ -38,9 +37,8 @@ const LinkedInAuthHelper: React.FC = () => {
         currentPath: window.location.pathname,
         fullOrigin: window.location.origin,
         domainPath: `${window.location.origin}/linkedin`,
-        params: Object.fromEntries(searchParams.entries()),
+        params: allParams,
         currentTimestamp: new Date().toISOString(),
-        savedState,
         userAuthenticated: !!user,
         userEmail: user?.email || null,
       };
@@ -51,24 +49,7 @@ const LinkedInAuthHelper: React.FC = () => {
       
       if (errorParam) {
         console.error(`LinkedIn returned an error: ${errorParam} - ${errorDescription}`);
-        
-        let detailedError = `LinkedIn Error: ${errorParam} - ${errorDescription || 'No description provided'}`;
-        
-        if (errorDescription?.includes("application is disabled")) {
-          detailedError = `LinkedIn Error: Your LinkedIn application appears to be disabled or not properly configured.
-          
-Please check:
-1. Your LinkedIn app status in the LinkedIn Developer Portal - ensure the app is marked as "Live" not "Development"
-2. Confirm that redirect URIs are properly configured:
-   - Current URL: ${window.location.href}
-   - This should be listed as an authorized redirect URI in your LinkedIn app settings
-   - If using Supabase environment variable, check LINKEDIN_REDIRECT_URL is set to: ${window.location.origin}/linkedin
-3. If app is in Development mode, confirm you've been added as an authorized test user
-4. Verify the app has the necessary OpenID permissions (openid, profile, email)
-5. Check that client ID and secret are correctly entered in Supabase secrets`;
-        }
-        
-        setError(detailedError);
+        setError(`LinkedIn Error: ${errorParam} - ${errorDescription || 'No description provided'}`);
         return;
       }
       
@@ -76,11 +57,6 @@ Please check:
         console.error("No authorization code found in URL parameters");
         setError("No authorization code found in the URL. Please try connecting again.");
         return;
-      }
-      
-      if (state !== savedState) {
-        console.warn(`State mismatch. Received: ${state}, Saved: ${savedState}`);
-        // Continue anyway for debugging purposes
       }
       
       // Check if user is logged in before proceeding
@@ -98,17 +74,15 @@ Please check:
       setIsProcessing(true);
       
       try {
-        console.time("linkedin-callback-processing");
-        console.log("About to call handleLinkedInCallback with code and current URL:", window.location.href);
-        const linkedInProfile = await handleLinkedInCallback(code);
-        console.timeEnd("linkedin-callback-processing");
-        console.log("Retrieved LinkedIn profile:", linkedInProfile);
+        console.log("Processing LinkedIn authentication code");
+        const linkedInUser = await handleLinkedInCallback(code);
+        console.log("LinkedIn auth completed, user data:", linkedInUser);
         
-        if (!linkedInProfile) {
+        if (!linkedInUser) {
           throw new Error("Failed to retrieve LinkedIn profile data");
         }
         
-        const processedProfile = processLinkedInProfile(linkedInProfile);
+        const processedProfile = processLinkedInProfile(linkedInUser);
         console.log("Processed profile:", processedProfile);
         
         if (user) {
@@ -122,6 +96,7 @@ Please check:
             description: "Your LinkedIn profile has been successfully connected.",
           });
           
+          // Redirect after short delay
           setTimeout(() => {
             navigate("/linkedin", { replace: true });
           }, 2000);
@@ -130,20 +105,7 @@ Please check:
         console.error("LinkedIn authentication error:", err);
         
         let errorMessage = err.message || "Failed to authenticate with LinkedIn";
-        
-        if (errorMessage.includes("LinkedIn profiles table not available")) {
-          errorMessage = "Database setup issue: LinkedIn profiles table not available. Please contact support.";
-        } else if (errorMessage.includes("API request failed")) {
-          errorMessage = "LinkedIn API error: " + errorMessage;
-        } else if (errorMessage.includes("application is disabled") || errorMessage.includes("not authorized")) {
-          errorMessage = "LinkedIn application issue: The LinkedIn application may be disabled or not properly configured. Try checking your app settings in the LinkedIn Developer Portal.";
-        }
-        
         setError(errorMessage);
-        
-        if (err.rawResponse) {
-          setRawResponse(err.rawResponse);
-        }
         
         toast({
           variant: "destructive",
@@ -171,7 +133,6 @@ Please check:
         <LinkedInAuthError 
           error={error}
           debugInfo={debugInfo}
-          rawResponse={rawResponse}
         />
       )}
       

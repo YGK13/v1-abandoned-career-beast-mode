@@ -15,28 +15,18 @@ export const useSSOAuth = (options: SSOAuthOptions) => {
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
   
-  // Get the correct Supabase provider string
-  const getProvider = () => {
-    try {
-      return getSupabaseProvider(provider);
-    } catch (error) {
-      console.error(`Error getting provider for ${provider}:`, error);
-      return provider.toLowerCase();
-    }
-  };
-  
-  const supabaseProvider = getProvider();
-  
   const handleSignIn = async () => {
     try {
       setIsLoading(true);
-      console.log(`Initiating ${provider} SSO login with provider: ${supabaseProvider}`);
+      console.log(`Initiating ${provider} SSO login`);
+      
+      // Get the correct Supabase provider string
+      const supabaseProvider = getSupabaseProvider(provider);
+      console.log(`Using Supabase provider: ${supabaseProvider}`);
       
       // Get the full domain for the redirect URL
       const origin = window.location.origin;
-      
-      // Make sure we're always redirecting to /linkedin for LinkedIn authentication
-      const redirectUrl = `${origin}/linkedin`;
+      const redirectUrl = `${origin}/${provider.toLowerCase()}`;
       
       console.log(`Redirect URL: ${redirectUrl}`);
       
@@ -55,7 +45,7 @@ export const useSSOAuth = (options: SSOAuthOptions) => {
           scopes: scopes,
           queryParams: provider.toLowerCase() === 'linkedin' ? {
             // Adding a unique state parameter helps with debugging
-            state: `linkedin-auth-${Date.now()}`,
+            state: `${provider.toLowerCase()}-auth-${Date.now()}`,
           } : undefined,
         }
       });
@@ -64,7 +54,7 @@ export const useSSOAuth = (options: SSOAuthOptions) => {
         console.error(`${provider} SSO error:`, error);
         toast({
           title: "Authentication Error",
-          description: `Error: ${error.message}. Please make sure your LinkedIn app is properly configured with correct redirect URLs.`,
+          description: `Error: ${error.message}`,
           variant: "destructive",
         });
         
@@ -72,8 +62,13 @@ export const useSSOAuth = (options: SSOAuthOptions) => {
         return;
       }
       
-      // If successful, the user will be redirected to the OAuth provider
-      console.log(`${provider} SSO initiated successfully`, data);
+      if (!data.url) {
+        throw new Error("No authentication URL generated");
+      }
+      
+      // If successful, redirect the user to the OAuth provider
+      console.log(`${provider} SSO initiated successfully, redirecting to:`, data.url);
+      window.location.href = data.url;
       
     } catch (error: any) {
       console.error(`Unexpected ${provider} SSO error:`, error);
