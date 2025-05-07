@@ -21,41 +21,21 @@ export const useAuthMethods = () => {
         console.log("Sign out before sign in failed, continuing anyway", err);
       }
       
-      // Use direct API call to bypass captcha verification
-      const response = await fetch(`${supabase.auth.url}/token?grant_type=password`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'apikey': supabase.supabaseKey,
-          'Authorization': `Bearer ${supabase.supabaseKey}`
-        },
-        body: JSON.stringify({
-          email,
-          password,
-          gotrue_meta_security: {}
-        })
+      // Use the standard Supabase auth method instead of direct API calls
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password
       });
-
-      const data = await response.json();
       
-      if (!response.ok) {
-        console.error("Sign in error:", data);
+      if (error) {
+        console.error("Sign in error:", error);
         toast({
           title: "Sign in failed",
-          description: data.error_description || data.message || "Authentication failed",
+          description: error.message || "Authentication failed",
           variant: "destructive",
         });
-        return { error: data, data: null };
+        return { error, data: null };
       }
-      
-      // Set session manually
-      await supabase.auth.setSession({
-        access_token: data.access_token,
-        refresh_token: data.refresh_token
-      });
-      
-      // Get user data
-      const { data: userData } = await supabase.auth.getUser();
       
       toast({
         title: "Welcome back!",
@@ -65,7 +45,7 @@ export const useAuthMethods = () => {
       // Force page reload for a clean state
       window.location.href = '/';
       
-      return { data: { user: userData.user, session: data }, error: null };
+      return { data, error: null };
     } catch (error: any) {
       console.error("Unexpected sign in error:", error);
       toast({
@@ -84,32 +64,23 @@ export const useAuthMethods = () => {
       // Clean up existing auth state first
       cleanupAuthState();
       
-      // Use direct API call to bypass captcha verification
-      const response = await fetch(`${supabase.auth.url}/signup`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'apikey': supabase.supabaseKey,
-          'Authorization': `Bearer ${supabase.supabaseKey}`
-        },
-        body: JSON.stringify({
-          email,
-          password,
-          data: userData || {},
-          gotrue_meta_security: {}
-        })
+      // Use the standard Supabase auth method instead of direct API calls
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: userData || {}
+        }
       });
-
-      const data = await response.json();
       
-      if (!response.ok) {
-        console.error("Sign up error:", data);
+      if (error) {
+        console.error("Sign up error:", error);
         toast({
           title: "Sign up failed",
-          description: data.error_description || data.message || "Registration failed",
+          description: error.message || "Registration failed",
           variant: "destructive",
         });
-        return { error: data, data: null };
+        return { error, data: null };
       }
       
       toast({
