@@ -49,10 +49,11 @@ describe("useBioGeneration", () => {
     const { result } = renderHook(() => useBioGeneration());
     
     act(() => {
-      result.current.generateBio("", "", "", "", [], "professional", "medium", true, true);
+      result.current.generateBio("", "", "", "", [], "professional", "medium", true, true, null, []);
     });
     
     expect(mockToast.toast).toHaveBeenCalledWith({
+      title: "Missing Information",
       description: "Please fill in all required fields before generating a bio",
       variant: "destructive",
     });
@@ -71,7 +72,9 @@ describe("useBioGeneration", () => {
         "professional", 
         "medium", 
         false, 
-        false
+        false,
+        null,
+        []
       );
     });
     
@@ -85,6 +88,7 @@ describe("useBioGeneration", () => {
     expect(result.current.generatedBio).toBe("Professional bio template");
     expect(result.current.isGenerating).toBe(false);
     expect(mockToast.toast).toHaveBeenCalledWith({
+      title: "Success",
       description: "Bio generated successfully!",
     });
   });
@@ -103,14 +107,16 @@ describe("useBioGeneration", () => {
         "professional", 
         "medium", 
         false, 
-        false
+        false,
+        null,
+        []
       );
       jest.advanceTimersByTime(1500);
     });
     
     // Then regenerate it
     act(() => {
-      result.current.regenerateBio("John", ["JavaScript", "React"]);
+      result.current.regenerateBio("John", ["JavaScript", "React"], null, []);
     });
     
     expect(result.current.isGenerating).toBe(true);
@@ -122,6 +128,7 @@ describe("useBioGeneration", () => {
     
     expect(result.current.isGenerating).toBe(false);
     expect(mockToast.toast).toHaveBeenCalledWith({
+      title: "Success",
       description: "Bio regenerated with new variations",
     });
   });
@@ -140,7 +147,9 @@ describe("useBioGeneration", () => {
         "professional", 
         "medium", 
         false, 
-        false
+        false,
+        null,
+        []
       );
       jest.advanceTimersByTime(1500);
     });
@@ -152,6 +161,7 @@ describe("useBioGeneration", () => {
     
     expect(navigator.clipboard.writeText).toHaveBeenCalledWith("Professional bio template");
     expect(mockToast.toast).toHaveBeenCalledWith({
+      title: "Copied",
       description: "Bio copied to clipboard",
     });
   });
@@ -170,7 +180,9 @@ describe("useBioGeneration", () => {
         "professional", 
         "medium", 
         false, 
-        false
+        false,
+        null,
+        []
       );
       jest.advanceTimersByTime(1500);
     });
@@ -181,6 +193,7 @@ describe("useBioGeneration", () => {
     });
     
     expect(mockToast.toast).toHaveBeenCalledWith({
+      title: "Saved",
       description: "Bio saved to your assets",
     });
   });
