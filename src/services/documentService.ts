@@ -35,6 +35,8 @@ export const uploadDocument = async (documentData: DocumentUpload): Promise<{ da
     const filePath = `${uuidv4()}.${fileExt}`;
     const fullPath = `${documentData.doc_type}/${filePath}`;
     
+    console.log(`Uploading file to ${STORAGE_BUCKET}/${fullPath}`);
+    
     // Upload file to storage
     const { error: uploadError } = await supabase.storage
       .from(STORAGE_BUCKET)
@@ -53,7 +55,7 @@ export const uploadDocument = async (documentData: DocumentUpload): Promise<{ da
         description: documentData.description || null,
         doc_type: documentData.doc_type,
         file_path: fullPath,
-        user_id: user.data.user.id // Add the user ID here
+        user_id: user.data.user.id
       })
       .select()
       .single();
@@ -64,7 +66,7 @@ export const uploadDocument = async (documentData: DocumentUpload): Promise<{ da
     }
     
     return { data, error: null };
-  } catch (error) {
+  } catch (error: any) {
     console.error("Unexpected error in uploadDocument:", error);
     return { data: null, error: error as Error };
   }
@@ -73,9 +75,17 @@ export const uploadDocument = async (documentData: DocumentUpload): Promise<{ da
 // Get all documents for the current user
 export const getUserDocuments = async (): Promise<{ data: Document[] | null; error: Error | null }> => {
   try {
+    const { data: userData } = await supabase.auth.getUser();
+    if (!userData.user) {
+      return { data: null, error: new Error("User not authenticated") };
+    }
+    
+    console.log("Fetching documents for user:", userData.user.id);
+    
     const { data, error } = await supabase
       .from("documents")
       .select("*")
+      .eq("user_id", userData.user.id)
       .order("created_at", { ascending: false });
       
     if (error) {
@@ -83,8 +93,9 @@ export const getUserDocuments = async (): Promise<{ data: Document[] | null; err
       return { data: null, error };
     }
     
+    console.log("Fetched documents:", data);
     return { data, error: null };
-  } catch (error) {
+  } catch (error: any) {
     console.error("Unexpected error in getUserDocuments:", error);
     return { data: null, error: error as Error };
   }
@@ -105,7 +116,7 @@ export const getDocumentById = async (id: string): Promise<{ data: Document | nu
     }
     
     return { data, error: null };
-  } catch (error) {
+  } catch (error: any) {
     console.error("Unexpected error in getDocumentById:", error);
     return { data: null, error: error as Error };
   }
@@ -145,7 +156,7 @@ export const deleteDocument = async (id: string): Promise<{ success: boolean; er
     }
     
     return { success: true, error: null };
-  } catch (error) {
+  } catch (error: any) {
     console.error("Unexpected error in deleteDocument:", error);
     return { success: false, error: error as Error };
   }
@@ -154,6 +165,8 @@ export const deleteDocument = async (id: string): Promise<{ success: boolean; er
 // Get a signed URL for a document file
 export const getDocumentFileUrl = async (filePath: string): Promise<{ url: string | null; error: Error | null }> => {
   try {
+    console.log(`Getting signed URL for ${STORAGE_BUCKET}/${filePath}`);
+    
     const { data, error } = await supabase.storage
       .from(STORAGE_BUCKET)
       .createSignedUrl(filePath, 60 * 60); // 1 hour expiry
@@ -164,7 +177,7 @@ export const getDocumentFileUrl = async (filePath: string): Promise<{ url: strin
     }
     
     return { url: data.signedUrl, error: null };
-  } catch (error) {
+  } catch (error: any) {
     console.error("Unexpected error in getDocumentFileUrl:", error);
     return { url: null, error: error as Error };
   }

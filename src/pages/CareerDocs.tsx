@@ -10,7 +10,7 @@ import CareerSyncRoadmap from "@/components/career-docs/CareerSyncRoadmap";
 import { careerTemplates } from "@/data/careerTemplatesData";
 import { FileSymlink } from "lucide-react";
 import { getUserDocuments } from "@/services/documentService";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 
 const CareerDocs = () => {
@@ -22,20 +22,26 @@ const CareerDocs = () => {
   const loadDocuments = async () => {
     setLoading(true);
     try {
+      console.log("Loading documents...");
       const { data, error } = await getUserDocuments();
       if (error) {
+        console.error("Error in loadDocuments:", error);
         toast({
           title: "Error loading documents",
           description: error.message,
           variant: "destructive",
         });
       } else if (data) {
+        console.log("Documents loaded successfully:", data);
         setDocuments(data.map((doc) => ({
           ...doc,
           date: doc.created_at,
         })));
+      } else {
+        console.log("No documents returned");
       }
     } catch (error) {
+      console.error("Exception in loadDocuments:", error);
       toast({
         title: "Failed to load documents",
         description: String(error),
@@ -48,7 +54,10 @@ const CareerDocs = () => {
 
   useEffect(() => {
     if (user) {
+      console.log("User authenticated, loading documents");
       loadDocuments();
+    } else {
+      console.log("No authenticated user found");
     }
     // eslint-disable-next-line
   }, [user]);
@@ -75,7 +84,11 @@ const CareerDocs = () => {
         />
 
         {/* Documents List - with upload handler */}
-        <DocumentsList documents={documents} onUploadClick={loadDocuments} />
+        <DocumentsList 
+          documents={documents} 
+          onUploadClick={() => loadDocuments()} 
+          isLoading={loading} 
+        />
 
         {/* Career Templates bottom */}
         <CareerTemplates templates={careerTemplates} />

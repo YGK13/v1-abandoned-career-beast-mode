@@ -33,29 +33,38 @@ const CareerDocumentUploadDialog: React.FC<CareerDocumentUploadDialogProps> = ({
     if (!docTitle || !docType || !docFile) return;
 
     setIsUploading(true);
+    console.log("Starting document upload");
 
     try {
-      const { data, error } = await uploadDocument({
+      const result = await uploadDocument({
         title: docTitle,
         description: docDescription,
         doc_type: docType,
         file: docFile,
       });
-      if (error) {
+      
+      if (result.error) {
+        console.error("Upload failed:", result.error);
         toast({
           title: "Upload failed",
-          description: error.message,
+          description: result.error.message,
           variant: "destructive",
         });
       } else {
+        console.log("Document uploaded successfully:", result.data);
         toast({
           title: "Document uploaded",
-          description: "Your file has been uploaded.",
+          description: "Your file has been uploaded successfully.",
         });
-        setDocTitle(""); setDocType("resume"); setDocDescription(""); setDocFile(null);
+        setDocTitle(""); 
+        setDocType("resume"); 
+        setDocDescription(""); 
+        setDocFile(null);
         onUploadSuccess();
+        onClose();
       }
     } catch (err) {
+      console.error("Unexpected upload error:", err);
       toast({
         title: "Upload failed",
         description: "An unexpected error occurred.",

@@ -1,11 +1,10 @@
 
 import React from "react";
-import { Search, FileText } from "lucide-react";
+import { Search, FileText, Loader2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import DocumentCard from "@/components/DocumentCard";
-import { getDocumentFileUrl } from "@/services/documentService";
 
 interface Document {
   id: string;
@@ -21,9 +20,14 @@ interface Document {
 interface DocumentsListProps {
   documents: Document[];
   onUploadClick: () => void;
+  isLoading?: boolean;
 }
 
-const DocumentsList: React.FC<DocumentsListProps> = ({ documents, onUploadClick }) => {
+const DocumentsList: React.FC<DocumentsListProps> = ({ 
+  documents, 
+  onUploadClick,
+  isLoading = false 
+}) => {
   const [searchQuery, setSearchQuery] = React.useState("");
   const documentTypes = [
     { id: "all", name: "All Documents" },
@@ -61,6 +65,15 @@ const DocumentsList: React.FC<DocumentsListProps> = ({ documents, onUploadClick 
         return "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=2070&auto=format&fit=crop";
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center p-12">
+        <Loader2 size={40} className="mb-4 animate-spin text-primary" />
+        <p className="text-lg font-medium">Loading your documents...</p>
+      </div>
+    );
+  }
 
   return (
     <>
