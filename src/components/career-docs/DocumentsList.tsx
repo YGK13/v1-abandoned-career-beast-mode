@@ -13,7 +13,6 @@ interface Document {
   date: string;
   file_path: string | null;
   fileSize?: string;
-  thumbnailUrl?: string;
   description?: string | null;
 }
 
@@ -50,20 +49,6 @@ const DocumentsList: React.FC<DocumentsListProps> = ({
       );
     }
     return filtered;
-  };
-
-  // Pick a stock thumbnail (AI Coach can see file_path, but this is just visual)
-  const docTypeToThumbnail = (docType: string | null): string => {
-    switch(docType) {
-      case "resume":
-        return "https://images.unsplash.com/photo-1586281380349-632531db7ed4?q=80&w=2070&auto=format&fit=crop";
-      case "review":
-        return "https://images.unsplash.com/photo-1517842645767-c639042777db?q=80&w=2070&auto=format&fit=crop";
-      case "certificate":
-        return "https://images.unsplash.com/photo-1551836022-deb4988cc6c0?q=80&w=2070&auto=format&fit=crop";
-      default:
-        return "https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=2070&auto=format&fit=crop";
-    }
   };
 
   if (isLoading) {
@@ -108,7 +93,6 @@ const DocumentsList: React.FC<DocumentsListProps> = ({
                   type={doc.doc_type || "Other"}
                   date={doc.date}
                   fileSize="N/A"
-                  thumbnailUrl={docTypeToThumbnail(doc.doc_type)}
                   description={doc.description}
                   filePath={doc.file_path}
                   onClick={() => {}}

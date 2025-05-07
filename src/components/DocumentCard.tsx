@@ -66,9 +66,11 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
     }
     
     try {
+      console.log("Getting document URL for preview:", filePath);
       const { url, error } = await getDocumentFileUrl(filePath);
       
       if (error || !url) {
+        console.error("Error getting document URL:", error);
         toast({
           title: "Error loading preview",
           description: error?.message || "Could not load document preview",
@@ -77,6 +79,7 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
         return;
       }
       
+      console.log("Document URL received:", url);
       setPreviewUrl(url);
       setIsPreviewOpen(true);
     } catch (error) {
@@ -156,7 +159,7 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-start justify-between">
-                <h4 className="font-medium text-base truncate pr-2">{title}</h4>
+                <h4 className="font-medium text-base pr-2">{title}</h4>
                 <HoverCard>
                   <HoverCardTrigger asChild>
                     <Button variant="ghost" size="icon" className="h-6 w-6" onClick={(e) => {
@@ -195,31 +198,6 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
               )}
             </CollapsibleContent>
           </Collapsible>
-          
-          {thumbnailUrl && (
-            <div 
-              className="relative w-full h-32 rounded-md mb-3 overflow-hidden cursor-pointer"
-              onClick={(e) => {
-                e.stopPropagation();
-                if (isPreviewable) {
-                  handlePreview();
-                }
-              }}
-            >
-              <img 
-                src={thumbnailUrl} 
-                alt={title} 
-                className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" 
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-background/50 to-transparent"></div>
-              
-              {isPreviewable && (
-                <div className="absolute inset-0 flex items-center justify-center bg-black/30 opacity-0 hover:opacity-100 transition-opacity">
-                  <Eye size={24} className="text-white" />
-                </div>
-              )}
-            </div>
-          )}
           
           <div className="mt-auto flex gap-2">
             <Button 
@@ -269,6 +247,7 @@ const DocumentCard: React.FC<DocumentCardProps> = ({
                 src={previewUrl}
                 className="w-full h-full"
                 title={title}
+                sandbox="allow-same-origin allow-scripts allow-forms"
               />
             )}
           </div>

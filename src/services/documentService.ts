@@ -167,6 +167,17 @@ export const getDocumentFileUrl = async (filePath: string): Promise<{ url: strin
   try {
     console.log(`Getting signed URL for ${STORAGE_BUCKET}/${filePath}`);
     
+    // First try to get a public URL if the file is publicly accessible
+    const { data: publicUrlData } = supabase.storage
+      .from(STORAGE_BUCKET)
+      .getPublicUrl(filePath);
+      
+    if (publicUrlData && publicUrlData.publicUrl) {
+      console.log("Public URL found:", publicUrlData.publicUrl);
+      return { url: publicUrlData.publicUrl, error: null };
+    }
+    
+    // If public URL is not available, try to create a signed URL
     const { data, error } = await supabase.storage
       .from(STORAGE_BUCKET)
       .createSignedUrl(filePath, 60 * 60); // 1 hour expiry
@@ -176,6 +187,7 @@ export const getDocumentFileUrl = async (filePath: string): Promise<{ url: strin
       return { url: null, error };
     }
     
+    console.log("Signed URL created:", data.signedUrl);
     return { url: data.signedUrl, error: null };
   } catch (error: any) {
     console.error("Unexpected error in getDocumentFileUrl:", error);
