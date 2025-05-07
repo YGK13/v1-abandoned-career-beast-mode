@@ -4,7 +4,6 @@ import { Session, User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { AuthContextType } from "./AuthContextTypes";
 import { useToast } from "@/hooks/use-toast";
-import { getHCaptchaToken } from "@/utils/captchaUtils";
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -124,16 +123,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         // Continue even if this fails
         console.log("Sign out before sign in failed, continuing anyway", err);
       }
-
-      // Get dummy captcha token from our utility
-      const captchaToken = await getHCaptchaToken();
       
+      // IMPORTANT: Sign in WITHOUT using captcha
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
-        password,
-        options: {
-          captchaToken: captchaToken.token
-        }
+        password
+        // No captcha options at all
       });
 
       if (error) {
@@ -173,15 +168,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       // Clean up existing auth state first
       cleanupAuthState();
       
-      // Get dummy captcha token
-      const captchaToken = await getHCaptchaToken();
-      
+      // IMPORTANT: Sign up WITHOUT using captcha
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
-          data: userData,
-          captchaToken: captchaToken.token
+          data: userData
+          // No captcha options at all
         }
       });
       

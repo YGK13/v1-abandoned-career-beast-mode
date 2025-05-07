@@ -1,20 +1,26 @@
 
-// Completely disabled captcha utility - Acts as if verification always succeeds
-// This file exists to satisfy imports but does not perform any actual verification
+// Completely disabled captcha utility - All functions are no-ops
+// This file exists only to satisfy any imports but doesn't actually do anything
 
 export interface CaptchaData {
   token: string;
   siteKey: string;
 }
 
-// Always returns a dummy token that will be accepted by our modified authentication flow
+// Function that will always successfully return without any actual verification
 export const getHCaptchaToken = async (): Promise<CaptchaData> => {
+  console.log("CAPTCHA COMPLETELY DISABLED - Bypassing captcha check");
   return {
-    token: "captcha-completely-disabled-bypass-token",
-    siteKey: "dummy-site-key"
+    token: "", // Empty token - we'll modify auth to not use captcha at all
+    siteKey: ""
   };
 };
 
-// No-op functions 
-export const setupCaptcha = () => {};
-export const cleanupCaptcha = () => {};
+// No-op functions
+export const setupCaptcha = () => {
+  console.log("CAPTCHA COMPLETELY DISABLED - setupCaptcha is a no-op");
+};
+
+export const cleanupCaptcha = () => {
+  console.log("CAPTCHA COMPLETELY DISABLED - cleanupCaptcha is a no-op");
+};
