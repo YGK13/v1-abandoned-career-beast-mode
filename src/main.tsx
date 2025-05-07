@@ -7,8 +7,15 @@ import { SubscriptionProvider } from './context/SubscriptionContext'
 import { AuthProvider } from './context/AuthProvider'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
-// Create a client
-const queryClient = new QueryClient()
+// Create a client with default options
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+  },
+})
 
 createRoot(document.getElementById("root")!).render(
   <BrowserRouter>
