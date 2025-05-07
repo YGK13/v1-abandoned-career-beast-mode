@@ -5,11 +5,13 @@ import DocumentsList from "@/components/career-docs/DocumentsList";
 import UploadDocumentSection from "@/components/career-docs/UploadDocumentSection";
 import DocumentUploadSuggestions from "@/components/career-docs/DocumentUploadSuggestions";
 import CareerTemplates from "@/components/career-docs/CareerTemplates";
+import CareerSyncRoadmap from "@/components/career-docs/CareerSyncRoadmap";
 import { FileSymlink } from "lucide-react";
 import { careerTemplates } from "@/data/careerTemplatesData";
 import { getUserDocuments } from "@/services/documentService";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 const CareerDocs = () => {
   const { user } = useAuth();
@@ -68,26 +70,39 @@ const CareerDocs = () => {
           <p className="text-muted-foreground mt-1">Manage and optimize your career assets</p>
         </header>
 
-        <DocumentUploadSuggestions />
+        <Tabs defaultValue="documents" className="w-full mb-8">
+          <TabsList className="mb-6">
+            <TabsTrigger value="documents">My Documents</TabsTrigger>
+            <TabsTrigger value="roadmap">Career Data Roadmap</TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="documents">
+            <DocumentUploadSuggestions />
 
-        {/* Upload Section - pass reload handler */}
-        <UploadDocumentSection
-          icon={FileSymlink}
-          title="Manual Document Upload"
-          description="Upload your career documents to build a comprehensive portfolio. We support PDF, DOCX, JPG, and PNG."
-          buttonText="Upload Files"
-          onUploadSuccess={loadDocuments}
-        />
+            {/* Upload Section - pass reload handler */}
+            <UploadDocumentSection
+              icon={FileSymlink}
+              title="Manual Document Upload"
+              description="Upload your career documents to build a comprehensive portfolio. We support PDF, DOCX, JPG, and PNG."
+              buttonText="Upload Files"
+              onUploadSuccess={loadDocuments}
+            />
 
-        {/* Documents List - with upload handler */}
-        <DocumentsList 
-          documents={documents} 
-          onUploadClick={() => loadDocuments()} 
-          isLoading={loading} 
-        />
+            {/* Documents List - with upload handler */}
+            <DocumentsList 
+              documents={documents} 
+              onUploadClick={() => loadDocuments()} 
+              isLoading={loading} 
+            />
 
-        {/* Career Templates bottom */}
-        <CareerTemplates templates={careerTemplates} />
+            {/* Career Templates bottom */}
+            <CareerTemplates templates={careerTemplates} />
+          </TabsContent>
+          
+          <TabsContent value="roadmap">
+            <CareerSyncRoadmap />
+          </TabsContent>
+        </Tabs>
       </div>
     </Layout>
   );
