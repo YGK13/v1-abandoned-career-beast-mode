@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -7,12 +7,52 @@ import { Users, RefreshCw, UserPlus, Filter } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { personRecommendations } from "@/data/networkingData";
 import PersonRecommendationCard from "./PersonRecommendationCard";
+import { useResumeData } from "@/hooks/useResumeData";
+import { PersonRecommendation } from "@/data/networkingData";
 
 const NetworkingSuggestions = () => {
   const { toast } = useToast();
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [recommendations, setRecommendations] = useState(personRecommendations);
   const [activeTab, setActiveTab] = useState("all");
+  const { currentPosition, company, skills } = useResumeData();
+
+  // Effect to prioritize recommendations based on user profile
+  useEffect(() => {
+    if (currentPosition || company || (skills && skills.length > 0)) {
+      const prioritizedRecommendations = [...personRecommendations].sort((a, b) => {
+        let aScore = 0;
+        let bScore = 0;
+        
+        // Score based on position match
+        if (currentPosition) {
+          const positionLower = currentPosition.toLowerCase();
+          if (a.title.toLowerCase().includes(positionLower)) aScore += 3;
+          if (b.title.toLowerCase().includes(positionLower)) bScore += 3;
+        }
+        
+        // Score based on company match
+        if (company) {
+          const companyLower = company.toLowerCase();
+          if (a.company.toLowerCase().includes(companyLower)) aScore += 2;
+          if (b.company.toLowerCase().includes(companyLower)) bScore += 2;
+        }
+        
+        // Score based on skills match
+        if (skills && skills.length > 0) {
+          skills.forEach(skill => {
+            const skillLower = skill.toLowerCase();
+            if (a.tags.some(tag => tag.toLowerCase().includes(skillLower))) aScore += 1;
+            if (b.tags.some(tag => tag.toLowerCase().includes(skillLower))) bScore += 1;
+          });
+        }
+        
+        return bScore - aScore;
+      });
+      
+      setRecommendations(prioritizedRecommendations);
+    }
+  }, [currentPosition, company, skills]);
 
   // Filter recommendations based on the active tab
   const filteredRecommendations = recommendations.filter(person => {
@@ -22,14 +62,48 @@ const NetworkingSuggestions = () => {
 
   const handleRefresh = () => {
     setIsRefreshing(true);
+    
     // In a real app, this would fetch new recommendations from the server
+    // based on the user's profile
     setTimeout(() => {
+      // Simulate refreshing with slight reordering
+      const shuffled = [...recommendations];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      
+      setRecommendations(shuffled);
       setIsRefreshing(false);
+      
       toast({
         title: "Recommendations refreshed",
         description: "We've updated your connection suggestions based on your latest profile data.",
       });
     }, 1500);
+  };
+
+  // Generate a personalized reason for each connection based on user profile
+  const getPersonalizedReason = (person: PersonRecommendation) => {
+    if (currentPosition && person.title.toLowerCase().includes(currentPosition.toLowerCase())) {
+      return `Shares your role as ${currentPosition}`;
+    }
+    
+    if (company && person.company.toLowerCase().includes(company.toLowerCase())) {
+      return `Works at ${company} like you`;
+    }
+    
+    if (skills && skills.length > 0) {
+      const matchedSkills = skills.filter(skill => 
+        person.tags.some(tag => tag.toLowerCase().includes(skill.toLowerCase()))
+      );
+      
+      if (matchedSkills.length > 0) {
+        return `Shares your skills in ${matchedSkills.join(', ')}`;
+      }
+    }
+    
+    return person.connectionReason;
   };
 
   return (
@@ -78,7 +152,13 @@ const NetworkingSuggestions = () => {
         <TabsContent value={activeTab} className="mt-0">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {filteredRecommendations.map((person) => (
-              <PersonRecommendationCard key={person.id} person={person} />
+              <PersonRecommendationCard 
+                key={person.id} 
+                person={{
+                  ...person,
+                  connectionReason: getPersonalizedReason(person)
+                }} 
+              />
             ))}
           </div>
           

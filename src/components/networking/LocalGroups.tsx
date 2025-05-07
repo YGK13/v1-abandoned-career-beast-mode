@@ -1,11 +1,34 @@
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { MapPin, Calendar, ExternalLink } from "lucide-react";
 import { localGroups } from "@/data/networkingData";
+import { LocalGroup } from "@/data/networkingData";
 
 const LocalGroups = () => {
+  const [userLocation, setUserLocation] = useState<string>("San Francisco, CA");
+  const [filteredGroups, setFilteredGroups] = useState<LocalGroup[]>(localGroups);
+  
+  useEffect(() => {
+    // Get user's location from localStorage (set by the LocationConfirmation component)
+    const savedLocation = localStorage.getItem("userNetworkingLocation");
+    if (savedLocation) {
+      setUserLocation(savedLocation);
+      
+      // In a real application, we would fetch groups based on the user's location
+      // For now, we'll simulate this by filtering the mock data
+      const locationCity = savedLocation.split(',')[0].trim().toLowerCase();
+      
+      // Filter groups that match the user's city or return all if no match
+      const matchingGroups = localGroups.filter(group => 
+        group.location.toLowerCase().includes(locationCity)
+      );
+      
+      setFilteredGroups(matchingGroups.length > 0 ? matchingGroups : localGroups);
+    }
+  }, []);
+
   return (
     <Card>
       <CardHeader className="pb-3">
@@ -16,12 +39,12 @@ const LocalGroups = () => {
           <CardTitle>Local Networking Groups</CardTitle>
         </div>
         <p className="text-sm text-muted-foreground pt-2">
-          Nearby communities and events based on your location
+          Nearby communities and events in {userLocation}
         </p>
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {localGroups.map((group) => (
+          {filteredGroups.map((group) => (
             <div key={group.id} className="border rounded-lg p-4">
               <div className="flex justify-between items-start">
                 <div>
@@ -61,6 +84,12 @@ const LocalGroups = () => {
               </div>
             </div>
           ))}
+
+          {filteredGroups.length === 0 && (
+            <div className="text-center py-8">
+              <p>No groups found in your area. Try changing your location.</p>
+            </div>
+          )}
         </div>
       </CardContent>
     </Card>
