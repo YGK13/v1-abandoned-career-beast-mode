@@ -5,10 +5,8 @@ import DocumentsList from "@/components/career-docs/DocumentsList";
 import UploadDocumentSection from "@/components/career-docs/UploadDocumentSection";
 import DocumentUploadSuggestions from "@/components/career-docs/DocumentUploadSuggestions";
 import CareerTemplates from "@/components/career-docs/CareerTemplates";
-import LinkedInProfileImport from "@/components/career-docs/LinkedInProfileImport";
-import CareerSyncRoadmap from "@/components/career-docs/CareerSyncRoadmap";
-import { careerTemplates } from "@/data/careerTemplatesData";
 import { FileSymlink } from "lucide-react";
+import { careerTemplates } from "@/data/careerTemplatesData";
 import { getUserDocuments } from "@/services/documentService";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
@@ -69,8 +67,6 @@ const CareerDocs = () => {
           <h1 className="text-4xl font-bold">Career Assets</h1>
           <p className="text-muted-foreground mt-1">Manage and optimize your career assets</p>
         </header>
-        <CareerSyncRoadmap />
-        <LinkedInProfileImport />
 
         <DocumentUploadSuggestions />
 
