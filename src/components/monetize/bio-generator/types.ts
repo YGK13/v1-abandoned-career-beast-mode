@@ -16,6 +16,16 @@ export interface CareerDoc {
   content: string;
 }
 
+// Resume data interface
+export interface ResumeData {
+  currentPosition: string;
+  company: string;
+  duration: string;
+  skills: string[];
+  isLoading: boolean;
+  error: string | null;
+}
+
 // Bio generator context type
 export interface BioGeneratorContextType {
   firstName: string;
@@ -48,6 +58,7 @@ export interface BioGeneratorContextType {
   linkedInData: LinkedInData | null;
   careerDocs: CareerDoc[];
   dataSourcesLoaded: boolean;
+  resumeData: ResumeData;
 }
 
 // Re-export the BioFormValues type from our schema file

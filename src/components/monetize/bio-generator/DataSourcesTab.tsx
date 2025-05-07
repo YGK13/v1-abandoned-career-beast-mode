@@ -1,14 +1,51 @@
 
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { Linkedin, FileText } from "lucide-react";
+import { Linkedin, FileText, BriefcaseBusiness } from "lucide-react";
 import { useBioGenerator } from "../BioGeneratorContext";
 
 const DataSourcesTab: React.FC = () => {
-  const { linkedInData, careerDocs, dataSourcesLoaded } = useBioGenerator();
+  const { linkedInData, careerDocs, dataSourcesLoaded, resumeData } = useBioGenerator();
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="space-y-4">
+        <div className="flex items-center gap-2">
+          <BriefcaseBusiness className="h-5 w-5 text-primary" />
+          <h3 className="text-lg font-semibold">Resume Data</h3>
+        </div>
+        {!resumeData.isLoading ? (
+          <div className="border rounded-md p-4 space-y-3">
+            <div>
+              <h4 className="font-medium text-sm">Current Position</h4>
+              <p className="text-sm text-muted-foreground">{resumeData.currentPosition || "Not available"}</p>
+            </div>
+            <div>
+              <h4 className="font-medium text-sm">Company</h4>
+              <p className="text-sm text-muted-foreground">{resumeData.company || "Not available"}</p>
+            </div>
+            <div>
+              <h4 className="font-medium text-sm">Skills</h4>
+              <div className="flex flex-wrap gap-1 mt-1">
+                {resumeData.skills && resumeData.skills.length > 0 ? (
+                  resumeData.skills.map((skill, index) => (
+                    <span key={index} className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">
+                      {skill}
+                    </span>
+                  ))
+                ) : (
+                  <p className="text-xs text-muted-foreground">No skills extracted from resume</p>
+                )}
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="border rounded-md p-4 flex items-center justify-center h-40 text-muted-foreground">
+            Loading resume data...
+          </div>
+        )}
+      </div>
+      
       <div className="space-y-4">
         <div className="flex items-center gap-2">
           <Linkedin className="h-5 w-5 text-primary" />
@@ -47,15 +84,9 @@ const DataSourcesTab: React.FC = () => {
             {dataSourcesLoaded ? "No LinkedIn data available" : "Loading LinkedIn data..."}
           </div>
         )}
-        
-        <div className="flex justify-end">
-          <Button variant="outline" size="sm">
-            Refresh LinkedIn Data
-          </Button>
-        </div>
       </div>
       
-      <div className="space-y-4">
+      <div className="space-y-4 md:col-span-2">
         <div className="flex items-center gap-2">
           <FileText className="h-5 w-5 text-primary" />
           <h3 className="text-lg font-semibold">Career Documents</h3>
@@ -74,12 +105,6 @@ const DataSourcesTab: React.FC = () => {
             {dataSourcesLoaded ? "No career documents available" : "Loading career documents..."}
           </div>
         )}
-        
-        <div className="flex justify-end">
-          <Button variant="outline" size="sm">
-            Manage Career Documents
-          </Button>
-        </div>
       </div>
     </div>
   );

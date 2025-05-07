@@ -1,18 +1,63 @@
 
-import React from "react";
+import React, { useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
-import { Linkedin, FileText, AlertCircle } from "lucide-react";
+import { Linkedin, FileText, AlertCircle, User } from "lucide-react";
 import { useBioGenerator } from "../BioGeneratorContext";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const FormFields: React.FC = () => {
-  const { form, isGenerating, onSubmit } = useBioGenerator();
+  const { 
+    form, 
+    isGenerating, 
+    onSubmit, 
+    firstName, 
+    setFirstName, 
+    lastName, 
+    setLastName,
+    headline,
+    setHeadline,
+    resumeData,
+    linkedInData,
+    dataSourcesLoaded
+  } = useBioGenerator();
+  
   const formErrors = form.formState.errors;
   const hasErrors = Object.keys(formErrors).length > 0;
+
+  // Auto-fill form from resume data
+  useEffect(() => {
+    if (!resumeData.isLoading && resumeData.currentPosition) {
+      // Set headline from resume position if not already set
+      if (!headline && resumeData.currentPosition) {
+        setHeadline(resumeData.currentPosition);
+      }
+      
+      // Pre-fill expertise from skills if available
+      if (resumeData.skills && resumeData.skills.length > 0) {
+        const skillsString = resumeData.skills.join(", ");
+        form.setValue("expertise", skillsString);
+      }
+    }
+  }, [resumeData.isLoading, resumeData.currentPosition, resumeData.skills]);
+
+  // Pre-fill from LinkedIn data if available
+  useEffect(() => {
+    if (dataSourcesLoaded && linkedInData) {
+      // Try to extract name if available
+      if (linkedInData.positions && linkedInData.positions.length > 0) {
+        const position = linkedInData.positions[0];
+        
+        // Use LinkedIn headline if no headline is set
+        if (!headline && linkedInData.headline) {
+          setHeadline(linkedInData.headline);
+        }
+      }
+    }
+  }, [dataSourcesLoaded, linkedInData]);
   
   return (
     <Form {...form}>
@@ -26,6 +71,46 @@ const FormFields: React.FC = () => {
           </Alert>
         )}
         
+        <div className="grid grid-cols-2 gap-4">
+          <FormItem>
+            <FormLabel>First Name</FormLabel>
+            <FormControl>
+              <Input 
+                placeholder="Your first name" 
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)} 
+              />
+            </FormControl>
+          </FormItem>
+          
+          <FormItem>
+            <FormLabel>Last Name</FormLabel>
+            <FormControl>
+              <Input 
+                placeholder="Your last name" 
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)} 
+              />
+            </FormControl>
+          </FormItem>
+        </div>
+        
+        <FormItem>
+          <FormLabel>Professional Headline</FormLabel>
+          <FormControl>
+            <Input 
+              placeholder="e.g., Senior Product Manager" 
+              value={headline}
+              onChange={(e) => setHeadline(e.target.value)} 
+            />
+          </FormControl>
+          {resumeData && resumeData.currentPosition && (
+            <p className="text-xs text-muted-foreground mt-1">
+              Using position from your resume: {resumeData.currentPosition}
+            </p>
+          )}
+        </FormItem>
+        
         <FormField
           control={form.control}
           name="expertise"
@@ -35,6 +120,11 @@ const FormFields: React.FC = () => {
               <FormControl>
                 <Input placeholder="e.g., Digital Marketing, Leadership, Data Science" {...field} />
               </FormControl>
+              {resumeData && resumeData.skills && resumeData.skills.length > 0 && (
+                <p className="text-xs text-muted-foreground mt-1">
+                  Using skills from your resume: {resumeData.skills.join(", ")}
+                </p>
+              )}
               <FormMessage />
             </FormItem>
           )}

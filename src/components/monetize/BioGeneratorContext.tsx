@@ -4,6 +4,7 @@ import { BioGeneratorContextType } from "./bio-generator/types";
 import { BioFormValues, useBioForm } from "./bio-generator/schema";
 import { useBioGeneration } from "./bio-generator/useBioGeneration";
 import { useDataSources } from "./bio-generator/useDataSources";
+import { useResumeData } from "@/hooks/useResumeData";
 
 // Create context
 const BioGeneratorContext = createContext<BioGeneratorContextType | undefined>(undefined);
@@ -24,6 +25,9 @@ export const BioGeneratorProvider: React.FC<{ children: ReactNode }> = ({ childr
   // Initialize the form
   const form = useBioForm();
 
+  // Get resume data to pre-populate fields
+  const resumeData = useResumeData();
+
   // Use our custom hooks
   const { 
     linkedInData, 
@@ -40,6 +44,17 @@ export const BioGeneratorProvider: React.FC<{ children: ReactNode }> = ({ childr
     saveBio
   } = useBioGeneration();
 
+  // Auto-populate form from resume data when available
+  React.useEffect(() => {
+    if (!resumeData.isLoading && resumeData.currentPosition && !headline) {
+      setHeadline(resumeData.currentPosition);
+      
+      if (resumeData.skills && resumeData.skills.length > 0) {
+        setExpertise(resumeData.skills);
+      }
+    }
+  }, [resumeData.isLoading, resumeData.currentPosition, headline]);
+
   // Form submission handler
   const onSubmit = (values: BioFormValues) => {
     // Update state from form values
@@ -52,13 +67,15 @@ export const BioGeneratorProvider: React.FC<{ children: ReactNode }> = ({ childr
     generateBio(
       firstName, 
       lastName, 
-      headline, 
+      headline || values.targetAudience, // Use headline or target audience if headline not provided
       values.experience, 
       values.expertise.split(",").map(item => item.trim()),
       tone,
       length,
       values.includeLinkedIn,
-      values.includeCareerDocs
+      values.includeCareerDocs,
+      linkedInData,
+      careerDocs
     );
   };
 
@@ -93,9 +110,16 @@ export const BioGeneratorProvider: React.FC<{ children: ReactNode }> = ({ childr
       tone, 
       length, 
       includeLinkedIn, 
-      includeDocuments
+      includeDocuments,
+      linkedInData,
+      careerDocs
     ),
-    regenerateBio: () => regenerateBio(firstName, expertise),
+    regenerateBio: () => regenerateBio(
+      firstName, 
+      expertise, 
+      linkedInData,
+      careerDocs
+    ),
     copyToClipboard,
     saveBio,
     // Form and data properties
@@ -103,7 +127,8 @@ export const BioGeneratorProvider: React.FC<{ children: ReactNode }> = ({ childr
     onSubmit,
     linkedInData,
     careerDocs,
-    dataSourcesLoaded
+    dataSourcesLoaded,
+    resumeData
   };
 
   return (
