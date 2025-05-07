@@ -1,14 +1,13 @@
-
 import React, { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Users, RefreshCw, UserPlus, Filter } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { personRecommendations } from "@/data/networkingData";
+import { personRecommendations } from "@/data/networking";
 import PersonRecommendationCard from "./PersonRecommendationCard";
 import { useResumeData } from "@/hooks/useResumeData";
-import { PersonRecommendation } from "@/data/networkingData";
+import { PersonRecommendation } from "@/data/networking";
 
 const NetworkingSuggestions = () => {
   const { toast } = useToast();

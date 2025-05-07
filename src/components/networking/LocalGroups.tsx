@@ -1,10 +1,9 @@
-
 import React, { useState, useEffect } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { MapPin, Calendar, ExternalLink } from "lucide-react";
-import { localGroups } from "@/data/networkingData";
-import { LocalGroup } from "@/data/networkingData";
+import { localGroups } from "@/data/networking";
+import { LocalGroup } from "@/data/networking";
 
 const LocalGroups = () => {
   const [userLocation, setUserLocation] = useState<string>("San Francisco, CA");

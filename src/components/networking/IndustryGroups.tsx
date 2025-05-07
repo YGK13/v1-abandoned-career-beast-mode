@@ -1,9 +1,8 @@
-
 import React from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Users, ExternalLink } from "lucide-react";
-import { industryGroups } from "@/data/networkingData";
+import { industryGroups } from "@/data/networking";
 
 const IndustryGroups = () => {
   return (

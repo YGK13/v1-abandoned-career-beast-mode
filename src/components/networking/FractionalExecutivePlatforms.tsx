@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -10,7 +9,7 @@ import {
   TooltipProvider, 
   TooltipTrigger 
 } from "@/components/ui/tooltip";
-import { executivePlatforms } from "@/data/networkingData";
+import { executivePlatforms } from "@/data/networking";
 
 const FractionalExecutivePlatforms = () => {
   return (

@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { UserPlus, LinkedinIcon, MessageCircle } from "lucide-react";
-import { PersonRecommendation } from "@/data/networkingData";
+import { PersonRecommendation } from "@/data/networking";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 interface PersonRecommendationCardProps {
