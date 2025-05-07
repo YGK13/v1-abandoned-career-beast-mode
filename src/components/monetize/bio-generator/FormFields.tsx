@@ -1,4 +1,3 @@
-
 import React, { useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -30,7 +29,18 @@ const FormFields: React.FC = () => {
 
   // Auto-fill form from resume data
   useEffect(() => {
-    if (!resumeData.isLoading && resumeData.currentPosition) {
+    if (!resumeData.isLoading) {
+      // Set name from resume if available
+      if (resumeData.fullName && !firstName && !lastName) {
+        const nameParts = resumeData.fullName.split(" ");
+        if (nameParts.length > 0) {
+          setFirstName(nameParts[0]);
+          if (nameParts.length > 1) {
+            setLastName(nameParts.slice(1).join(" "));
+          }
+        }
+      }
+      
       // Set headline from resume position if not already set
       if (!headline && resumeData.currentPosition) {
         setHeadline(resumeData.currentPosition);
@@ -41,8 +51,13 @@ const FormFields: React.FC = () => {
         const skillsString = resumeData.skills.join(", ");
         form.setValue("expertise", skillsString);
       }
+      
+      // Set years of experience if available
+      if (resumeData.yearsExperience) {
+        form.setValue("experience", String(resumeData.yearsExperience));
+      }
     }
-  }, [resumeData.isLoading, resumeData.currentPosition, resumeData.skills]);
+  }, [resumeData.isLoading, resumeData.fullName, resumeData.currentPosition, resumeData.skills, resumeData.yearsExperience, firstName, lastName, headline, form, setFirstName, setLastName, setHeadline]);
 
   // Pre-fill from LinkedIn data if available
   useEffect(() => {
@@ -57,7 +72,7 @@ const FormFields: React.FC = () => {
         }
       }
     }
-  }, [dataSourcesLoaded, linkedInData]);
+  }, [dataSourcesLoaded, linkedInData, headline, setHeadline]);
   
   return (
     <Form {...form}>
@@ -81,6 +96,11 @@ const FormFields: React.FC = () => {
                 onChange={(e) => setFirstName(e.target.value)} 
               />
             </FormControl>
+            {resumeData.fullName && (
+              <p className="text-xs text-muted-foreground mt-1">
+                Auto-populated from your resume
+              </p>
+            )}
           </FormItem>
           
           <FormItem>
@@ -139,6 +159,11 @@ const FormFields: React.FC = () => {
               <FormControl>
                 <Input type="number" min="1" {...field} />
               </FormControl>
+              {resumeData && resumeData.yearsExperience && (
+                <p className="text-xs text-muted-foreground mt-1">
+                  Auto-populated from your resume: {resumeData.yearsExperience} years
+                </p>
+              )}
               <FormMessage />
             </FormItem>
           )}

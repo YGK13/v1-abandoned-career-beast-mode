@@ -1,5 +1,5 @@
 
-import React, { createContext, useContext, useState, ReactNode } from "react";
+import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
 import { BioGeneratorContextType } from "./bio-generator/types";
 import { BioFormValues, useBioForm } from "./bio-generator/schema";
 import { useBioGeneration } from "./bio-generator/useBioGeneration";
@@ -45,15 +45,37 @@ export const BioGeneratorProvider: React.FC<{ children: ReactNode }> = ({ childr
   } = useBioGeneration();
 
   // Auto-populate form from resume data when available
-  React.useEffect(() => {
-    if (!resumeData.isLoading && resumeData.currentPosition && !headline) {
-      setHeadline(resumeData.currentPosition);
+  useEffect(() => {
+    if (!resumeData.isLoading && resumeData.currentPosition) {
+      // Set headline if not already set
+      if (!headline) {
+        setHeadline(resumeData.currentPosition);
+      }
       
-      if (resumeData.skills && resumeData.skills.length > 0) {
+      // Set expertise from skills
+      if (resumeData.skills && resumeData.skills.length > 0 && expertise.length === 0) {
         setExpertise(resumeData.skills);
+        form.setValue("expertise", resumeData.skills.join(", "));
+      }
+      
+      // Try to extract name from document title
+      if (!firstName && resumeData.fullName) {
+        const nameParts = resumeData.fullName.split(" ");
+        if (nameParts.length > 0) {
+          setFirstName(nameParts[0]);
+          if (nameParts.length > 1) {
+            setLastName(nameParts.slice(1).join(" "));
+          }
+        }
+      }
+      
+      // Set years of experience if available
+      if (!years && resumeData.yearsExperience) {
+        setYears(String(resumeData.yearsExperience));
+        form.setValue("experience", String(resumeData.yearsExperience));
       }
     }
-  }, [resumeData.isLoading, resumeData.currentPosition, headline]);
+  }, [resumeData.isLoading, resumeData.currentPosition, headline, expertise.length, firstName, years, form]);
 
   // Form submission handler
   const onSubmit = (values: BioFormValues) => {

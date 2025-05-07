@@ -8,6 +8,8 @@ interface ResumeData {
   company: string;
   duration: string;
   skills: string[];
+  fullName: string;  // Added fullName property
+  yearsExperience: number | null;  // Added yearsExperience property
   isLoading: boolean;
   error: string | null;
 }
@@ -18,6 +20,8 @@ export const useResumeData = (): ResumeData => {
     company: "",
     duration: "",
     skills: [],
+    fullName: "",  // Initialize fullName
+    yearsExperience: null,  // Initialize yearsExperience
     isLoading: true,
     error: null
   });
@@ -58,11 +62,40 @@ export const useResumeData = (): ResumeData => {
           // Extract information from title if description is not available
           const title = resumeDoc.title || "";
           
+          // Try to extract full name from title
+          const extractNameFromTitle = (title: string): string => {
+            // Common resume title patterns: "Name Resume", "Resume - Name", "Name CV", etc.
+            const namePatterns = [
+              /^([\w\s]+?)\s+(?:Resume|CV)/i,  // "John Smith Resume"
+              /^(?:Resume|CV)(?:\s+(?:for|of)?\s+|-\s*)([\w\s]+)/i,  // "Resume - John Smith" or "Resume for John Smith"
+              /([\w\s]+?)(?:'s)?\s+(?:Resume|CV)/i  // "John Smith's Resume"
+            ];
+            
+            for (const pattern of namePatterns) {
+              const match = title.match(pattern);
+              if (match && match[1]) {
+                return match[1].trim();
+              }
+            }
+            
+            // Look for name-like patterns with capitalization
+            const words = title.split(/\s+/);
+            const potentialName = words.filter(word => 
+              word.length > 1 && 
+              word[0] === word[0].toUpperCase() &&
+              !/(?:resume|cv|portfolio|profile|document)/i.test(word)
+            ).join(" ");
+            
+            if (potentialName) return potentialName;
+            
+            return "";
+          };
+          
           // Try to extract position from title if no description
           const extractPositionFromTitle = (title: string) => {
             const positionKeywords = ["engineer", "manager", "developer", "analyst", "specialist", 
                                     "director", "coordinator", "assistant", "lead", "chief", 
-                                    "officer", "head", "sme", "expert"];
+                                    "officer", "head", "sme", "expert", "consultant", "professional"];
             
             // Check if any position keywords are in the title
             for (const keyword of positionKeywords) {
@@ -106,6 +139,28 @@ export const useResumeData = (): ResumeData => {
               : ["Leadership", "Strategy", "Communication"];
           };
           
+          // Extract years of experience from title or description
+          const extractYearsExperience = (text: string): number | null => {
+            // Look for patterns like "X years", "X+ years", "X yr", etc.
+            const yearsPatterns = [
+              /(\d+)(?:\+)?\s*(?:years?|yrs?)\s+(?:of\s+)?experience/i,
+              /experience\D*(\d+)(?:\+)?\s*(?:years?|yrs?)/i,
+              /(\d+)(?:\+)?\s*(?:years?|yrs?)\s+in\s+(?:the\s+)?(?:field|industry)/i
+            ];
+            
+            for (const pattern of yearsPatterns) {
+              const match = text.match(pattern);
+              if (match && match[1]) {
+                return parseInt(match[1], 10);
+              }
+            }
+            
+            return null;
+          };
+          
+          const fullName = extractNameFromTitle(title);
+          const yearsExperience = extractYearsExperience(title + " " + (resumeDoc.description || ""));
+          
           // Process description or use title-based extraction
           if (resumeDoc.description) {
             // Extract from description as before
@@ -114,6 +169,9 @@ export const useResumeData = (): ResumeData => {
             const durationMatch = resumeDoc.description.match(/(?:duration|years|period):\s*([^,\n]+)/i);
             const skillsMatch = resumeDoc.description.match(/(?:skills|expertise|competencies):\s*([^,\n]+)/i);
             
+            // Extract additional years of experience from description if not found in title
+            const descYearsExp = yearsExperience || extractYearsExperience(resumeDoc.description);
+            
             setResumeData({
               currentPosition: positionMatch?.[1]?.trim() || extractPositionFromTitle(title),
               company: companyMatch?.[1]?.trim() || "Current Company",
@@ -121,6 +179,8 @@ export const useResumeData = (): ResumeData => {
               skills: skillsMatch 
                 ? skillsMatch[1].split(',').map(s => s.trim()) 
                 : extractSkillsFromTitle(title),
+              fullName: fullName || "Professional",
+              yearsExperience: descYearsExp,
               isLoading: false,
               error: null
             });
@@ -137,6 +197,8 @@ export const useResumeData = (): ResumeData => {
               company: companyMatch?.[1] || "Current Company",
               duration: "Current",
               skills: skills,
+              fullName: fullName || "Professional",
+              yearsExperience: yearsExperience,
               isLoading: false,
               error: null
             });
@@ -148,6 +210,8 @@ export const useResumeData = (): ResumeData => {
             company: "Current Company",
             duration: "Current",
             skills: ["Leadership", "Strategic Planning", "Communication"],
+            fullName: "Professional",
+            yearsExperience: 5,
             isLoading: false,
             error: "No resume found. Using default values."
           });

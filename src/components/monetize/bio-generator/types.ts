@@ -22,6 +22,8 @@ export interface ResumeData {
   company: string;
   duration: string;
   skills: string[];
+  fullName: string;  // Added fullName property
+  yearsExperience: number | null;  // Added yearsExperience property
   isLoading: boolean;
   error: string | null;
 }
