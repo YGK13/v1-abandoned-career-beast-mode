@@ -4,6 +4,7 @@ import { Session, User } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { AuthContextType } from "./AuthContextTypes";
 import { useToast } from "@/hooks/use-toast";
+import { getHCaptchaToken } from "@/utils/captchaUtils";
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -33,6 +34,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     } catch (error) {
       console.error("Unexpected error fetching profile:", error);
     }
+  };
+
+  // Clean up auth state
+  const cleanupAuthState = () => {
+    // Remove standard auth tokens
+    localStorage.removeItem('supabase.auth.token');
+    // Remove all Supabase auth keys from localStorage
+    Object.keys(localStorage).forEach((key) => {
+      if (key.startsWith('supabase.auth.') || key.includes('sb-')) {
+        localStorage.removeItem(key);
+      }
+    });
+    // Remove from sessionStorage if in use
+    Object.keys(sessionStorage || {}).forEach((key) => {
+      if (key.startsWith('supabase.auth.') || key.includes('sb-')) {
+        sessionStorage.removeItem(key);
+      }
+    });
   };
 
   useEffect(() => {
@@ -95,9 +114,26 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     try {
       console.log("Signing in with email:", email);
       
+      // Clean up existing auth state first
+      cleanupAuthState();
+      
+      // Attempt global sign out to clear any existing sessions
+      try {
+        await supabase.auth.signOut({ scope: 'global' });
+      } catch (err) {
+        // Continue even if this fails
+        console.log("Sign out before sign in failed, continuing anyway", err);
+      }
+
+      // Get dummy captcha token from our utility
+      const captchaToken = await getHCaptchaToken();
+      
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
+        options: {
+          captchaToken: captchaToken.token
+        }
       });
 
       if (error) {
@@ -114,6 +150,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
         title: "Welcome back!",
         description: "You've successfully signed in.",
       });
+      
+      // Force page reload for a clean state
+      window.location.href = '/';
+      
       return { data, error: null };
     } catch (error: any) {
       console.error("Unexpected sign in error:", error);
@@ -130,11 +170,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     try {
       console.log("Signing up with email:", email);
       
+      // Clean up existing auth state first
+      cleanupAuthState();
+      
+      // Get dummy captcha token
+      const captchaToken = await getHCaptchaToken();
+      
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
         options: {
           data: userData,
+          captchaToken: captchaToken.token
         }
       });
       
@@ -166,11 +213,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const signOut = async () => {
     try {
+      // Clean up auth state first
+      cleanupAuthState();
+      
       await supabase.auth.signOut();
+      
       toast({
         title: "Signed out",
         description: "You've been successfully signed out.",
       });
+      
+      // Force page reload for a clean state
+      window.location.href = '/auth';
     } catch (error: any) {
       toast({
         title: "Error signing out",
