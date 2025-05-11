@@ -18,7 +18,6 @@ import {
   Link,
   Users,
   DollarSign,
-  Linkedin,
   Network,
   FileSpreadsheet
 } from "lucide-react";
@@ -33,7 +32,6 @@ export const navLinks: NavItem[] = [
     icon: Building,
     children: [
       { path: "/career-docs", label: "Career Assets", icon: FileText }, 
-      { path: "/linkedin", label: "LinkedIn", icon: Linkedin },
       { path: "/manage-everything", label: "Manage Everything", icon: Users },
       { path: "/build-business", label: "Start Your Biz", icon: Factory },
       { path: "/bio-generator", label: "Bio Generator", icon: FileSpreadsheet }

@@ -1,7 +1,7 @@
 
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { Linkedin, FileText, Award } from "lucide-react";
+import { FileText, Award } from "lucide-react";
 
 const DashboardHeader: React.FC = () => {
   return (
@@ -12,10 +12,6 @@ const DashboardHeader: React.FC = () => {
           <p className="text-muted-foreground mt-1">Your central hub for career growth and professional development</p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <Button variant="outline" className="flex items-center gap-2">
-            <Linkedin size={16} />
-            <span>Sync with LinkedIn</span>
-          </Button>
           <Button variant="outline" className="flex items-center gap-2">
             <FileText size={16} />
             <span>Upload Resume</span>

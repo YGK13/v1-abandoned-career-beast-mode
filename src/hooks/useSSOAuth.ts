@@ -30,23 +30,11 @@ export const useSSOAuth = (options: SSOAuthOptions) => {
       
       console.log(`Redirect URL: ${redirectUrl}`);
       
-      // Using OpenID Connect scopes for LinkedIn
-      const scopes = provider.toLowerCase() === 'linkedin' 
-        ? 'openid profile email' 
-        : undefined;
-      
-      console.log(`Using scopes: ${scopes}`);
-      
       // Configure the OAuth request with the correct parameters
       const { data, error } = await supabase.auth.signInWithOAuth({
         provider: supabaseProvider as any,
         options: {
           redirectTo: redirectUrl,
-          scopes: scopes,
-          queryParams: provider.toLowerCase() === 'linkedin' ? {
-            // Adding a unique state parameter helps with debugging
-            state: `${provider.toLowerCase()}-auth-${Date.now()}`,
-          } : undefined,
         }
       });
       

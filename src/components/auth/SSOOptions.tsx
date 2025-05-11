@@ -28,12 +28,6 @@ const SSOOptions: React.FC<SSOOptionsProps> = ({
           onSuccess={onSuccess}
           onError={onError}
         />
-        
-        <SSOButton 
-          provider="linkedin" 
-          onSuccess={onSuccess}
-          onError={onError}
-        />
       </div>
     </div>
   );

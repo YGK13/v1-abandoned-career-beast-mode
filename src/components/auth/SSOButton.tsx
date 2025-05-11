@@ -3,11 +3,10 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { useSSOAuth } from "@/hooks/useSSOAuth";
-import { SSOProvider } from "@/utils/linkedInUtils";
 import { getProviderConfig } from "@/components/auth/SSOProviderConfig";
 
 interface SSOButtonProps {
-  provider: SSOProvider;
+  provider: string;
   onSuccess?: () => void;
   onError?: (error: Error) => void;
 }

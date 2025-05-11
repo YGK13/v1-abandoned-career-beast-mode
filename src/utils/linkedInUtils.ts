@@ -1,25 +1,6 @@
 
-// LinkedIn utility types and functions
-import { z } from "zod";
-
-export type SSOProvider = "linkedin" | "google";
-
-export const validateLinkedInState = (state: string | null, savedState: string | null): boolean => {
-  if (!state || !savedState) return false;
-  return state === savedState;
-};
-
-// LinkedIn profile form schema
-export const linkedInProfileSchema = z.object({
-  profileUrl: z
-    .string()
-    .url("Please enter a valid URL")
-    .startsWith("https://www.linkedin.com/", "Must be a LinkedIn profile URL")
-    .min(5, "Profile URL is required"),
-});
-
-// Type for the form values
-export type LinkedInProfileFormValues = z.infer<typeof linkedInProfileSchema>;
+// This file has been emptied as part of LinkedIn integration removal
+export type SSOProvider = "google";
 
 // Simulated import process for demonstration purposes
 export const simulateImportProcess = (

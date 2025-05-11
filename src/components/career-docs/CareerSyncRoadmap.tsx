@@ -1,7 +1,7 @@
 
 import React from "react";
 import { Link } from "react-router-dom";
-import { CheckCircle2, LinkedinIcon, FileUp, FileCheck, ArrowRight, LucideIcon } from "lucide-react";
+import { CheckCircle2, FileUp, FileCheck, ArrowRight, LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import DashboardCard from "@/components/DashboardCard";
 
@@ -20,22 +20,15 @@ interface RoadmapStep {
 const CareerSyncRoadmap: React.FC = () => {
   const steps: RoadmapStep[] = [
     {
-      id: "linkedin",
-      title: "Sync LinkedIn Profile",
-      description: "Import your work history, skills, and education from LinkedIn",
-      icon: LinkedinIcon,
-      completed: false,
-      action: {
-        label: "Connect LinkedIn",
-        path: "/linkedin"
-      }
-    },
-    {
       id: "documents",
       title: "Upload Key Documents",
       description: "Add your resumes, certificates, and performance reviews",
       icon: FileUp,
       completed: false,
+      action: {
+        label: "Upload Documents",
+        path: "/career-docs"
+      }
     },
     {
       id: "verification",
@@ -51,9 +44,9 @@ const CareerSyncRoadmap: React.FC = () => {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h3 className="text-xl font-semibold">Career Data Roadmap</h3>
-          <Link to="/linkedin">
+          <Link to="/career-docs">
             <Button variant="outline" size="sm" className="flex items-center gap-2">
-              <span>LinkedIn Profile</span>
+              <span>Career Documents</span>
               <ArrowRight size={16} />
             </Button>
           </Link>
