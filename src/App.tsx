@@ -32,6 +32,7 @@ import Checkout from "./pages/Checkout";
 import FAQ from "./pages/FAQ";
 import Help from "./pages/Help";
 import NotFound from "./pages/NotFound";
+import Profile from "./pages/Profile";
 import { Toaster } from "./components/ui/toaster";
 import LinkedIn from "./pages/LinkedIn"; // Import LinkedIn page
 import Google from "./pages/Google"; // Import Google page
@@ -73,6 +74,7 @@ function App() {
         <Route path="/linkedin/callback" element={<LinkedIn />} />
         <Route path="/google" element={<Google />} />
         <Route path="/google/callback" element={<Google />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       <Toaster />
