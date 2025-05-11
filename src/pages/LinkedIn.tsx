@@ -1,15 +1,13 @@
-
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import Layout from "@/components/Layout";
 import PageContainer from "@/components/layout/PageContainer";
 import { useAuth } from "@/context/AuthContext";
-import { supabase } from "@/integrations/supabase/client";
 import LinkedInAuthHelper from "@/components/career-docs/LinkedInAuthHelper";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Loader2, CheckCircle2, LinkedinIcon } from "lucide-react";
-import { getLinkedInProfile, disconnectLinkedInProfile } from "@/utils/linkedInUtils";
+import { getLinkedInProfile, disconnectLinkedInProfile } from "@/utils/linkedin";
 
 const LinkedIn: React.FC = () => {
   const { user } = useAuth();

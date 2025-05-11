@@ -1,31 +1,8 @@
-// This file has been emptied as part of LinkedIn integration removal
+// This file has been refactored and replaced with individual files in src/utils/linkedin
+// Keeping this file as a simpler re-export for existing imports that haven't been updated
+
 export type SSOProvider = "google";
 
-// Simulated import process for demonstration purposes
-export const simulateImportProcess = (
-  setIsImporting: React.Dispatch<React.SetStateAction<boolean>>,
-  setImportProgress: React.Dispatch<React.SetStateAction<number>>,
-  onComplete?: () => void
-) => {
-  setIsImporting(true);
-  setImportProgress(0);
-  
-  const totalSteps = 5;
-  let currentStep = 0;
-  
-  const interval = setInterval(() => {
-    currentStep++;
-    setImportProgress(Math.round((currentStep / totalSteps) * 100));
-    
-    if (currentStep >= totalSteps) {
-      clearInterval(interval);
-      
-      // If there's a completion callback, execute it after a short delay
-      if (onComplete) {
-        setTimeout(() => {
-          onComplete();
-        }, 500);
-      }
-    }
-  }, 1000);
-};
+// Re-export the simulation function for compatibility
+import { simulateImportProcess as _simulateImportProcess } from './linkedin/simulation';
+export const simulateImportProcess = _simulateImportProcess;

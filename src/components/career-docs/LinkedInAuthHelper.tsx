@@ -6,7 +6,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Loader2, CheckCircle, XCircle } from "lucide-react";
-import { exchangeLinkedInCode, saveLinkedInProfile } from "@/utils/linkedInUtils";
+import { exchangeLinkedInCode, saveLinkedInProfile } from "@/utils/linkedin";
 
 const LinkedInAuthHelper: React.FC = () => {
   const { user } = useAuth();

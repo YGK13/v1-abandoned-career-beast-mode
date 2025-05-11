@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from "@/components/ui/button";
-import { generateLinkedInAuthUrl } from "@/utils/linkedInUtils";
+import { generateLinkedInAuthUrl } from "@/utils/linkedin";
 import { Linkedin } from "lucide-react";
 
 interface LinkedInConnectButtonProps {
