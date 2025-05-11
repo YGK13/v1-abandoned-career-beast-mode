@@ -1,6 +1,8 @@
 
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render } from "@testing-library/react";
+import { screen } from "@testing-library/dom";
+import { fireEvent } from "@testing-library/user-event";
 import FormFields from "../FormFields";
 import { useBioGenerator } from "../../BioGeneratorContext";
 import { BioFormValues } from "../types";

@@ -1,6 +1,7 @@
 
 import React from "react";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/dom";
 import { BioGeneratorProvider, useBioGenerator } from "../../BioGeneratorContext";
 import { useBioGeneration } from "../useBioGeneration";
 import { useDataSources } from "../useDataSources";
