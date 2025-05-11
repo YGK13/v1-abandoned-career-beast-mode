@@ -2,7 +2,7 @@
 import React from "react";
 import { render } from "@testing-library/react";
 import { screen } from "@testing-library/dom";
-import { fireEvent } from "@testing-library/user-event";
+import userEvent from "@testing-library/user-event";
 import FormFields from "../FormFields";
 import { useBioGenerator } from "../../BioGeneratorContext";
 import { BioFormValues } from "../types";
@@ -57,11 +57,11 @@ describe("FormFields", () => {
     render(<FormFields />);
     
     // Fill out form
-    fireEvent.change(screen.getByLabelText(/your area of expertise/i), { target: { value: "React, JavaScript" } });
-    fireEvent.change(screen.getByLabelText(/years of experience/i), { target: { value: "5" } });
+    userEvent.type(screen.getByLabelText(/your area of expertise/i), "React, JavaScript");
+    userEvent.type(screen.getByLabelText(/years of experience/i), "5");
     
     // Submit form
-    fireEvent.click(screen.getByRole("button", { name: /generate bio/i }));
+    userEvent.click(screen.getByRole("button", { name: /generate bio/i }));
     
     expect(mockOnSubmit).toHaveBeenCalledWith({
       expertise: "React, JavaScript",

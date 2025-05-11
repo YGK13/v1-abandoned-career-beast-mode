@@ -2,7 +2,7 @@
 import React from "react";
 import { render } from "@testing-library/react";
 import { screen } from "@testing-library/dom";
-import { fireEvent } from "@testing-library/user-event";
+import userEvent from "@testing-library/user-event";
 import GeneratedBioPreview from "../GeneratedBioPreview";
 import { useBioGenerator } from "../../BioGeneratorContext";
 
@@ -76,7 +76,7 @@ describe("GeneratedBioPreview", () => {
   it("should handle regenerate button click", () => {
     render(<GeneratedBioPreview />);
     
-    fireEvent.click(screen.getByRole("button", { name: /regenerate/i }));
+    userEvent.click(screen.getByRole("button", { name: /regenerate/i }));
     
     expect(mockRegenerateBio).toHaveBeenCalled();
   });
@@ -84,7 +84,7 @@ describe("GeneratedBioPreview", () => {
   it("should handle copy button click", () => {
     render(<GeneratedBioPreview />);
     
-    fireEvent.click(screen.getByRole("button", { name: /copy to clipboard/i }));
+    userEvent.click(screen.getByRole("button", { name: /copy to clipboard/i }));
     
     expect(mockCopyToClipboard).toHaveBeenCalled();
   });
@@ -92,7 +92,7 @@ describe("GeneratedBioPreview", () => {
   it("should handle save button click", () => {
     render(<GeneratedBioPreview />);
     
-    fireEvent.click(screen.getByRole("button", { name: /save bio/i }));
+    userEvent.click(screen.getByRole("button", { name: /save bio/i }));
     
     expect(mockSaveBio).toHaveBeenCalled();
   });
