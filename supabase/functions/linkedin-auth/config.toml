@@ -1,10 +1,6 @@
 
 project_id = "wcxdaenhwiiowmoecpli"
 
-[functions.google-auth.deploy.env]
-GOOGLE_CLIENT_ID = ""
-GOOGLE_CLIENT_SECRET = ""
-
 [functions.linkedin-auth.deploy.env]
 LINKEDIN_CLIENT_ID = "77kzqqoduziywo"
 LINKEDIN_CLIENT_SECRET = "WPL_AP1.EEG6iatnc4hDePGK.bCwp1Q=="

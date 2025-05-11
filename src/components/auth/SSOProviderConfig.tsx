@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Mail } from "lucide-react";
+import { Linkedin, Mail } from "lucide-react";
 
 export const getProviderConfig = (provider: string) => {
   const providerLower = provider.toLowerCase();
@@ -31,6 +31,12 @@ export const getProviderConfig = (provider: string) => {
         label: "Continue with Google",
         className: "bg-[#4285F4] hover:bg-[#4285F4]/90 text-white"
       };
+    case "linkedin":
+      return {
+        icon: <Linkedin className="h-4 w-4 mr-2" />,
+        label: "Continue with LinkedIn",
+        className: "bg-[#0A66C2] hover:bg-[#084482] text-white"
+      };
     default:
       return {
         icon: <Mail className="h-4 w-4 mr-2" />,
@@ -46,6 +52,8 @@ export const getSupabaseProvider = (provider: string): string => {
   switch (providerLower) {
     case "google":
       return "google";
+    case "linkedin":
+      return "linkedin";
     default:
       return providerLower;
   }
