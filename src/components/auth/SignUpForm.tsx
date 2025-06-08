@@ -1,177 +1,40 @@
+import React, { useState } from 'react';
 
-import React, { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Loader2, Eye, EyeOff } from "lucide-react";
-import { useToast } from "@/hooks/use-toast";
-import { useAuth } from "@/hooks/useAuth";
-import SSOOptions from "@/components/auth/SSOOptions";
+const SignUpForm: React.FC = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-interface SignUpFormProps {
-  email: string;
-  setEmail: (email: string) => void;
-  password: string;
-  setPassword: (password: string) => void;
-  confirmPassword: string;
-  setConfirmPassword: (confirmPassword: string) => void;
-  fullName: string;
-  setFullName: (fullName: string) => void;
-  onSignUpComplete: () => void;
-}
-
-const SignUpForm: React.FC<SignUpFormProps> = ({
-  email,
-  setEmail,
-  password,
-  setPassword,
-  confirmPassword,
-  setConfirmPassword,
-  fullName,
-  setFullName,
-  onSignUpComplete
-}) => {
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const { toast } = useToast();
-  const { signUp } = useAuth();
-
-  const togglePasswordVisibility = () => setShowPassword(!showPassword);
-  const toggleConfirmPasswordVisibility = () => setShowConfirmPassword(!showConfirmPassword);
-
-  const handleSignUp = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!email || !password || !confirmPassword) {
-      toast({
-        title: "Missing fields",
-        description: "Please fill in all required fields",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (password !== confirmPassword) {
-      toast({
-        title: "Passwords don't match",
-        description: "Please make sure your passwords match",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    setIsSubmitting(true);
-    try {
-      console.log("Attempting signup");
-
-      const { error } = await signUp(email, password, {
-        full_name: fullName,
-      });
-      
-      if (!error) {
-        onSignUpComplete();
-      }
-    } catch (error: any) {
-      console.error("Sign up unexpected error:", error);
-      toast({
-        title: "Error",
-        description: error.message || "An unexpected error occurred",
-        variant: "destructive",
-      });
-    } finally {
-      setIsSubmitting(false);
-    }
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    console.log('Sign Up Submitted:', { email, password });
+    // Placeholder for actual sign-up logic
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Create an Account</CardTitle>
-        <CardDescription>
-          Sign up to access all features and resources
-        </CardDescription>
-      </CardHeader>
-      <form onSubmit={handleSignUp}>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="fullname">Full Name (Optional)</Label>
-            <Input
-              id="fullname"
-              type="text"
-              placeholder="John Doe"
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="signup-email">Email</Label>
-            <Input
-              id="signup-email"
-              type="email"
-              placeholder="your.email@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="signup-password">Password</Label>
-            <div className="relative">
-              <Input
-                id="signup-password"
-                type={showPassword ? "text" : "password"}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                className="absolute right-2 top-1/2 -translate-y-1/2"
-                onClick={togglePasswordVisibility}
-              >
-                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-              </Button>
-            </div>
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="confirm-password">Confirm Password</Label>
-            <div className="relative">
-              <Input
-                id="confirm-password"
-                type={showConfirmPassword ? "text" : "password"}
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-              />
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                className="absolute right-2 top-1/2 -translate-y-1/2"
-                onClick={toggleConfirmPasswordVisibility}
-              >
-                {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-              </Button>
-            </div>
-          </div>
-        </CardContent>
-        <CardFooter className="flex flex-col space-y-4">
-          <Button 
-            type="submit" 
-            className="w-full" 
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}
-            Create Account
-          </Button>
-          
-          <SSOOptions onSuccess={onSignUpComplete} />
-        </CardFooter>
-      </form>
-    </Card>
+    <form onSubmit={handleSubmit}>
+      <h2>Sign Up</h2>
+      <div>
+        <label htmlFor="signup-email">Email:</label>
+        <input
+          id="signup-email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+      </div>
+      <div>
+        <label htmlFor="signup-password">Password:</label>
+        <input
+          id="signup-password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+      </div>
+      <button type="submit">Sign Up</button>
+    </form>
   );
 };
 
